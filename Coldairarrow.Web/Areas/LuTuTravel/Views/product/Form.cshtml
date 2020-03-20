@@ -1,0 +1,478 @@
+@using Coldairarrow.Entity.LuTuTravel;
+@using Coldairarrow.Util;
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (product)(ViewData["theProduct"]);
+    obj.content = obj.content.IsNullOrEmpty() ? @"【报名方式】
+【集合地点】
+【变更说明】
+【差价说明】
+【发票说明】
+【退改说明】
+【温馨提示】
+【联系电话】" : obj.content;
+    obj.features = obj.features.IsNullOrEmpty() ? @"【产品特色】
+【形成说明】
+【第一天/出发地-目的地 住：】
+【第二天/出发地-目的地 住：】" : obj.features;
+    obj.cost_detail = obj.cost_detail.IsNullOrEmpty() ? @"【费用包含】
+景点：
+住宿：
+用餐：
+交通：
+保险：
+【费用不包含】
+【自选项目】
+【购物说明】" : obj.cost_detail;
+
+    var objStr = Html.Raw(obj.ToJson());
+
+    var datalist = (List<product_date>)(ViewData["theProductData"]);
+    var datalistStr = Html.Raw(datalist.ToJson());
+
+    var emptyProductData = (product_date)(ViewData["emptyProductData"]);
+    var emptyProductDataStr = Html.Raw(emptyProductData.ToJson());
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>线路名称</th>
+                <td>
+                    <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,50]'">
+                </td>
+            </tr>
+            <tr>
+                <th>供应商</th>
+                <td>
+                    <input name="supplier" value="@obj.supplier" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,100]'">
+                </td>
+            </tr>
+            <tr>
+                <th>产品类别</th>
+                <td>
+                    <input name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
+                           data-options="width:'30%',required:true,
+                                        valueField: 'id',
+                                        textField: 'title',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
+                </td>
+            </tr>
+            <tr>
+                <th>所属区域</th>
+                <td>
+                    <input name="area_code" value="@obj.area_code" class="easyui-combotree"
+                           data-options="width: '30%', required: false,
+                                        state: 'closed',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetAreaList',
+                                        onSelect: function(node){
+                                                  $('#area_name').textbox('setValue', node.text);
+                                        }">
+                    <input id="area_name" name="area_name" value="@obj.area_name" class="easyui-textbox" data-options="width:'20%',editable:false">
+                </td>
+            </tr>
+            <tr>
+                <th>出发地</th>
+                <td>
+                    <input name="region_start" value="@obj.region_start" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,100]'">
+                </td>
+            </tr>
+            <tr>
+                <th>目的地</th>
+                <td>
+                    <input name="region" value="@obj.region" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,100]'">
+                </td>
+            </tr>
+            <tr>
+                <th>预定须知</th>
+                <td>
+                    <textarea name="content" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.content</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>产品特色介绍</th>
+                <td>
+                    <textarea name="features" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.features</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>费用明细</th>
+                <td>
+                    <textarea name="cost_detail" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.cost_detail</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>上传产品图片</th>
+                <td>
+                    <input id="hiddenImages" type="hidden" name="images" value="@obj.images">
+
+                    <input style="display:none" id="file1" type="file" accept="*">
+                    <input id="file-display1" class="easyui-textbox" data-options="width:'200px',required:false">
+                    <label for="file1" class="easyui-linkbutton" data-options="iconCls:'icon-add'">选择文件</label>
+                    <a id="aUploadFile1" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">上传</a>
+                </td>
+            </tr>
+            <tr>
+                <th>产品logo，用于封面展示</th>
+                <td>
+                    <input id="hiddenlogo" type="hidden" name="logo" value="@obj.logo">
+
+                    <input style="display:none" id="file2" type="file" accept="*">
+                    <input id="file-display2" class="easyui-textbox" data-options="width:'200px',required:false">
+                    <label for="file2" class="easyui-linkbutton" data-options="iconCls:'icon-add'">选择文件</label>
+                    <a id="aUploadFile2" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">上传</a>
+
+            </tr>
+            <tr>
+                <th>可发团时间日期</th>
+                <td>
+                    <input name="maximum_time_available" value="@obj.maximum_time_available" class="easyui-datebox"
+                           data-options="width:'20%',
+                                           required: true,
+                                           onSelect: function(date){
+                                                time_availableClick(date);
+                                           }">
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    <div id="accordion_time_available" class="easyui-accordion" style="width:100%;">
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>成本价</th>
+                <td>
+                    <input name="origin_price" value="@obj.origin_price" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>市场价</th>
+                <td>
+                    <input name="price" value="@obj.price" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>成团价</th>
+                <td>
+                    <input name="team_price" value="@obj.team_price" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>团长返佣金额</th>
+                <td>
+                    <input name="team_commission" value="@obj.team_commission" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>用户分享所得优惠券面值</th>
+                <td>
+                    <input name="share_amount" value="@obj.share_amount" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>游玩天数</th>
+                <td>
+                    <input name="days" value="@obj.days" class="easyui-numberbox" data-options="width:'20%',required:true,min:1,max:30">
+                </td>
+            </tr>
+            <tr>
+                <th>集合地点</th>
+                <td>
+                    <input name="address" value="@obj.address" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,255]'">
+                </td>
+            </tr>
+            <tr>
+                <th>砍价时间</th>
+                <td>
+                    <span>需提前</span>
+                    <input name="advance_day" value="@obj.advance_day" class="easyui-numberbox" data-options="width:'40px',required:false,min:0,max:100">
+                    <span>天，并在</span>
+                    <input name="advance_time" value="@obj.advance_time" class="easyui-timespinner" style="width:80px;" data-options="min:'00:01'">
+                    <span>前砍价</span>
+                </td>
+            </tr>
+            <tr>
+                <th>产品砍价最低人数</th>
+                <td>
+                    <input name="people_minnum" value="@obj.people_minnum" class="easyui-numberbox" data-options="width:'20%',required:true,min:1,max:1000">
+                </td>
+            </tr>
+            <tr>
+                <th>适合年龄最小值</th>
+                <td>
+                    <input name="age_appropriate_min" value="@obj.age_appropriate_min" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100">
+                </td>
+            </tr>
+            <tr>
+                <th>适合年龄最大值</th>
+                <td>
+                    <input name="age_appropriate_max" value="@obj.age_appropriate_max" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100">
+                </td>
+            </tr>
+            <tr>
+                <th>下单风险提示开关</th>
+                <td>
+                    <input name="issue_risk" value="@obj.issue_risk" class="easyui-combobox"
+                           data-options="width:'30%',required: true,
+                                           valueField: 'value',
+		                                   textField: 'label',
+                                            data:[{
+			                                        label: '提示',
+			                                        value: '1'
+		                                        },{
+			                                        label: '不提示',
+			                                        value: '2'
+		                                        }],
+                                                onSelect: function(rec){
+                                                    if(rec.value == '1') $('.issue_risk_content').show();
+                                                    else if(rec.value == '2') $('.issue_risk_content').hide();
+                                                    else $('.issue_risk_content').hide();
+                                                }">
+                </td>
+            </tr>
+            <tr class="issue_risk_content">
+                <th></th>
+                <td>
+                    <input name="issue_risk_content" value="@obj.issue_risk_content" class="easyui-textbox" data-options="width:'100%',required:false,validType:'length[0,255]'">
+                </td>
+            </tr>
+            <tr>
+                <th>产品到期时间</th>
+                <td>
+                    <input name="product_endtime" value="@obj.product_endtime" class="easyui-datebox" data-options="width:'20%',required:false">
+                </td>
+            </tr>
+            <tr>
+                <th>最大延迟付款时间</th>
+                <td>
+                    <input name="pay_time" value="@obj.pay_time" class="easyui-numberbox" data-options="width:'20%',required:true,min:10,max:60">
+                </td>
+            </tr>
+            <tr>
+                <th>是否是推荐(0否 1是)</th>
+                <td>
+                    <input name="recommend_status" value="@obj.recommend_status" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:1">
+                </td>
+            </tr>
+            <tr>
+                <th>是否是特价(0否 1是)</th>
+                <td>
+                    <input name="bargain_price_status" value="@obj.bargain_price_status" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:1">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    //生成每一天的样式
+    function accordionPanelDay(obj) {
+        var day = (new Date(obj.open_date)).getDate();
+        var accordionPanelDays = '<div style="float:left;width:33%">';//每一天的控件/布局
+        accordionPanelDays += '<input type="hidden" name="product_date_id" value="' + (obj.product_date_id || '') + '">';
+        accordionPanelDays += '<input type="checkbox" ' + (obj.is_opening == '1' ? 'checked="checked" ' : '') + '>';
+        accordionPanelDays += '<input type="hidden" name="open_date" value="' + obj.open_date + '">';
+        accordionPanelDays += '<span>' + day + (day < 10 ? '&nbsp;' : '') + '</span>';
+        accordionPanelDays += '<span>成团人数</span> <input class="easyui-numberbox" name="team_people_num" value="' + (obj.team_people_num || '') + '" data-options="width:\'45px\',min:1,max:1000" /><span>团数</span><input class="easyui-numberbox" name="team_num" value="' + (obj.team_num || '') + '" data-options="width:\'45px\',min:1,max:1000" />';
+        accordionPanelDays += '</div>';
+        return accordionPanelDays;
+    }
+    function accordionPanelDayButton() {
+        var foottDiv = '<div style="float:left;width:100%;text-align:right">';//Panel Button
+        foottDiv += '<span>默认人数</span> <input value="20" class="easyui-numberbox" data-options="width:\'45px\',min:1,max:1000" /><span>团数</span><input value="10" class="easyui-numberbox" data-options="width:\'45px\',min:1,max:1000"  />';
+        foottDiv += '<a onclick="checkAll($(this).parent())" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-ok\'">默认/全选</a>';
+        foottDiv += '<a onclick="goNextMonthPanel()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一月</a>';
+        foottDiv += '</div>';
+        return foottDiv;
+    }
+
+    //默认/全选
+    function checkAll(foottDiv) {
+        var a = $(foottDiv).find('input:first').val();
+        var b = $(foottDiv).find('input:last').val();
+        var nochecked = $(foottDiv).parent().find(':checkbox:not(:checked)');
+        if (nochecked.length > 0) {//存在没有勾选的
+            $(foottDiv).prevAll().find('.easyui-numberbox:first').numberbox('setValue', a);
+            $(foottDiv).prevAll().find('.easyui-numberbox:last').numberbox('setValue', b);
+            $(foottDiv).parent().find(':checkbox').prop('checked', true);
+        } else {
+            $(foottDiv).prevAll().find('.easyui-numberbox').numberbox('setValue', '');
+            $(foottDiv).parent().find(':checkbox').prop('checked', false);
+        }
+    }
+    //下一月
+    function goNextMonthPanel() {
+        var panel = $('#accordion_time_available').accordion('getSelected');
+        var title = $(panel).panel('options').title;
+        var date = new Date(title);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var newdate = new Date(year, month + 1, 0);
+        time_availableClick(newdate);
+    }
+    //初始化一个pannel
+    function time_availableClick(date) {
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var newdate = new Date(year, month, 0);
+        var d = newdate.getDate();
+
+        month = month < 10 ? ('0' + month) : month.toString();
+        var title = year.toString() + '-' + month;
+
+        var content = '';
+        for (var i = 1; i <= d; i++) {
+            content += accordionPanelDay({ open_date: title + '-' + (i < 10 ? '0' : '') + i.toString() });
+        }
+        content += accordionPanelDayButton();
+
+        var panel = $('#accordion_time_available').accordion('getPanel', title);
+        if (panel) {
+            $('#accordion_time_available').accordion('select', title);
+        } else {
+            $('#accordion_time_available').accordion('add', {
+                title: title,
+                height: '370px',
+                content: content,
+                selected: true
+            });
+        }
+    }
+
+
+    $(function () {
+        var list = @datalistStr;
+        var defaultContent = accordionPanelDayButton();//默认项
+        var month = '';
+        var monthContent = '';
+        for (var i = 0; i < list.length; i++) {
+            var rmonth = list[i].open_date.substr(0, 7);
+            if (month != rmonth) {
+                $('#accordion_time_available').accordion('add', {
+                    title: rmonth,
+                    height: '370px',
+                    selected: true
+                });
+
+                if (month != '') {
+                    //每月一号填充上月数据
+                    var panel = $('#accordion_time_available').accordion('getPanel', month);
+                    $(panel).panel({ 'content': monthContent + defaultContent });
+                }
+                month = rmonth;
+                monthContent = '';//清空
+            }
+            monthContent += accordionPanelDay(list[i]);
+            if (i == list.length - 1) {
+                //最后一天填充当月数据
+                var panel = $('#accordion_time_available').accordion('getPanel', month);
+                $(panel).panel({ 'content': monthContent + defaultContent });
+            }
+        }
+        //上传产品图片
+        document.getElementById('file1').onchange = function () {
+            $('#file1').getFileBase64(function (base64, fileName) {
+                $('#file-display1').textbox('setValue', fileName);
+            });
+        };
+        $('#aUploadFile1').click(function () {
+            if (theEntity.Id == '0') {
+                dialogError('请先录入产品其他信息，最后上传图片');
+                return;
+            }
+            if (!$('#file-display1').textbox('getValue')) {
+                dialogError('请选择图片');
+                return;
+            }
+            loading();
+            $('#file1').getFileBase64(function (base64, fileName) {
+                $.postJSON(rootUrl + 'LuTuTravel/Product/UploadFileToServer', { UploadType:'images', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
+                    loading(false);
+                    if (resJson.Success) {
+                        $('#hiddenImages').val(resJson.Data.toString());
+                        parent.dialogMsg('上传成功!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+        //上传logo
+        document.getElementById('file2').onchange = function () {
+            $('#file2').getFileBase64(function (base64, fileName) {
+                $('#file-display2').textbox('setValue', fileName);
+            });
+        };
+        $('#aUploadFile2').click(function () {
+            if (theEntity.Id == '0') {
+                dialogError('请先录入产品其他信息，最后上传图片');
+                return;
+            }
+            if (!$('#file-display2').textbox('getValue')) {
+                dialogError('请选择图片');
+                return;
+            }
+            loading();
+            $('#file2').getFileBase64(function (base64, fileName) {
+                $.postJSON(rootUrl + 'LuTuTravel/Product/UploadFileToServer', { UploadType: 'logo', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
+                    loading(false);
+                    if (resJson.Success) {
+                        $('#hiddenlogo').val(resJson.Data.toString());
+                        parent.dialogMsg('上传成功!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            var datalistProductData = [];
+            var panels = $('#accordion_time_available').accordion('panels');
+            for (var i = 0; i < panels.length; i++) {
+                var daysdiv = $(panels[i]).panel('body').find('div:not(:last)');
+                for (var j = 0; j < daysdiv.length; j++) {
+                    var theEntityProductData = @emptyProductDataStr;
+                    var values = $(daysdiv[j]).getValues();
+                    $.extend(theEntityProductData, values);
+
+                    if ($(daysdiv[j]).find(':checkbox').prop('checked'))
+                        theEntityProductData.is_opening = 1;
+                    else
+                        theEntityProductData.is_opening = 0;
+                    datalistProductData.push(theEntityProductData);
+                }
+            }
+            debugger;
+            $.postJSON(rootUrl + 'LuTuTravel/Product/SaveData', { "theData": theEntity, "listProductDate":datalistProductData }, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogMsg('保存成功!');
+                    parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>
