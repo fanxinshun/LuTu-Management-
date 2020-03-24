@@ -1,0 +1,134 @@
+@using Coldairarrow.Entity.LuTuTravel;
+@using Coldairarrow.Util;
+@using Coldairarrow.Business.LuTuTravel
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (productMarketingModel)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>产品/门票</th>
+                <td>
+                    <input name="product_id" value="@obj.product_id" class="easyui-combobox"
+                           data-options="width:'50%',required:true,editable:false,
+                                        valueField: 'Id',
+                                        textField: 'title',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetAllProductDataList',
+                                       onSelect:function(record){
+                                           $('span[name=parea_name]').html(record.area_name);
+                                           $('span[name=pprice]').html(record.price);
+                                           $('span[name=pteam_price]').html(record.team_price);
+                                           $('span[name=pteam_commission]').html(record.team_commission);
+                                       },
+                                        onLoadSuccess:function(){
+                                            $(this).combobox('setValue', '@obj.product_id');
+                                            $(this).combobox('setText', '@obj.ptitle');
+                                        }">
+                </td>
+            </tr>
+            <tr>
+                <th>所属区域</th>
+                <td>
+                    <span name="parea_name">
+                        @obj.parea_name
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>市场价</th>
+                <td>
+                    <span name="pprice">
+                        @obj.pprice
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>营销市场价</th>
+                <td>
+                    <input name="price" value="@obj.price" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>团购价</th>
+                <td>
+                    <span name="pteam_price">
+                        @obj.pteam_price
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>营销团购价</th>
+                <td>
+                    <input name="team_price" value="@obj.team_price" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>团长返佣金额</th>
+                <td>
+                    <span name="pteam_commission">
+                        @obj.pteam_commission
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>营销返佣金额</th>
+                <td>
+                    <input name="team_commission" value="@obj.team_commission" class="easyui-numberbox" data-options="width:'50%',required:false,min:0,max:100000">
+                </td>
+            </tr>
+            <tr>
+                <th>营销开始时间</th>
+                <td>
+                    <input name="marketing_starttime" value="@obj.marketing_starttime" class="easyui-datebox" data-options="width:'50%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>营销结束时间</th>
+                <td>
+                    <input name="marketing_endtime" value="@obj.marketing_endtime" class="easyui-datebox" data-options="width:'50%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>备注</th>
+                <td>
+                    <input name="remark" value="@obj.remark" class="easyui-textbox" data-options="width:'50%',required:false">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'LuTuTravel/product_marketing/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogMsg('保存成功!');
+                    parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>

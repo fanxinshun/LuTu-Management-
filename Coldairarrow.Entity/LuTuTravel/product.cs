@@ -126,11 +126,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 游玩天数
         /// </summary>
         public Int32? days { get; set; }
-
-        /// <summary>
-        /// 成团价
-        /// </summary>
-        public Decimal? vip_price { get; set; }
+        
 
         /// <summary>
         /// 集合地点

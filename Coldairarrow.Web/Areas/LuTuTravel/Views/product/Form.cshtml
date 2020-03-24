@@ -57,7 +57,7 @@
                 <th>产品类别</th>
                 <td>
                     <input name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
-                           data-options="width:'30%',required:true,
+                           data-options="width:'30%',required:true,editable:false,
                                         valueField: 'id',
                                         textField: 'title',
                                         url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
@@ -112,7 +112,7 @@
                     <input id="hiddenImages" type="hidden" name="images" value="@obj.images">
 
                     <input style="display:none" id="file1" type="file" accept="*">
-                    <input id="file-display1" class="easyui-textbox" data-options="width:'200px',required:false">
+                    <input id="file-display1" class="easyui-textbox" data-options="width:'200px',required:false,editable:false">
                     <label for="file1" class="easyui-linkbutton" data-options="iconCls:'icon-add'">选择文件</label>
                     <a id="aUploadFile1" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">上传</a>
                 </td>
@@ -123,7 +123,7 @@
                     <input id="hiddenlogo" type="hidden" name="logo" value="@obj.logo">
 
                     <input style="display:none" id="file2" type="file" accept="*">
-                    <input id="file-display2" class="easyui-textbox" data-options="width:'200px',required:false">
+                    <input id="file-display2" class="easyui-textbox" data-options="width:'200px',required:false,editable:false">
                     <label for="file2" class="easyui-linkbutton" data-options="iconCls:'icon-add'">选择文件</label>
                     <a id="aUploadFile2" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">上传</a>
 

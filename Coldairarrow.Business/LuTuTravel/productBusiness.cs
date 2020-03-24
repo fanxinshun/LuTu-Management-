@@ -38,6 +38,15 @@ namespace Coldairarrow.Business.LuTuTravel
         }
 
         /// <summary>
+        /// 获取所以产品门票数据
+        /// </summary>
+        /// <returns></returns>
+        public List<product> GetDataList()
+        {
+            return GetIQueryable().Where(x => x.enable_flag == "1").ToList();
+        }
+
+        /// <summary>
         /// 获取指定的单条数据
         /// </summary>
         /// <param name="id">主键</param>

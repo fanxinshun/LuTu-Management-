@@ -1,0 +1,136 @@
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+}
+@section toolbar{
+    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+    <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+}
+@section search{
+    <div class="search_wrapper">
+        <div class="search_item">
+            <label class="search_label">产品类型</label>
+            <input name="product_type_id" class="easyui-combobox"
+                   data-options="width:'150px',editable:false,
+                                        valueField: 'id',
+                                        textField: 'title',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
+        </div>
+        <div class="search_item">
+            <label class="search_label">城市标签</label>
+            <input name="parent_id" class="easyui-combobox"
+                   data-options="width:'150px',editable:false,
+                                        valueField: 'id',
+                                        textField: 'tagname',
+                                        url: '@Url.Content("~/")LuTuTravel/product_tag/GetpanentTagname'">
+        </div>
+        <div class="search_submit">
+            <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+        </div>
+    </div>
+}
+<div id="dataTable">
+</div>
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var formWidth = 500;
+    var formHeight = 375;
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            url: rootUrl + 'LuTuTravel/product_tag/GetDataList',
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'id',
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            sortName: 'create_time',
+            sortOrder: 'desc',
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            //nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: 'ck', field: 'ck', checkbox: true },
+
+                //{ title: '主键id', field: 'id', width: 200 },
+                //{ title: '产品类型表id', field: 'product_type_id', width: 200 },
+                { title: '产品类型', field: 'product_type_name', width: 200 },
+                //{ title: '地区编码', field: 'area_code', width: 200 },
+                { title: '城市标签', field: 'panentName', width: 200 },
+                { title: '城市', field: 'areaName', width: 200 },
+                { title: '标签logo', field: 'img_url', width: 200 }
+                //{ title: '父级id', field: 'parent_id', width: 200 }
+            ]],
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+    $(function () {
+        initTable();
+
+        //添加数据
+        $('#add').click(function () {
+            dialogOpen({
+                id: 'form',
+                title: '添加数据',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'LuTuTravel/product_tag/Form',
+            });
+        });
+
+        //修改数据
+        $('#edit').click(function () {
+            var selected = $("#dataTable").datagrid("getChecked");
+            if (!selected || !selected.length) {
+                dialogError('请选择要修改的记录!');
+                return;
+            }
+            var id = selected[0].id;
+
+            dialogOpen({
+                id: 'form',
+                title: '修改数据',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'LuTuTravel/product_tag/Form?id=' + id,
+            });
+        });
+
+        //删除数据
+        $('#delete').click(function () {
+            var checked = $("#dataTable").datagrid("getChecked");
+            if (!checked || !checked.length) {
+                dialogError('请选择要删除的记录!');
+                return;
+            }
+            var ids = $.map(checked, function (item) {
+                return item['id'];
+            });
+
+            dialogComfirm('确认删除吗？', function () {
+                $.postJSON(rootUrl + 'LuTuTravel/product_tag/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+                    if (resJson.Success) {
+                        $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                        $('#dataTable').datagrid('reload');
+                        dialogMsg('删除成功!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+    });
+</script>
