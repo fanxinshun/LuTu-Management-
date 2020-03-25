@@ -17,20 +17,23 @@
             <tr>
                 <th>产品/门票</th>
                 <td>
-                    <input name="product_id" value="@obj.product_id" class="easyui-combobox"
-                           data-options="width:'50%',required:true,editable:false,
+                    <input name="product_id" value="@obj.pId" class="easyui-combobox"
+                           data-options="width:'50%',required:true,editable:false,readonly:'@obj.product_marketing_id'? true:false,
                                         valueField: 'Id',
                                         textField: 'title',
-                                        url: '@Url.Content("~/")LuTuTravel/Product/GetAllProductDataList',
+                                        url: '@Url.Content("~/")LuTuTravel/product_marketing/GetNoProductMarketingList',
                                        onSelect:function(record){
                                            $('span[name=parea_name]').html(record.area_name);
                                            $('span[name=pprice]').html(record.price);
                                            $('span[name=pteam_price]').html(record.team_price);
                                            $('span[name=pteam_commission]').html(record.team_commission);
                                        },
-                                        onLoadSuccess:function(){
-                                            $(this).combobox('setValue', '@obj.product_id');
-                                            $(this).combobox('setText', '@obj.ptitle');
+                                        onBeforeLoad:function(){
+                                            if('@obj.product_marketing_id'){
+                                                $(this).combobox('setValue', '@obj.pId');
+                                                $(this).combobox('setText', '@obj.ptitle');
+                                                return false;
+                                            }
                                         }">
                 </td>
             </tr>
@@ -87,7 +90,7 @@
             <tr>
                 <th>营销开始时间</th>
                 <td>
-                    <input name="marketing_starttime" value="@obj.marketing_starttime" class="easyui-datebox" data-options="width:'50%',required:true">
+                    <input name="marketing_starttime" value="@obj.marketing_starttime" class="easyui-datebox" data-options="width:'50%',required:true,min:new Date()">
                 </td>
             </tr>
             <tr>

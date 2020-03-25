@@ -10,6 +10,7 @@ namespace Coldairarrow.Web
     [Area("LuTuTravel")]
     public class product_marketingController : BaseMvcController
     {
+        ProductBusiness _ProductBusiness = new ProductBusiness();
         product_marketingBusiness _product_marketingBusiness = new product_marketingBusiness();
 
         #region 视图功能
@@ -19,11 +20,22 @@ namespace Coldairarrow.Web
             return View();
         }
 
-        public ActionResult Form(string id)
+        public ActionResult Form(string id, string pId)
         {
-            var theData = id.IsNullOrEmpty() ? new productMarketingModel() : _product_marketingBusiness.GetProductMarketingModel(id);
+            var theData = _product_marketingBusiness.GetProductMarketingModel(id, pId);
 
             return View(theData);
+        }
+        /// <summary>
+        /// 获取未参加营销的产品/门票数据
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetNoProductMarketingList()
+        {
+            //var dataList = _product_marketingBusiness.GetNoProductMarketingList();
+            var dataList = _ProductBusiness.GetDataList();
+
+            return Content(dataList.ToJson());
         }
 
         #endregion
@@ -35,7 +47,7 @@ namespace Coldairarrow.Web
         /// </summary>
         /// <param name="title">产品/门票名称</param>
         /// <returns></returns>
-        public ActionResult GetDataList(string marketingType, string title, Pagination pagination)
+        public ActionResult GetDataList(int marketingType, string title, Pagination pagination)
         {
             var dataList = _product_marketingBusiness.GetDataList(marketingType, title, pagination);
 
@@ -52,10 +64,18 @@ namespace Coldairarrow.Web
         /// <param name="theData">保存的数据</param>
         public ActionResult SaveData(product_marketing theData)
         {
+            if (theData.marketing_starttime > theData.marketing_endtime)
+                return Error("结束时间必须大于开始时间");
+
+            //校验一下该产品能否参加营销
+            if (_product_marketingBusiness.CheckTheDataByProductId(theData))
+            {
+                return Error("当前时间段正在营销中，请检查");
+            }
+
             if (theData.product_marketing_id.IsNullOrEmpty())
             {
                 theData.product_marketing_id = Guid.NewGuid().ToSequentialGuid();
-
                 theData.create_by = Operator.UserId;
                 theData.create_time = DateTime.Now;
                 _product_marketingBusiness.AddData(theData);

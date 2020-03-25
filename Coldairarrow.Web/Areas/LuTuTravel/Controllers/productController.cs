@@ -73,16 +73,6 @@ namespace Coldairarrow.Web
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
-        /// <summary>
-        /// 获取所以产品/门票数据
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult GetAllProductDataList()
-        {
-            var dataList = _productBusiness.GetDataList();
-
-            return Content(dataList.ToJson());
-        }
 
         #endregion
 

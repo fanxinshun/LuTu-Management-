@@ -36,14 +36,13 @@ namespace Coldairarrow.Business.LuTuTravel
             pagination.SortType = "desc";
             return q.GetPagination(pagination).ToList();
         }
-
         /// <summary>
         /// 获取所以产品门票数据
         /// </summary>
         /// <returns></returns>
         public List<product> GetDataList()
         {
-            return GetIQueryable().Where(x => x.enable_flag == "1").ToList();
+            return GetIQueryable().Where(x => x.enable_flag == "1").OrderByDescending(x => x.Id).ToList();
         }
 
         /// <summary>
