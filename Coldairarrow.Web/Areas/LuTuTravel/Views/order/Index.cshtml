@@ -75,8 +75,16 @@
                 { title: '人数', field: 'num', width: 200 },
                 { title: '下单人联系方式', field: 'phone', hidden: true, width: 200 },
                 { title: '下单人姓名', field: 'name', hidden: true, width: 200 },
-                { title: '开团时间', field: 'start_time', width: 200 },
-                { title: '创建时间', field: 'create_time', width: 200 },
+                {
+                    title: '开团时间', field: 'start_time', width: 200, formatter: function (value, row, index) {
+                        return value == null ? '' : value.split(' ')[0];
+                    }
+                },
+                {
+                    title: '创建时间', field: 'create_time', width: 200, formatter: function (value, row, index) {
+                        return value == null ? '' : value.split(' ')[0];
+                    }
+                },
                 {
                     title: '订单状态', field: 'status', width: 200, formatter: function (value, row,index) {
                         if (value == '1') return '下单成功';

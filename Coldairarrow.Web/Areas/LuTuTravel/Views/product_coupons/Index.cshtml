@@ -1,26 +1,16 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 }
-
 @section toolbar{
     <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
     <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
     <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
 }
-
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
-            <label class="search_label">查询类别</label>
-            <select name="condition" class="easyui-combobox" data-options="width:100">
-                <option value="">请选择</option>
-                
-                <option value="id">主键</option>
-                <option value="coupons_name">优惠券名称</option>
-                <option value="coupons_type">可消费类型</option>
-                <option value="coupons_ditch">发放渠道(0:分享程序,1:分享界面,2:分款之后,3:首次注册,4:分享优惠券好友领取)</option>
-            </select>
-            <input name="keyword" class="easyui-textbox" style="width:150px" />
+            <label class="search_label">优惠券名称</label>
+            <input name="coupons_name" class="easyui-textbox" style="width:150px" />
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
@@ -28,27 +18,27 @@
     </div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var formWidth = 500;
     var formHeight = 480;
+    var data_coupons_name = [{ label: '门票', value: '0' }, { label: '线路', value: '1' }];
+    var data_coupons_ditch = [{ label: '分享程序', value: '0' }, { label: '分享界面', value: '1' }, { label: '分款之后', value: '2' }, { label: '首次注册', value: '3' }, { label: '分享优惠券好友领取', value: '4' }];
 
     function initTable() {
         $('#dataTable').datagrid({
             url: rootUrl + 'LuTuTravel/product_coupons/GetDataList',
             method: 'POST',
             //queryParams: { 'id': id },
-            idField: 'Id',
+            idField: 'id',
             fit: true,
             fitColumns: true,
             singleSelect: false,
             selectOnCheck: false,
             checkOnSelect: false,
-            //sortName: 'Id',
-            //sortOrder: 'asc',
+            sortName: 'create_time',
+            sortOrder: 'desc',
             //rownumbers: true,
             pagination: true,
             pageSize: 30,
@@ -57,16 +47,30 @@
             //showFooter: true,
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
-                
-                { title: '主键', field: 'id', width: 200 },
+
                 { title: '优惠券名称', field: 'coupons_name', width: 200 },
                 { title: '优惠券金额', field: 'coupons_money', width: 200 },
                 { title: '消费满减金额限制', field: 'coupons_limit', width: 200 },
-                { title: '可消费类型', field: 'coupons_type', width: 200 },
-                { title: '发放渠道(0:分享程序,1:分享界面,2:分款之后,3:首次注册,4:分享优惠券好友领取)', field: 'coupons_ditch', width: 200 },
+                {
+                    title: '可消费类型', field: 'coupons_type', width: 200, formatter: function (value, row, index) {
+                        var newValue = '';
+                        data_coupons_name.map(item => { if (value.indexOf(item.value) >= 0) newValue += (newValue ? ',' : '') + '' + item.label; });
+                        return newValue;
+                    }
+                },
+                {
+                    title: '发放渠道', field: 'coupons_ditch', width: 200, formatter: function (value, row, index) {
+                        var newValue = '';
+                        data_coupons_ditch.map(item => { if (value.indexOf(item.value) >= 0) newValue += (newValue ? ',' : '') + '' + item.label; });
+                        return newValue;
+                    }
+                },
                 { title: '发放张数', field: 'coupons_num', width: 200 },
-                { title: '过期时间', field: 'overdue_time', width: 200 }
-                { title: '创建时间', field: 'create_time', width: 200 },
+                {
+                    title: '过期时间', field: 'overdue_time', width: 200, formatter: function (value, row, index) {
+                        return value == null ? '' : value.split(' ')[0];
+                    }
+                }
             ]],
             onBeforeLoad: function (param) {
 
@@ -76,6 +80,9 @@
             }
         });
     }
+
+    var data_coupons_name = [{ label: '门票', value: '0' }, { label: '线路', value: '1' }];
+    var data_coupons_ditch = [{ label: '分享程序', value: '0' }, { label: '分享界面', value: '1' }, { label: '分款之后', value: '2' }, { label: '首次注册', value: '3' }, { label: '分享优惠券好友领取', value: '4' }];
 
     $(function () {
         initTable();
@@ -98,7 +105,7 @@
                 dialogError('请选择要修改的记录!');
                 return;
             }
-            var id = selected[0].Id;
+            var id = selected[0].id;
 
             dialogOpen({
                 id: 'form',
@@ -117,7 +124,7 @@
                 return;
             }
             var ids = $.map(checked, function (item) {
-                return item['Id'];
+                return item['id'];
             });
 
             dialogComfirm('确认删除吗？', function () {

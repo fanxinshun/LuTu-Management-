@@ -17,13 +17,13 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<product_coupons> GetDataList(string condition, string keyword, Pagination pagination)
+        public List<product_coupons> GetDataList(string coupons_name, Pagination pagination)
         {
             var q = GetIQueryable();
 
             //模糊查询
-            if (!condition.IsNullOrEmpty() && !keyword.IsNullOrEmpty())
-                q = q.Where($@"{condition}.Contains(@0)", keyword);
+            if (!coupons_name.IsNullOrEmpty())
+                q = q.Where($@"coupons_name.Contains(@0)", coupons_name);
 
             return q.GetPagination(pagination).ToList();
         }

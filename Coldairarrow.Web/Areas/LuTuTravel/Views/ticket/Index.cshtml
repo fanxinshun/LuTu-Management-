@@ -88,7 +88,11 @@
                 //{ title: '适合年龄最大值', field: 'age_appropriate_max', width: 200 },
                 //{ title: '下单风险提示开关', field: 'issue_risk', width: 200 },
                 //{ title: '下单风险提示内容', field: 'issue_risk_content', width: 200 },
-                { title: '产品到期时间', field: 'product_endtime', width: 200 }
+                {
+                    title: '产品到期时间', field: 'product_endtime', width: 200, formatter: function (value, row, index) {
+                        return value == null ? '' : value.split(' ')[0];
+                    }
+                }
                 //{ title: '最大延迟付款时间', field: 'pay_time', width: 200 },
                 //{ title: '是否是特价门票(0否 1是)', field: 'special_status', width: 200 },
                 //{ title: '产品logo，用于封面展示', field: 'logo', width: 200 },

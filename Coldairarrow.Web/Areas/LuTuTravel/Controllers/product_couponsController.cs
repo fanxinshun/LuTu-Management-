@@ -35,9 +35,9 @@ namespace Coldairarrow.Web
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public ActionResult GetDataList(string condition, string keyword, Pagination pagination)
+        public ActionResult GetDataList(string coupons_name, Pagination pagination)
         {
-            var dataList = _product_couponsBusiness.GetDataList(condition, keyword, pagination);
+            var dataList = _product_couponsBusiness.GetDataList(coupons_name, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
@@ -55,6 +55,7 @@ namespace Coldairarrow.Web
             if(theData.id.IsNullOrEmpty())
             {
                 theData.id = Guid.NewGuid().ToSequentialGuid();
+                theData.create_time = DateTime.Now;
 
                 _product_couponsBusiness.AddData(theData);
             }
