@@ -123,6 +123,24 @@ namespace Coldairarrow.Entity.LuTuTravel
         public Decimal? share_amount { get; set; }
 
         /// <summary>
+        /// 退款提前天数1
+        /// </summary>
+        public Int32? drawback_days1 { get; set; }
+        /// <summary>
+        /// 退款额度比例1
+        /// </summary>
+        public Int32? drawback_money1 { get; set; }
+
+        /// <summary>
+        /// 退款提前天数2
+        /// </summary>
+        public Int32? drawback_days2 { get; set; }
+        /// <summary>
+        /// 退款额度比例2
+        /// </summary>
+        public Int32? drawback_money2 { get; set; }
+
+        /// <summary>
         /// 游玩天数
         /// </summary>
         public Int32? days { get; set; }

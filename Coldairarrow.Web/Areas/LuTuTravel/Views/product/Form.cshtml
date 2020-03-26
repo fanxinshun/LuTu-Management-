@@ -56,21 +56,21 @@
             <tr>
                 <th>产品类别</th>
                 <td>
-                    <input name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
-                           data-options="width:'30%',required:true,editable:false,
+                    <div style="float:left">
+                        <input name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
+                               data-options="required:true,editable:false,
                                         valueField: 'id',
                                         textField: 'title',
                                         url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
-                </td>
-            </tr>
-            <tr>
-                <th>所属区域</th>
-                <td>
-                    <input id="area_code" name="area_code" value="@obj.area_code" class="easyui-combobox"
-                           data-options="width:'30%',required:true,editable:true,
+                    </div>
+                    <div style="float:left;line-height: 30px;margin-left:15px">所属区域</div>
+                    <div style="float:left;margin-left:5px">
+                        <input id="area_code" name="area_code" value="@obj.area_code" class="easyui-combobox"
+                               data-options="required:true,editable:true,
                                         valueField: 'code',
                                         textField: 'name',
                                         url: '@Url.Content("~/")LuTuTravel/area/GetAreaDataList'">
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -88,7 +88,7 @@
             <tr>
                 <th>预定须知</th>
                 <td>
-                    <textarea name="content" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.content</textarea>
+                    <textarea name="content" class="easyui-textbox" data-options="width:'100%',height:'160px',required:true,multiline:true,validType:'length[0,1000]'">@obj.content</textarea>
                 </td>
             </tr>
             <tr>
@@ -100,7 +100,7 @@
             <tr>
                 <th>费用明细</th>
                 <td>
-                    <textarea name="cost_detail" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.cost_detail</textarea>
+                    <textarea name="cost_detail" class="easyui-textbox" data-options="width:'100%',height:'180px',required:true,multiline:true,validType:'length[0,1000]'">@obj.cost_detail</textarea>
                 </td>
             </tr>
             <tr>
@@ -129,8 +129,7 @@
                 <th>可发团时间日期</th>
                 <td>
                     <input name="maximum_time_available" value="@obj.maximum_time_available" class="easyui-datebox"
-                           data-options="width:'20%',
-                                           required: true,
+                           data-options="required: true,
                                            onSelect: function(date){
                                                 time_availableClick(date);
                                            }">
@@ -147,37 +146,51 @@
             <tr>
                 <th>成本价</th>
                 <td>
-                    <input name="origin_price" value="@obj.origin_price" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
+                    <div style="float:left">
+                        <input name="origin_price" value="@obj.origin_price" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100000">
+                    </div>
+                    <div style="float:left;line-height:30px;margin-left:15px">市场价</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="price" value="@obj.price" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100000">
+                    </div>
+                    <div style="float:left;line-height:30px;margin-left:15px">成团价</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="team_price" value="@obj.team_price" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100000">
+                    </div>
+                    <div style="float:left;line-height:30px;margin-left:15px">团长返佣金额</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="team_commission" value="@obj.team_commission" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100000">
+                    </div>
+                    <div style="float:left;line-height:30px;margin-left:15px">用户分享所得优惠券面值</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="share_amount" value="@obj.share_amount" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100000">
+                    </div>
                 </td>
             </tr>
             <tr>
-                <th>市场价</th>
+                <th>提前</th>
                 <td>
-                    <input name="price" value="@obj.price" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
-                </td>
-            </tr>
-            <tr>
-                <th>成团价</th>
-                <td>
-                    <input name="team_price" value="@obj.team_price" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
-                </td>
-            </tr>
-            <tr>
-                <th>团长返佣金额</th>
-                <td>
-                    <input name="team_commission" value="@obj.team_commission" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
-                </td>
-            </tr>
-            <tr>
-                <th>用户分享所得优惠券面值</th>
-                <td>
-                    <input name="share_amount" value="@obj.share_amount" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100000">
+                    <div style="float:left">
+                        <input name="drawback_days1" value="@obj.drawback_days1" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">天，
+                    </div>
+                    <div style="float:left;line-height:30px;">退款</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="drawback_money1" value="@obj.drawback_money1" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">%
+                    </div>
+                    <div style="float:left;line-height:30px;margin-left:15px">提前</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="drawback_days2" value="@obj.drawback_days2" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">天，
+                    </div>
+                    <div style="float:left;line-height:30px;">退款额度比例2</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="drawback_money2" value="@obj.drawback_money2" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">%
+                    </div>
                 </td>
             </tr>
             <tr>
                 <th>游玩天数</th>
                 <td>
-                    <input name="days" value="@obj.days" class="easyui-numberbox" data-options="width:'20%',required:true,min:1,max:30">
+                    <input name="days" value="@obj.days" class="easyui-numberbox" data-options="required:true,min:1,max:30">
                 </td>
             </tr>
             <tr>
@@ -199,26 +212,26 @@
             <tr>
                 <th>产品砍价最低人数</th>
                 <td>
-                    <input name="people_minnum" value="@obj.people_minnum" class="easyui-numberbox" data-options="width:'20%',required:true,min:1,max:1000">
+                    <input name="people_minnum" value="@obj.people_minnum" class="easyui-numberbox" data-options="required:true,min:1,max:1000">
                 </td>
             </tr>
             <tr>
-                <th>适合年龄最小值</th>
+                <th>适合最小年龄</th>
                 <td>
-                    <input name="age_appropriate_min" value="@obj.age_appropriate_min" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100">
-                </td>
-            </tr>
-            <tr>
-                <th>适合年龄最大值</th>
-                <td>
-                    <input name="age_appropriate_max" value="@obj.age_appropriate_max" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:100">
+                    <div style="float:left">
+                        <input name="age_appropriate_min" value="@obj.age_appropriate_min" class="easyui-numberbox" data-options="required:true,min:0,max:100">
+                    </div>
+                    <div style="float:left;line-height:30px;margin-left:15px">适合最大年龄</div>
+                    <div style="float:left;margin-left:5px">
+                        <input name="age_appropriate_max" value="@obj.age_appropriate_max" class="easyui-numberbox" data-options="required:true,min:0,max:100">
+                    </div>
                 </td>
             </tr>
             <tr>
                 <th>下单风险提示开关</th>
                 <td>
                     <input name="issue_risk" value="@obj.issue_risk" class="easyui-combobox"
-                           data-options="width:'30%',required: true,
+                           data-options="required: true,
                                            valueField: 'value',
 		                                   textField: 'label',
                                             data:[{
@@ -244,25 +257,25 @@
             <tr>
                 <th>产品到期时间</th>
                 <td>
-                    <input name="product_endtime" value="@obj.product_endtime" class="easyui-datebox" data-options="width:'20%',required:false">
+                    <input name="product_endtime" value="@obj.product_endtime" class="easyui-datebox" data-options="required:false">
                 </td>
             </tr>
             <tr>
                 <th>最大延迟付款时间</th>
                 <td>
-                    <input name="pay_time" value="@obj.pay_time" class="easyui-numberbox" data-options="width:'20%',required:true,min:10,max:60">
+                    <input name="pay_time" value="@obj.pay_time" class="easyui-numberbox" data-options="required:true,min:10,max:60">
                 </td>
             </tr>
             <tr>
                 <th>是否是推荐(0否 1是)</th>
                 <td>
-                    <input name="recommend_status" value="@obj.recommend_status" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:1">
+                    <input name="recommend_status" value="@obj.recommend_status" class="easyui-numberbox" data-options="required:true,min:0,max:1">
                 </td>
             </tr>
             <tr>
                 <th>是否是特价(0否 1是)</th>
                 <td>
-                    <input name="bargain_price_status" value="@obj.bargain_price_status" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:1">
+                    <input name="bargain_price_status" value="@obj.bargain_price_status" class="easyui-numberbox" data-options="required:true,min:0,max:1">
                 </td>
             </tr>
         </tbody>
