@@ -38,13 +38,11 @@
             <tr>
                 <th>城市</th>
                 <td>
-                    <input id="area_code" name="area_code" class="easyui-combotree"
-                           data-options="width: '50%', required: true,editable:false,
-                                        state: 'closed',
-                                        url: '@Url.Content("~/")LuTuTravel/Product/GetAreaList',
-                                        onLoadSuccess:function(){
-                                            $('#area_code').combotree('setValue', {	                                            id: '@obj.area_code',	                                            text: '@obj.areaName'                                            });
-                                        }">
+                    <inpu id="area_code" name="area_code" value="@obj.area_code" class="easyui-combobox"
+                           data-options="width:'50%',required:true,editable:true,
+                                        valueField: 'code',
+                                        textField: 'name',
+                                        url: '@Url.Content("~/")LuTuTravel/area/GetAreaDataList'">
                 </td>
             </tr>
             <tr>
@@ -104,7 +102,12 @@
         $('#saveForm').click(function () {
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
-            debugger;
+
+            var noSelect = $('#area_code').combobox('getValue') == $('#area_code').combobox('getText');
+            if (noSelect) {
+                dialogError('请选择所属区域');
+                return;
+            }
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
             $.postJSON(rootUrl + 'LuTuTravel/product_tag/SaveData', theEntity, function (resJson) {

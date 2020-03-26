@@ -52,13 +52,11 @@
             <tr>
                 <th>地区编码</th>
                 <td>
-                    <input name="area_code" value="@obj.area_code" class="easyui-combotree"
-                           data-options="width: '30%', required: true,
-                                        url: '@Url.Content("~/")LuTuTravel/ticket/GetAreaList',
-                                        onSelect: function(node){
-                                                  $('#area_name').textbox('setValue', node.text);
-                                        }">
-                    <input id="area_name" name="area_name" value="@obj.area_name" class="easyui-textbox" data-options="width:'20%',editable:false">
+                    <input id="area_code" name="area_code" value="@obj.area_code" class="easyui-combobox"
+                           data-options="width:'30%',required:true,editable:true,
+                                        valueField: 'code',
+                                        textField: 'name',
+                                        url: '@Url.Content("~/")LuTuTravel/area/GetAreaDataList'">
                 </td>
             </tr>
             <tr>
@@ -647,6 +645,12 @@
         $('#saveForm').click(function () {
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
+
+            var noSelect = $('#area_code').combobox('getValue') == $('#area_code').combobox('getText');
+            if (noSelect) {
+                dialogError('请选择所属区域');
+                return;
+            }
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
 

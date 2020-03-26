@@ -12,6 +12,7 @@ namespace Coldairarrow.Web
     [Area("LuTuTravel")]
     public class product_tagController : BaseMvcController
     {
+        AreaBusiness _areaBusiness = new AreaBusiness();
         product_tagBusiness _product_tagBusiness = new product_tagBusiness();
 
         #region 视图功能
@@ -31,7 +32,7 @@ namespace Coldairarrow.Web
         #endregion
 
         #region 获取数据
-
+        
         /// <summary>
         /// 获取数据列表
         /// </summary>

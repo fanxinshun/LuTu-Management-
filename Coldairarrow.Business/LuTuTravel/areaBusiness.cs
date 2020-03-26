@@ -10,6 +10,7 @@ namespace Coldairarrow.Business.LuTuTravel
     public class AreaBusiness : BaseBusiness<area>
     {
         #region 外部接口
+
         /// <summary>
         /// 获取数据列表
         /// </summary>
@@ -31,6 +32,17 @@ namespace Coldairarrow.Business.LuTuTravel
                 });
             });
             return aModule;
+        }
+
+        /// <summary>
+        /// 获取数据列表
+        /// </summary>
+        /// <param name="condition">查询类型</param>
+        /// <param name="keyword">关键字</param>
+        /// <returns></returns>
+        public List<area> GetDataList()
+        {
+            return GetIQueryable().ToList();
         }
         /// <summary>
         /// 获取数据列表
