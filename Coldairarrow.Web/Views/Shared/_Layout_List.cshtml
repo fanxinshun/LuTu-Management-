@@ -50,6 +50,14 @@
         $.parser.onComplete = function () {
             $('#loadingMask').remove();
         }
+        $.fn.datebox.defaults.parser = function (s) {
+            var t = Date.parse(s);
+            if (!isNaN(t)) {
+                return new Date(t);
+            } else {
+                return new Date();
+            }
+        }
     </script>
 </body>
 </html>
