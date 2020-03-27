@@ -32,9 +32,12 @@ namespace Coldairarrow.Business.LuTuTravel
                 q = q.Where(x => x.create_time >= create_time1);
             if (create_time2 != null)
                 q = q.Where(x => x.create_time <= create_time2);
-            pagination.SortField = "Id";
-            pagination.SortType = "desc";
-            return q.GetPagination(pagination).ToList();
+
+            var resList = q.GetPagination(pagination).ToList();
+            var areaBusiness = new AreaBusiness();
+            resList.ForEach(item => item.area_code = areaBusiness.GetTheData(item.area_code)?.name);
+
+            return resList;
         }
         /// <summary>
         /// 获取所以产品门票数据

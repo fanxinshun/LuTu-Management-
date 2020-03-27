@@ -24,7 +24,7 @@ namespace Coldairarrow.Business.LuTuTravel
         {
             List<DbParameter> paramters = new List<DbParameter>()
             {
-                new  MySqlParameter ("@title",title)
+                new  MySqlParameter ("@title", "%" + title + "%")
             };
             var sql = string.Empty;
             //marketingType == 0全部
@@ -40,11 +40,12 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
 	                        b.team_commission pteam_commission,
-	                        b.area_name parea_name 
+	                        c.name parea_name 
                         FROM
 	                        product_marketing a
 	                        RIGHT JOIN product b ON a.product_id = b.Id
-                        WHERE (@title is null or b.title=@title) ";
+                            LEFT JOIN area c on b.area_code = c.code
+                        WHERE b.enable_flag = '1' AND (@title is null or b.title like @title) ";
             }
             else if (marketingType == 1)
             {
@@ -55,11 +56,12 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
 	                        b.team_commission pteam_commission,
-	                        b.area_name parea_name 
+	                        c.name parea_name 
                         FROM
 	                        product_marketing a
 	                        INNER JOIN product b ON a.product_id = b.Id
-                        WHERE (@title is null or b.title=@title) ";
+                            LEFT JOIN area c on b.area_code = c.code
+                        WHERE b.enable_flag = '1' AND (@title is null or b.title like @title) ";
             }
             else if (marketingType == 2)
             {
@@ -70,11 +72,14 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
 	                        b.team_commission pteam_commission,
-	                        b.area_name parea_name 
+	                        c.name parea_name 
                         FROM
 	                        product_marketing a
 	                        RIGHT JOIN product b ON a.product_id = b.Id
-                        WHERE a.product_marketing_id is null AND (@title is null or b.title=@title) ";
+                            LEFT JOIN area c on b.area_code = c.code
+                        WHERE b.enable_flag = '1' 
+                          AND a.product_marketing_id is null 
+                          AND (@title is null or b.title like @title) ";
             }
             else if (marketingType == 3)
             {
@@ -85,11 +90,14 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
 	                        b.team_commission pteam_commission,
-	                        b.area_name parea_name 
+	                        c.name parea_name 
                         FROM
 	                        product_marketing a
 	                        RIGHT JOIN product b ON a.product_id = b.Id
-                        WHERE b.team_commission >0 AND (@title is null or b.title=@title) ";
+                            LEFT JOIN area c on b.area_code = c.code
+                        WHERE b.enable_flag = '1' 
+                          AND b.team_commission >0 
+                          AND (@title is null or b.title like @title) ";
             }
             DataTable table = GetDataTableWithSql(sql, paramters);
 
@@ -105,7 +113,7 @@ namespace Coldairarrow.Business.LuTuTravel
         {
             List<DbParameter> paramters = new List<DbParameter>()
             {
-                new  MySqlParameter ("@product_marketing_id",id=="null"?null:id),
+                new  MySqlParameter ("@product_marketing_id", id == "null" ? null: id),
                 new  MySqlParameter ("@product_id",product_id)
             };
             DataTable table = GetDataTableWithSql(@"SELECT
@@ -115,10 +123,11 @@ namespace Coldairarrow.Business.LuTuTravel
 	                                                    b.title ptitle,
 	                                                    b.team_price pteam_price,
 	                                                    b.team_commission pteam_commission,
-	                                                    b.area_name parea_name 
+	                                                    c.name parea_name 
                                                     FROM
 	                                                    product_marketing a
-	                                                    RIGHT JOIN product b ON a.product_id = b.Id
+	                                                    RIGHT JOIN product b ON a.product_id = b.Id AND b.enable_flag = '1'
+                                               LEFT JOIN area c on b.area_code = c.code
                                                    WHERE (@product_marketing_id is not null AND a.product_marketing_id=@product_marketing_id)
                                                           OR (@product_marketing_id is null AND @product_id=b.Id )", paramters);
             if (table == null || table.Rows.Count == 0) return new productMarketingModel();

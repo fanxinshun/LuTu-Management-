@@ -46,11 +46,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 地区编码
         /// </summary>
         public String area_code { get; set; }
-
-        /// <summary>
-        /// 地区名称
-        /// </summary>
-        public String area_name { get; set; }
+        
 
         /// <summary>
         /// 目的地
