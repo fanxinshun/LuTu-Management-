@@ -544,13 +544,11 @@
         } else {
             $('#accordion_time_available').accordion('add', {
                 title: title,
-                height: '180px',
                 content: content,
                 selected: true
             });
         }
     }
-
 
     $(function () {
         var list = @datalistStr;
@@ -657,8 +655,8 @@
             var datalistProductData = [];
             var panels = $('#accordion_time_available').accordion('panels');
             for (var i = 0; i < panels.length; i++) {
-                var daysdiv = $(panels[i]).panel('body').find('div:not(:last)');
-                for (var j = 0; j < daysdiv.length; j++) {
+                var daysdiv = $(panels[i]).panel('body').find('div');
+                for (var j = 0; j < daysdiv.length-2; j++) {
                     var theEntityProductData = @emptyProductDataStr;
                     var values = $(daysdiv[j]).getValues();
                     $.extend(theEntityProductData, values);

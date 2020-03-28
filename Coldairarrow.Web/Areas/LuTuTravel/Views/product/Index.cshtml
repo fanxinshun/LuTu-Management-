@@ -5,25 +5,30 @@
     <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
     <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
     <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">下架</a>
+    <a id="copy" class="easyui-linkbutton" data-options="iconCls:'icon-add'">复制产品</a>
 }
 @section search{
     <div class="search_wrapper">
-        <div class='search_item' style="display:none">
-            <label class='search_label'>产品ID</label>
-            <input name='Id' class='easyui-textbox' style='width:150px' />
+        <div class='search_item'>
+            <label class='search_label'>产品类别</label>
+            <input name="product_type_id" class="easyui-combobox"
+                   data-options="width:'120px',editable:true,
+                                        valueField: 'id',
+                                        textField: 'title',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
         </div>
         <div class='search_item'>
             <label class='search_label'>产品名称</label>
-            <input name='title' class='easyui-textbox' style='width:150px'>
+            <input name='title' class='easyui-textbox' style='width:120px'>
         </div>
         <div class='search_item'>
             <label class='search_label'>供应商</label>
-            <input name='supplier' class='easyui-textbox' style='width:150px'>
+            <input name='supplier' class='easyui-textbox' style='width:120px'>
         </div>
         <div class='search_item'>
             <label class='search_label'>发布时间</label>
-            <input name='create_time1' class='easyui-datebox' style='width:150px' />
-            <input name='create_time2' class='easyui-datebox' style='width:150px' />
+            <input name='create_time1' class='easyui-datebox' style='width:120px' />
+            <input name='create_time2' class='easyui-datebox' style='width:120px' />
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
@@ -177,6 +182,28 @@
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');
                         dialogMsg('下架成功!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+        //复制产品
+        $('#copy').click(function () {
+            var selected = $("#dataTable").datagrid("getChecked");
+            if (!selected || !selected.length) {
+                dialogError('请选择要复制的产品!');
+                return;
+            }
+            var id = selected[0].Id;
+
+            dialogComfirm('确认复制吗？', function () {
+                $.postJSON(rootUrl + 'LuTuTravel/product/CopyData', { id: id }, function (resJson) {
+                    if (resJson.Success) {
+                        $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                        $('#dataTable').datagrid('reload');
+                        dialogMsg('复制成功!');
                     }
                     else {
                         dialogError(resJson.Msg);

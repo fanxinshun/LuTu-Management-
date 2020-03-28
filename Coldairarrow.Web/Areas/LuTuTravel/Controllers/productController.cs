@@ -67,9 +67,9 @@ namespace Coldairarrow.Web
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public ActionResult GetDataList(int? Id, string title, string supplier, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
+        public ActionResult GetDataList(string product_type_id, string title, string supplier, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
         {
-            var dataList = _productBusiness.GetDataList(0, Id, title, supplier, create_time1, create_time2, pagination);
+            var dataList = _productBusiness.GetDataList(0, product_type_id, title, supplier, create_time1, create_time2, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
@@ -137,6 +137,32 @@ namespace Coldairarrow.Web
             _productBusiness.UpdateAny(products, new List<string>() { "enable_flag" });
 
             return Success("下架成功！");
+        }
+        /// <summary>
+        /// 复制产品
+        /// </summary>
+        /// <param name="theData">删除的数据</param>
+        public ActionResult CopyData(int id)
+        {
+            var theData = _productBusiness.GetTheData(id).DeepClone();
+            var teamlist = new List<team>();
+            if (theData != null)
+            {
+                var listProductDate = _product_dateBusiness.GetDataList(theData.Id);
+                theData.Id = 0;
+                theData.create_by = Operator.UserId;
+                theData.create_time = DateTime.Now;
+                _productBusiness.Insert(theData);
+                foreach (var item in listProductDate)
+                {
+                    item.product_date_id = 0;
+                    teamlist.Add(new team() { product_id = theData.Id, start_time = item.open_date, status = 1 });
+                }
+                _product_dateBusiness.Insert(listProductDate);
+                _teamBusiness.Insert(teamlist);
+
+            }
+            return Success("复制成功！");
         }
         /// <summary>
         /// 上传文件到文件系统服务器

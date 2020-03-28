@@ -32,7 +32,12 @@
                            data-options="width:'50%',required:true,
                                         valueField: 'id',
                                         textField: 'tagname',
-                                        url: '@Url.Content("~/")LuTuTravel/product_tag/GetpanentTagname'">
+                                        url: '@Url.Content("~/")LuTuTravel/product_tag/GetpanentTagname',
+                                        onSelect:function(rec){
+                           debugger;
+                                             $('input[name=tagname]').val(rec.tagname);
+                                         }">
+                    <input type="hidden" name="tagname" value="@obj.tagname"/>
                 </td>
             </tr>
             <tr>

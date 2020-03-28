@@ -65,9 +65,9 @@ namespace Coldairarrow.Web
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public ActionResult GetDataList(int? Id, string title, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
+        public ActionResult GetDataList(string product_type_id, string title, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
         {
-            var dataList = _productBusiness.GetDataList(1, Id, title, string.Empty, create_time1, create_time2, pagination);
+            var dataList = _productBusiness.GetDataList(1, product_type_id, title, string.Empty, create_time1, create_time2, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }

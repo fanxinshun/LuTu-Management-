@@ -194,18 +194,12 @@
                 </td>
             </tr>
             <tr>
-                <th>集合地点</th>
-                <td>
-                    <input name="address" value="@obj.address" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,255]'">
-                </td>
-            </tr>
-            <tr>
                 <th>砍价时间</th>
                 <td>
                     <span>需提前</span>
                     <input name="advance_day" value="@obj.advance_day" class="easyui-numberbox" data-options="width:'40px',required:false,min:0,max:100">
                     <span>天，并在</span>
-                    <input name="advance_time" value="@obj.advance_time" class="easyui-timespinner" style="width:80px;" data-options="min:'00:01'">
+                    <input id="advance_time" name="advance_time" class="easyui-timespinner" style="width:80px;" data-options="min:'00:01'">
                     <span>前砍价</span>
                 </td>
             </tr>
@@ -263,7 +257,7 @@
             <tr>
                 <th>最大延迟付款时间</th>
                 <td>
-                    <input name="pay_time" value="@obj.pay_time" class="easyui-numberbox" data-options="required:true,min:10,max:60">
+                    <input name="pay_time" value="@obj.pay_time" class="easyui-numberbox" data-options="required:true,min:10,max:60">分钟
                 </td>
             </tr>
             <tr>
@@ -291,22 +285,46 @@
     //生成每一天的样式
     function accordionPanelDay(obj) {
         var day = (new Date(obj.open_date)).getDate();
-        var accordionPanelDays = '<div style="float:left;width:33%">';//每一天的控件/布局
+        var accordionPanelDays = '<div style="float:left;width:25%">';//每一天的控件/布局
         accordionPanelDays += '<input type="hidden" name="product_date_id" value="' + (obj.product_date_id || '') + '">';
         accordionPanelDays += '<input type="checkbox" ' + (obj.is_opening == '1' ? 'checked="checked" ' : '') + '>';
         accordionPanelDays += '<input type="hidden" name="open_date" value="' + obj.open_date + '">';
-        accordionPanelDays += '<span>' + day + (day < 10 ? '&nbsp;' : '') + '</span>';
-        accordionPanelDays += '<span>成团人数</span> <input class="easyui-numberbox" name="team_people_num" value="' + (obj.team_people_num || '') + '" data-options="width:\'45px\',min:1,max:1000" /><span>团数</span><input class="easyui-numberbox" name="team_num" value="' + (obj.team_num || '') + '" data-options="width:\'45px\',min:1,max:1000" />';
+        accordionPanelDays += '<span>' + day.toString() + (day < 10 ? '&nbsp' : '') + '</span>';
+        accordionPanelDays += '<span>人数</span> <input class="easyui-numberbox" name="team_people_num" value="' + (obj.team_people_num || '') + '" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" /><span>团数</span><input class="easyui-numberbox" name="team_num" value="' + (obj.team_num || '') + '" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" />';
         accordionPanelDays += '</div>';
         return accordionPanelDays;
     }
     function accordionPanelDayButton() {
         var foottDiv = '<div style="float:left;width:100%;text-align:right">';//Panel Button
-        foottDiv += '<span>默认人数</span> <input value="20" class="easyui-numberbox" data-options="width:\'45px\',min:1,max:1000" /><span>团数</span><input value="10" class="easyui-numberbox" data-options="width:\'45px\',min:1,max:1000"  />';
+        foottDiv += '<span>默认人数</span> <input value="20" class="easyui-numberbox" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" /><span>团数</span><input value="10" class="easyui-numberbox" data-options="width:\'45px\',height:\'22px\',min:1,max:1000"  />';
         foottDiv += '<a onclick="checkAll($(this).parent())" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-ok\'">默认/全选</a>';
         foottDiv += '<a onclick="goNextMonthPanel()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一月</a>';
         foottDiv += '</div>';
+        foottDiv += '<div id="foottCheckboxDiv" style="float:left;width:100%;text-align:right">';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,1)">周一&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,2)">周二&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,3)">周三&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,4)">周四&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,5)">周五&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,6)">周六&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,0)">周日&nbsp';
+        foottDiv += '</div>';
         return foottDiv;
+    }
+    //按周选择
+    function foottCheckboxClick(ck, wk) {
+        var a = $(ck).parent().prev().find('input:first').val();
+        var b = $(ck).parent().prev().find('input:last').val();
+        var divs = $(ck).parent().parent().find('div');
+        for (var i = 0; i < $(divs).length - 2; i++) {
+            var open_date = new Date($(divs).eq(i).find('input[name=open_date]').val());
+            if (wk == open_date.getDay()) {
+                var isck = $(ck).prop('checked');
+                $(divs).eq(i).find(':checkbox').prop('checked', isck);
+                $(divs).eq(i).find('.easyui-numberbox:first').numberbox('setValue', isck ? a : '');
+                $(divs).eq(i).find('.easyui-numberbox:last').numberbox('setValue', isck ? b : '');
+            }
+        }
     }
 
     //默认/全选
@@ -355,15 +373,14 @@
         } else {
             $('#accordion_time_available').accordion('add', {
                 title: title,
-                height: '370px',
                 content: content,
                 selected: true
             });
         }
     }
 
-
     $(function () {
+        $('#advance_time').timespinner('setValue', '@obj.advance_time' ? '@obj.advance_time' : '23:59');
         var list = @datalistStr;
         var defaultContent = accordionPanelDayButton();//默认项
         var month = '';
@@ -373,7 +390,6 @@
             if (month != rmonth) {
                 $('#accordion_time_available').accordion('add', {
                     title: rmonth,
-                    height: '370px',
                     selected: true
                 });
 
@@ -392,6 +408,8 @@
                 $(panel).panel({ 'content': monthContent + defaultContent });
             }
         }
+
+
         //上传产品图片
         document.getElementById('file1').onchange = function () {
             $('#file1').getFileBase64(function (base64, fileName) {
@@ -465,8 +483,8 @@
             var datalistProductData = [];
             var panels = $('#accordion_time_available').accordion('panels');
             for (var i = 0; i < panels.length; i++) {
-                var daysdiv = $(panels[i]).panel('body').find('div:not(:last)');
-                for (var j = 0; j < daysdiv.length; j++) {
+                var daysdiv = $(panels[i]).panel('body').find('div');
+                for (var j = 0; j < daysdiv.length-2; j++) {
                     var theEntityProductData = @emptyProductDataStr;
                     var values = $(daysdiv[j]).getValues();
                     $.extend(theEntityProductData, values);

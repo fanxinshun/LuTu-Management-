@@ -8,18 +8,22 @@
 }
 @section search{
     <div class="search_wrapper">
-        <div class='search_item' style="display:none">
-            <label class='search_label'>产品ID</label>
-            <input name='Id' class='easyui-textbox' style='width:150px' />
+        <div class='search_item'>
+            <label class='search_label'>产品类别</label>
+            <input name="product_type_id" class="easyui-combobox"
+                   data-options="width:'120px',editable:true,
+                                        valueField: 'id',
+                                        textField: 'title',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
         </div>
         <div class='search_item'>
             <label class='search_label'>产品名称</label>
-            <input name='title' class='easyui-textbox' style='width:150px'>
+            <input name='title' class='easyui-textbox' style='width:120px'>
         </div>
         <div class='search_item'>
             <label class='search_label'>发布时间</label>
-            <input name='create_time1' class='easyui-datebox' style='width:150px' />
-            <input name='create_time2' class='easyui-datebox' style='width:150px' />
+            <input name='create_time1' class='easyui-datebox' style='width:120px' />
+            <input name='create_time2' class='easyui-datebox' style='width:120px' />
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>

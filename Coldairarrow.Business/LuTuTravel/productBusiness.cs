@@ -15,18 +15,18 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 获取数据列表
         /// </summary>
         /// <returns></returns>
-        public List<product> GetDataList(int special_status, int? Id, string title, string supplier, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
+        public List<product> GetDataList(int special_status, string product_type_id, string title, string supplier, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
         {
             var q = GetIQueryable().Where(x => x.enable_flag == "1" && x.special_status == special_status);
 
             //模糊查询
-            if (Id != null)
-                q = q.Where(x => x.Id == Id);
+            if (!product_type_id.IsNullOrEmpty())
+                q = q.Where(x => x.product_type_id == product_type_id);
 
             if (!title.IsNullOrEmpty())
                 q = q.Where(x => x.title.Contains(title));
             if (!supplier.IsNullOrEmpty())
-                q = q.Where(x => x.title.Contains(supplier));
+                q = q.Where(x => x.supplier.Contains(supplier));
 
             if (create_time1 != null)
                 q = q.Where(x => x.create_time >= create_time1);
