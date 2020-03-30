@@ -1,196 +1,195 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+}
+<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="@Url.Scrpit("~/Scripts/vendor/layui/css/layui.css")" />
-    <link rel="stylesheet" href="@Url.Scrpit("~/Skin/home/desktop.css")" />
-</head>
+    <script src="@Url.Scrpit("~/Scripts/echarts/echarts-en.common.min.js")"></script>
 
+    <style type="text/css">
+        #mainDiv {
+            width: 90%;
+            text-align: center;
+            margin: 10px;
+        }
+
+        .topDiv {
+            width: 100%;
+            height: 80px;
+            text-align: left;
+        }
+
+            .topDiv div {
+                float: left;
+                width: 20%
+            }
+
+        #main {
+            width: 100%;
+            height: 250px;
+            margin-top: 30px
+        }
+    </style>
+</head>
 <body>
-    <div class="admin-main">
-        <blockquote class="layui-elem-quote">
-            <p>本框架旨在极大的提高开发效率</p>
-            <p>
-                使用技术栈：<br />
-                后端：采用.NET Core平台，ASP.NET Core，C#语言（使用反射等高级技术），Entity Framework Core（数据库ORM框架）。<br />
-                使用数据仓储模式，抽象化数据库操作(CRUD等)、支持事务处理以及分布式事务处理（跨库）<br />
-                禁用系统Session,使用自定义Session，提高系统性能<br />
-                集成多种工具类库以及操作拓展<br />
-                数据库：SqlServer（框架使用简单工厂，工厂方法，抽象工厂，可轻松更换数据库）,Redis作为分布式缓存<br />
-                前端：HTML5,JS,JQuery,Easyui（主要前端框架），其中集成多种JS插件，力求方便项目开发。
-                <br />
-                <br />
-                具体技术实施：<br />
-                项目采用前后端完全分离模式，并采用严格分层模式，极大的增加聚合度，降低耦合度，<br />
-                提高代码的健壮性，可维护性。<br />
-                前后端通过数据接口操作数据，统一使用JSON作为数据格式，并使用默认接口签名算法保证接口的安全性。
-                <br />
-                <br />
-                功能架构部分详解：<br />
-                快速开发：此功能为框架的核心，通过选择数据库中的表，就能自动生成对应的实体层、业务逻辑层、控制器、视图，以及对应的配置，即无需编写代码即可生成基本的CRUD操作。<br />
-                接口密钥管理：管理接口的密钥，若开启接口签名的规则，则前端需要通过给接口签名才能够正常访问后台接口。<br />
-                权限管理：提供健全的权限管理功能，支持给系统用户、系统角色和对外接口AppId分配权限
-                <br />
-                <br />
-                相关技术文档:<br />
-                Easyui:<a href="http://www.jeasyui.net/" target="_blank">http://www.jeasyui.net/</a>
-            </p>
-            <br />
-        </blockquote>
-        <fieldset class="layui-elem-field">
-            <legend>更新日志</legend>
-            <div class="layui-field-box">
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2018-01-08</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            框架移植整合到Easyui
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-16</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            添加数据库分布式事务支持
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-15</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            数据库事务优化
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-13</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            数据库操作优化
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-12</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            实体生成，添加对PostgreSql的支持
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-08</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            数据仓储更新优化
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-08</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            初步整体完成~~
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-06</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            1:添加验证插件<br />
-                            2:加载动画
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-11-04</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            禁用自带Session，使用自定义Session，提高并发性能
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-31</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            完成用户管理，权限管理
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-23</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            Wcf优化，不再需要添加服务引用，可以直接使用接口创建客户端
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-17</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            代码生成（完成部分）
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-14</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            1:更新完善签名<br />
-                            2:SocketUdp框架初步完成
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-11</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            1:添加密钥管理<br />
-                            2:更新Socket框架
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-07</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            完成实体生成功能
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-05</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            完成数据库连接管理
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-03</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            完成系统功能模块
-                        </p>
-                    </div>
-                </fieldset>
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>2017-10-02</legend>
-                    <div class="layui-field-box">
-                        <p>
-                            系统功能管理
-                        </p>
-                    </div>
-                </fieldset>
+
+    <div id="mainDiv">
+        <div class="topDiv">
+            <div>今日浏览数：<span id="T_VisitsNum"></span></div>
+            <div>今日注册用户：<span id="T_RegisteredUsers"></span></div>
+            <div>今日团长新增：<span id="T_NewHead"></span></div>
+            <div>今日参团数：<span id="T_Participants"></span></div>
+            <div>今日交易额：<span id="T_TradingVolume"></span></div>
+            <div>昨日：<span id="Y_VisitsNum"></span></div>
+            <div>昨日：<span id="Y_RegisteredUsers"></span></div>
+            <div>昨日：<span id="Y_NewHead"></span></div>
+            <div>昨日：<span id="Y_Participants"></span></div>
+            <div>昨日：<span id="Y_TradingVolume"></span></div>
+            <div>共：<span id="A_VisitsNum"></span></div>
+            <div>共：<span id="A_RegisteredUsers"></span></div>
+            <div>共：<span id="A_NewHead"></span></div>
+            <div>共：<span id="A_Participants"></span></div>
+            <div>共：<span id="A_TradingVolume"></span></div>
+
+        </div>
+        <div style="clear:both"></div>
+
+        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main"></div>
+        <div style="margin-top: 200px;">
+            <div style="float: left;width: 50%;height:220px">
+                <div id="productSaleRank">
+                    <!--产品销售排行-->
+                </div>
             </div>
-        </fieldset>
+
+            <div style="float: left;width: 50%;height:220px">
+                <div id="teamSaleRank">
+                    <!--团长销售排行-->
+                </div>
+            </div>
+        </div>
     </div>
+    <script type="text/javascript">
+
+        function iniProductSaleRank() {
+            $('#productSaleRank').datagrid({
+                //url: rootUrl + 'Home/GetProductSaleRankData',
+                //method: 'POST',
+                title: '产品销售排行榜',
+                //queryParams: { 'id': id },
+                idField: 'name',
+                fit: true,
+                striped:true,
+                fitColumns: true,
+                singleSelect: false,
+                selectOnCheck: false,
+                checkOnSelect: false,
+                sortName: 'num',
+                sortOrder: 'desc',
+                rownumbers: true,
+                pagination: true,
+                pageSize: 5,
+                //nowrap: false,
+                pageList: [5, 20, 30, 50, 100, 150, 200],
+                //showFooter: true,
+                columns: [[
+                    { title: '产品名称', field: 'name', width: 200 },
+                    { title: '数量', field: 'num', width: 200 }
+                ]],
+                onBeforeSelect: function () {
+                    return false;
+                }
+            });
+        }
+
+        function iniTeamSaleRank() {
+            $('#teamSaleRank').datagrid({
+                //url: rootUrl + 'Home/GetProductSaleRankData',
+                //method: 'POST',
+                title: '团长销售排行榜',
+                //queryParams: { 'id': id },
+                //idField: 'Id',
+                fit: true,
+                striped: true,
+                fitColumns: true,
+                singleSelect: false,
+                selectOnCheck: false,
+                checkOnSelect: false,
+                sortName: 'num',
+                sortOrder: 'desc',
+                rownumbers: true,
+                pagination: true,
+                pageSize: 5,
+                //nowrap: false,
+                pageList: [5, 20, 30, 50, 100, 150, 200],
+                //showFooter: true,
+                columns: [[
+                    { title: '团长', field: 'name', width: 200 },
+                    { title: '数量', field: 'num', width: 200 }
+                ]],
+                onBeforeSelect: function () {
+                    return false;
+                }
+            });
+        }
+
+        var rootUrl = '@Url.Content("~/")';
+
+        $(function () {
+            iniProductSaleRank();
+            iniTeamSaleRank();
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+            myChart.on('click', function (params) {
+                // 控制台打印数据的名称
+                console.log(params.name);
+            });
+            myChart.showLoading();
+            $.getJSON(rootUrl + 'Home/GetMainData', { days: 30 }).done(function (resJson) {
+                if (resJson.Success) {
+                    myChart.hideLoading();
+                    myChart.setOption({
+                        title: {
+                            text: '运营概况'
+                        },
+                        tooltip: {
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: resJson.Data.xAxisData
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '销售额',
+                            type: 'line',
+                            data: resJson.Data.yAxisData, smooth: true
+                        }]
+                    });
+                    $('#T_VisitsNum').html(resJson.Data.T_VisitsNum);
+                    $('#Y_VisitsNum').html(resJson.Data.Y_VisitsNum);
+                    $('#A_VisitsNum').html(resJson.Data.A_VisitsNum);
+                    $('#T_RegisteredUsers').html(resJson.Data.T_RegisteredUsers);
+                    $('#Y_RegisteredUsers').html(resJson.Data.Y_RegisteredUsers);
+                    $('#A_RegisteredUsers').html(resJson.Data.A_RegisteredUsers);
+                    $('#T_NewHead').html(resJson.Data.T_NewHead);
+                    $('#Y_NewHead').html(resJson.Data.Y_NewHead);
+                    $('#A_NewHead').html(resJson.Data.A_NewHead);
+                    $('#T_Participants').html(resJson.Data.T_Participants);
+                    $('#Y_Participants').html(resJson.Data.Y_Participants);
+                    $('#A_Participants').html(resJson.Data.A_Participants);
+                    $('#T_TradingVolume').html(resJson.Data.T_TradingVolume);
+                    $('#Y_TradingVolume').html(resJson.Data.Y_TradingVolume);
+                    $('#A_TradingVolume').html(resJson.Data.A_TradingVolume);
+                    $('#productSaleRank').datagrid('loadData', resJson.Data.ProductSaleRank);
+                    $('#teamSaleRank').datagrid('loadData', resJson.Data.TeamSaleRank);
+                }
+            });
+
+        });
+
+    </script>
 </body>
 </html>

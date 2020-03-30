@@ -82,5 +82,9 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// </summary>
         public String member_id { get; set; }
 
+        /// <summary>
+        /// 分享人id
+        /// </summary>
+        public String share_id { get; set; }
     }
 }

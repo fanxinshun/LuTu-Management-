@@ -9,7 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>鹿途旅游后台管理系统</title>
+    <title>北燕后台管理系统</title>
     <link href="@Url.Scrpit("~/Scripts/easyui/themes/bootstrap/easyui.css")" rel="stylesheet" />
     <link href="@Url.Scrpit("~/Scripts/easyui/themes/icon.css")" rel="stylesheet" />
     <link href="@Url.Scrpit("~/Scripts/easyui/themes/color.css")" rel="stylesheet" />
@@ -107,6 +107,7 @@
             });
 
             $container.find("a.main_item:eq(0)").trigger("click");
+            $container.find("a.sub_item:eq(0)").trigger("click");
 
             $('#logout').click(function () {
                 dialogComfirm('确认要注销吗？', function () {
@@ -128,7 +129,7 @@
                 });
             });
 
-            //Desktop.tabs.add('_panel_0110000', '框架介绍', rootUrl + 'Home/Desktop');
+            //Desktop.tabs.add('_panel_0110000', '首页', rootUrl + 'Home/Desktop');
         })();
     </script>
 </body>

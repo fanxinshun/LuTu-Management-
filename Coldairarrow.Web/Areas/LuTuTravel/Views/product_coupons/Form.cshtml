@@ -22,13 +22,13 @@
             <tr>
                 <th>优惠券金额</th>
                 <td>
-                    <input name="coupons_money" value="@obj.coupons_money" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000">
+                    <input name="coupons_money" value="@obj.coupons_money" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000,precision:2">
                 </td>
             </tr>
             <tr>
                 <th>消费满减金额限制</th>
                 <td>
-                    <input name="coupons_limit" value="@obj.coupons_limit" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000">
+                    <input name="coupons_limit" value="@obj.coupons_limit" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000,precision:2">
                 </td>
             </tr>
             <tr>
@@ -54,7 +54,7 @@
             <tr>
                 <th>发放张数</th>
                 <td>
-                    <input name="coupons_num" value="@obj.coupons_num" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000">
+                    <input name="coupons_num" value="@obj.coupons_num" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:10000">
                 </td>
             </tr>
             <tr>

@@ -7,7 +7,7 @@ namespace Coldairarrow.Web
 {
     public class HomeController : BaseMvcController
     {
-        public HomeController(IHomebusiness homebus )
+        public HomeController(IHomebusiness homebus)
         {
             _homeBus = homebus;
         }
@@ -49,6 +49,14 @@ namespace Coldairarrow.Web
         #endregion
 
         #region 获取数据
+        public ActionResult GetMainData(int days)
+        {
+            Pagination pagination = new Pagination() { SortField = "num", order = "desc" };
+            var res = new HomeBusiness().GetMainData(days, pagination);
+
+            //return View(theData);
+            return Success(res);
+        }
 
         #endregion
 
