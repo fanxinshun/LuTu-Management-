@@ -58,10 +58,12 @@ namespace Coldairarrow.Business.Base_SysManage
 
             data.xAxisData = new List<string>();
             data.yAxisData = new List<decimal>();
+            decimal value = 0;
             for (int i = days - 1; i >= 0; i--)
             {
+                value += listPays.Where(x => x.pay_time?.ToString("yyyy-MM-dd") == DateTime.Now.AddDays(-i).ToString("yyyy-MM-dd")).Sum(x => x.money);
                 data.xAxisData.Add(DateTime.Now.AddDays(-i).ToString("MM/dd"));
-                data.yAxisData.Add(listPays.Where(x => x.pay_time?.ToString("yyyy-MM-dd") == DateTime.Now.AddDays(-i).ToString("yyyy-MM-dd")).Sum(x => x.money));
+                data.yAxisData.Add(value);
             }
 
             List<SaleRank> ProductSaleRank = new List<SaleRank>();
