@@ -51,8 +51,7 @@ namespace Coldairarrow.Util
         public static IQueryable<T> GetPagination<T>(this IQueryable<T> source, Pagination pagination)
         {
             pagination.records = source.Count();
-            source = source.OrderBy(pagination.SortField, pagination.SortType);
-            return source.Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
+            return source.OrderBy(pagination.SortField, pagination.SortType).Skip((pagination.page - 1) * pagination.rows).Take(pagination.rows);
         }
 
         /// <summary>

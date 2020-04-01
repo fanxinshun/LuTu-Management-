@@ -26,7 +26,7 @@ namespace Coldairarrow.Business.LuTuTravel
             {
                 new  MySqlParameter ("@title", "%" + title + "%")
             };
-            var sql = string.Empty;
+            string sql = string.Empty;
             //marketingType == 0全部
             //marketingType == 1营销产品
             //marketingType == 2非营销产品
@@ -99,9 +99,9 @@ namespace Coldairarrow.Business.LuTuTravel
                           AND b.team_commission >0 
                           AND (@title is null or b.title like @title) ";
             }
-            DataTable table = GetDataTableWithSql(sql, paramters);
+            var list = GetListBySql<productMarketingModel>(sql, paramters);
 
-            return table.ToList<productMarketingModel>().GetPagination(pagination).ToList();
+            return list.GetPagination(pagination).ToList();
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Coldairarrow.Business.LuTuTravel
                 new  MySqlParameter ("@product_marketing_id", id == "null" ? null: id),
                 new  MySqlParameter ("@product_id",product_id)
             };
-            DataTable table = GetDataTableWithSql(@"SELECT
+            var list = GetListBySql<productMarketingModel>(@"SELECT
 	                                                    a.*,
 	                                                    b.Id pId,
 	                                                    b.price pprice,
@@ -130,8 +130,8 @@ namespace Coldairarrow.Business.LuTuTravel
                                                LEFT JOIN area c on b.area_code = c.code
                                                    WHERE (@product_marketing_id is not null AND a.product_marketing_id=@product_marketing_id)
                                                           OR (@product_marketing_id is null AND @product_id=b.Id )", paramters);
-            if (table == null || table.Rows.Count == 0) return new productMarketingModel();
-            return table.ToList<productMarketingModel>()[0];
+            if (list == null || list.Count == 0) return new productMarketingModel();
+            return list[0];
         }
 
 

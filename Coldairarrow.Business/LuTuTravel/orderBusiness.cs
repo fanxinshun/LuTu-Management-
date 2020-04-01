@@ -48,7 +48,14 @@ namespace Coldairarrow.Business.LuTuTravel
                 var time = create_time2.ToDateTime();
                 q = q.Where(x => x.create_time <= time);
             }
-            return q.GetPagination(pagination).ToList();
+
+            var listProduct = new ProductBusiness().GetIQueryable().ToList();//产品清单
+            var list = q.GetPagination(pagination).ToList();
+            foreach (var item in list)
+            {
+                item.product_name = listProduct.Find(x => x.Id.ToString() == item.product_id)?.title;
+            }
+            return list;
         }
 
         /// <summary>
