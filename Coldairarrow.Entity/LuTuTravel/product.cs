@@ -46,7 +46,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 地区编码
         /// </summary>
         public String area_code { get; set; }
-        
+
 
         /// <summary>
         /// 目的地
@@ -140,7 +140,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 游玩天数
         /// </summary>
         public Int32? days { get; set; }
-        
+
 
         /// <summary>
         /// 集合地点
@@ -171,7 +171,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 提前时间
         /// </summary>
         public String advance_time { get; set; }
-        
+
 
         /// <summary>
         /// 产品砍价最低人数
@@ -332,6 +332,40 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 分终端配置
         /// </summary>
         public String validity_terminal { get; set; }
+
+
+
+        /// <summary>
+        /// 商品所属类别
+        /// </summary>
+        public String commodity_type { get; set; }
+
+        /// <summary>
+        /// 产地
+        /// </summary>
+        public String placeofproduction { get; set; }
+
+        /// <summary>
+        /// 农户照片
+        /// </summary>
+        public String photooffarmers { get; set; }
+
+        /// <summary>
+        /// 商品介绍
+        /// </summary>
+        public String commodity_presentations { get; set; }
+
+
+        /// <summary>
+        /// 参考菜谱
+        /// </summary>
+        public String reference_menu { get; set; }
+
+
+        /// <summary>
+        /// 商品照片
+        /// </summary>
+        public String commodity_photo { get; set; }
 
     }
 }

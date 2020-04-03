@@ -500,7 +500,27 @@
         foottDiv += '<a onclick="checkAll($(this).parent())" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-ok\'">默认/全选</a>';
         foottDiv += '<a onclick="goNextMonthPanel()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一月</a>';
         foottDiv += '</div>';
+        foottDiv += '<div id="foottCheckboxDiv" style="float:left;width:100%;text-align:right">';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,1)">周一&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,2)">周二&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,3)">周三&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,4)">周四&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,5)">周五&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,6)">周六&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,0)">周日&nbsp';
+        foottDiv += '</div>';
         return foottDiv;
+    }
+    //按周选择
+    function foottCheckboxClick(ck, wk) {
+        var divs = $(ck).parent().parent().find('div');
+        for (var i = 0; i < $(divs).length - 2; i++) {
+            var open_date = new Date($(divs).eq(i).find('input[name=open_date]').val());
+            if (wk == open_date.getDay()) {
+                var isck = $(ck).prop('checked');
+                $(divs).eq(i).find(':checkbox').prop('checked', isck);
+            }
+        }
     }
 
     //默认/全选
