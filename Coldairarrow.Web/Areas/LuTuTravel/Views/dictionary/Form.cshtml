@@ -1,0 +1,126 @@
+@using Coldairarrow.Entity.LuTuTravel;
+@using Coldairarrow.Util;
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (dictionary)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>字典类别</th>
+                <td>
+                    <input name="code" value="@obj.code" class="easyui-combobox"
+                           data-options="width:'200px',required:true,editable:true,
+                                        valueField: 'code',
+                                        textField: 'code',
+                                        url: '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType'">
+                </td>
+            </tr>
+            <tr>
+                <th>值</th>
+                <td>
+                    <input name="value" value="@obj.value" class="easyui-textbox" data-options="width:'200px',required:false">
+                </td>
+            </tr>
+            <tr>
+                <th>名称</th>
+                <td>
+                    <input name="name" value="@obj.name" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>排序</th>
+                <td>
+                    <input name="sort" value="@obj.sort" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>字段描述</th>
+                <td>
+                    <input name="description" value="@obj.description" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>上传图片</th>
+                <td>
+                    <input id="hiddenImages" type="hidden" name="images" value="@obj.images">
+
+                    <input style="display:none" id="file1" type="file" accept="*">
+                    <input id="file-display1" class="easyui-textbox" data-options="width:'30%',required:false,editable:false">
+                    <label for="file1" class="easyui-linkbutton" data-options="iconCls:'icon-add'">选择文件</label>
+                    <a id="aUploadFile1" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">上传</a>
+                </td>
+            </tr>
+            <tr>
+                <th>数据是否有效(0:无效;1:有效)</th>
+                <td>
+                    <input name="enable_flag" value="@obj.enable_flag" class="easyui-numberbox" data-options="width:'200px',required:true,min:0,max:1">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        //上传产品图片
+        document.getElementById('file1').onchange = function () {
+            $('#file1').getFileBase64(function (base64, fileName) {
+                $('#file-display1').textbox('setValue', fileName);
+            });
+        };
+        $('#aUploadFile1').click(function () {
+            if (theEntity.Id == '') {
+                dialogError('请先录入产品其他信息，最后上传图片');
+                return;
+            }
+            if (!$('#file-display1').textbox('getValue')) {
+                dialogError('请选择图片');
+                return;
+            }
+            loading();
+            $('#file1').getFileBase64(function (base64, fileName) {
+                $.postJSON(rootUrl + 'LuTuTravel/dictionary/UploadFileToServer', { UploadType: 'images', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
+                    loading(false);
+                    if (resJson.Success) {
+                        $('#hiddenImages').val(resJson.Data.toString());
+                        parent.dialogMsg('上传成功!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'LuTuTravel/dictionary/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogMsg('保存成功!');
+                    parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>

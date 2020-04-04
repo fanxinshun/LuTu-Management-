@@ -12,27 +12,41 @@ namespace Coldairarrow.Business.LuTuTravel
         #region 外部接口
 
         /// <summary>
+        /// 获取DictionaryType
+        /// </summary>
+        /// <returns></returns>
+        public List<dictionary> GetDictionaryType()
+        {
+            List<dictionary> result = new List<dictionary>();
+            var list = GetIQueryable().Where(x => x.enable_flag == "1").ToList().GroupBy(x => x.code);
+            foreach (var item in list)
+            {
+                result.Add(new dictionary() { code = item.Key });
+            }
+            return result;
+        }
+        /// <summary>
         /// 获取数据列表
         /// </summary>
         /// <returns></returns>
         public List<dictionary> GetDictionaryListByCode(string code)
         {
-            return GetList().Where(x => x.code == code).ToList();
+            return GetIQueryable().Where(x => x.code == code && x.enable_flag == "1").OrderBy(x => x.sort).ToList();
         }
 
         /// <summary>
         /// 获取数据列表
         /// </summary>
         /// <param name="condition">查询类型</param>
-        /// <param name="keyword">关键字</param>
+        /// <param name="code">关键字</param>
         /// <returns></returns>
-        public List<dictionary> GetDataList(string condition, string keyword, Pagination pagination)
+        public List<dictionary> GetDataList(string code, Pagination pagination)
         {
-            var q = GetIQueryable();
+            var q = GetIQueryable().Where(x => x.enable_flag == "1");
 
             //模糊查询
-            if (!condition.IsNullOrEmpty() && !keyword.IsNullOrEmpty())
-                q = q.Where($@"{condition}.Contains(@0)", keyword);
+            if (!code.IsNullOrEmpty())
+                q = q.Where($@"code.Contains(@0)", code);
 
             return q.GetPagination(pagination).ToList();
         }

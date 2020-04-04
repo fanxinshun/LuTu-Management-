@@ -15,7 +15,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// id
         /// </summary>
         [Key, Column(Order = 1)]
-        public String id { get; set; }
+        public String Id { get; set; }
 
         /// <summary>
         /// 字段名
@@ -42,5 +42,14 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// </summary>
         public String description { get; set; }
 
+        /// <summary>
+        /// 图片
+        /// </summary>
+        public String images { get; set; }
+
+        /// <summary>
+        /// 数据是否有效(0:无效;1:有效)
+        /// </summary>
+        public String enable_flag { get; set; }
     }
 }
