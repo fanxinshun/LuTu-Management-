@@ -46,6 +46,14 @@
                 </td>
             </tr>
             <tr>
+                <th>成本价</th>
+                <td>
+                    <span name="pprice">
+                        @obj.porigin_price
+                    </span>
+                </td>
+            </tr>
+            <tr>
                 <th>市场价</th>
                 <td>
                     <span name="pprice">
@@ -84,7 +92,7 @@
             <tr>
                 <th>营销返佣金额</th>
                 <td>
-                    <input name="team_commission" value="@obj.team_commission" class="easyui-numberbox" data-options="width:'50%',required:false,min:0,max:100000,precision:2">
+                    <input name="team_commission" value="@obj.team_commission" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000,precision:2">
                 </td>
             </tr>
             <tr>

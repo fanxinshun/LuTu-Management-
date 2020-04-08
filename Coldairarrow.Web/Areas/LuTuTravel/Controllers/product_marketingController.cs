@@ -10,7 +10,7 @@ namespace Coldairarrow.Web
     [Area("LuTuTravel")]
     public class product_marketingController : BaseMvcController
     {
-        ProductBusiness _ProductBusiness = new ProductBusiness();
+        ProductBusiness _productBusiness = new ProductBusiness();
         product_marketingBusiness _product_marketingBusiness = new product_marketingBusiness();
 
         #region 视图功能
@@ -33,7 +33,7 @@ namespace Coldairarrow.Web
         public ActionResult GetNoProductMarketingList()
         {
             //var dataList = _product_marketingBusiness.GetNoProductMarketingList();
-            var dataList = _ProductBusiness.GetDataList();
+            var dataList = _productBusiness.GetDataList();
 
             return Content(dataList.ToJson());
         }
@@ -65,13 +65,19 @@ namespace Coldairarrow.Web
         public ActionResult SaveData(product_marketing theData)
         {
             if (theData.marketing_starttime > theData.marketing_endtime)
-                return Error("结束时间必须大于开始时间");
-
-            //校验一下该产品能否参加营销
-            if (_product_marketingBusiness.CheckTheDataByProductId(theData))
             {
-                return Error("当前时间段正在营销中，请检查");
+                return Error("结束时间必须大于开始时间");
             }
+            //校验价格是否亏本
+            if (!_productBusiness.PaymentAmount(theData.product_id))
+            {
+                return Error("价格异常！请检查产品价格及营销价格");
+            }
+            //校验一下该产品能否参加营销
+            //if (_product_marketingBusiness.CheckTheDataByProductId(theData))
+            //{
+            //    return Error("当前时间段正在营销中，请检查");
+            //}
 
             if (theData.product_marketing_id.IsNullOrEmpty())
             {

@@ -86,6 +86,29 @@ namespace Coldairarrow.Business.LuTuTravel
 
         #endregion
 
+        /// <summary>
+        /// 校验价格是否异常
+        /// </summary>
+        /// <returns></returns>
+        public bool PaymentAmount(int? product_id)
+        {
+            var theData = GetTheData(product_id);
+            //bool ck1 = theData.origin_price < theData.price;//成本价 < 市场价
+            //bool ck2 = theData.team_price < theData.origin_price;//成团价  < 成本价
+            bool ck3 = theData.team_price > theData.origin_price - theData.team_commission - theData.share_amount;//成团价 > 成本价 - 返佣 - 分享所得优惠券
+
+            bool b1 = true, b2 = true, b3 = true;
+            //获取该产品最新的营销活动 PaymentAmount
+            product_marketing market = theData.Id == 0 ? new product_marketing() : new product_marketingBusiness().GetTheData(theData.Id);
+            if (market != null)
+            {
+                //b1 = market.price < theData.price;//营销市场价 < 市场价
+                //b2 = market.team_price < theData.team_price;//营销团购价 < 团购价
+                b3 = market.team_price > theData.origin_price - market.team_commission - theData.share_amount;//营销团购价 > 成本价 - 营销返佣 - 分享所得优惠券
+            }
+            return ck3 && b3;
+        }
+
         #region 私有成员
 
         #endregion

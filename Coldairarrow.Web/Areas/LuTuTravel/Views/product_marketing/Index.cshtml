@@ -13,7 +13,7 @@
         <div class="search_item">
             <label class="search_label">查询类别</label>
             <select name="marketingType" class="easyui-combobox" data-options="width:150">
-                <option value="0" selected="selected">全部商品</option>
+                <option value="0">全部商品</option>
                 <option value="1">营销产品</option>
                 <option value="2">非营销产品</option>
                 <option value="3">团长返佣产品</option>
@@ -48,7 +48,7 @@
             singleSelect: false,
             selectOnCheck: false,
             checkOnSelect: false,
-            sortName: 'create_time',
+            sortName: 'product_id',
             sortOrder: 'desc',
             //rownumbers: true,
             pagination: true,
@@ -59,9 +59,10 @@
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
                 
-                //{ title: '全民营销表ID', field: 'product_marketing_id', width: 200 },
+                { title: '产品ID', field: 'pId', width: 200 },
                 { title: '名称', field: 'ptitle', width: 200 },
                 { title: '所属地区', field: 'parea_name', width: 200 },
+                { title: '成本价', field: 'porigin_price', width: 200 },
                 { title: '市场价', field: 'pprice', width: 200 },
                 { title: '营销市场价', field: 'price', width: 200 },
                 { title: '团购价', field: 'pteam_price', width: 200 },

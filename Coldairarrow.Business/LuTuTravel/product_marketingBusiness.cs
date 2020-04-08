@@ -20,11 +20,12 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<productMarketingModel> GetDataList(int marketingType, string title, Pagination pagination)
+        public List<productMarketingModel> GetDataList(int marketingType, string title, Pagination pagination, string product_id = null)
         {
             List<DbParameter> paramters = new List<DbParameter>()
             {
-                new  MySqlParameter ("@title", "%" + title + "%")
+                new  MySqlParameter ("@title", "%" + title + "%"),
+                new  MySqlParameter ("@product_id", product_id )
             };
             string sql = string.Empty;
             //marketingType == 0全部
@@ -36,6 +37,7 @@ namespace Coldairarrow.Business.LuTuTravel
                 sql = @"SELECT
 	                        a.*,
 	                        b.Id pId,
+	                        b.origin_price porigin_price,
 	                        b.price pprice,
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
@@ -45,13 +47,16 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        product_marketing a
 	                        RIGHT JOIN product b ON a.product_id = b.Id
                             LEFT JOIN area c on b.area_code = c.code
-                        WHERE b.enable_flag = '1' AND (@title is null or b.title like @title) ";
+                        WHERE b.enable_flag = '1' 
+                          AND (@product_id is null or b.Id = @product_id)
+                          AND (@title is null or b.title like @title) ";
             }
             else if (marketingType == 1)
             {
                 sql = @"SELECT
 	                        a.*,
 	                        b.Id pId,
+	                        b.origin_price porigin_price,
 	                        b.price pprice,
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
@@ -61,13 +66,16 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        product_marketing a
 	                        INNER JOIN product b ON a.product_id = b.Id
                             LEFT JOIN area c on b.area_code = c.code
-                        WHERE b.enable_flag = '1' AND (@title is null or b.title like @title) ";
+                        WHERE b.enable_flag = '1' 
+                          AND (@product_id is null or b.Id = @product_id)
+                          AND (@title is null or b.title like @title) ";
             }
             else if (marketingType == 2)
             {
                 sql = @"SELECT
 	                        a.*,
 	                        b.Id pId,
+	                        b.origin_price porigin_price,
 	                        b.price pprice,
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
@@ -78,6 +86,7 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        RIGHT JOIN product b ON a.product_id = b.Id
                             LEFT JOIN area c on b.area_code = c.code
                         WHERE b.enable_flag = '1' 
+                          AND (@product_id is null or b.Id = @product_id)
                           AND a.product_marketing_id is null 
                           AND (@title is null or b.title like @title) ";
             }
@@ -86,6 +95,7 @@ namespace Coldairarrow.Business.LuTuTravel
                 sql = @"SELECT
 	                        a.*,
 	                        b.Id pId,
+	                        b.origin_price porigin_price,
 	                        b.price pprice,
 	                        b.title ptitle,
 	                        b.team_price pteam_price,
@@ -96,6 +106,7 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        RIGHT JOIN product b ON a.product_id = b.Id
                             LEFT JOIN area c on b.area_code = c.code
                         WHERE b.enable_flag = '1' 
+                          AND (@product_id is null or b.Id = @product_id)
                           AND b.team_commission >0 
                           AND (@title is null or b.title like @title) ";
             }
@@ -119,6 +130,7 @@ namespace Coldairarrow.Business.LuTuTravel
             var list = GetListBySql<productMarketingModel>(@"SELECT
 	                                                    a.*,
 	                                                    b.Id pId,
+	                                                    b.origin_price porigin_price,
 	                                                    b.price pprice,
 	                                                    b.title ptitle,
 	                                                    b.team_price pteam_price,
@@ -126,9 +138,9 @@ namespace Coldairarrow.Business.LuTuTravel
 	                                                    c.name parea_name 
                                                     FROM
 	                                                    product_marketing a
-	                                                    RIGHT JOIN product b ON a.product_id = b.Id AND b.enable_flag = '1'
-                                               LEFT JOIN area c on b.area_code = c.code
-                                                   WHERE (@product_marketing_id is not null AND a.product_marketing_id=@product_marketing_id)
+	                                         RIGHT JOIN product b ON a.product_id = b.Id AND b.enable_flag = '1'
+                                              LEFT JOIN area c on b.area_code = c.code
+                                                  WHERE (@product_marketing_id is not null AND a.product_marketing_id=@product_marketing_id)
                                                           OR (@product_marketing_id is null AND @product_id=b.Id )", paramters);
             if (list == null || list.Count == 0) return new productMarketingModel();
             return list[0];
@@ -157,6 +169,16 @@ namespace Coldairarrow.Business.LuTuTravel
         {
             var q = GetIQueryable().Where(x => x.product_id == theData.product_id && x.marketing_endtime >= theData.marketing_starttime);
             return q.ToList().Count > 0;
+        }
+
+        /// <summary>
+        /// 获取产品最新的营销活动
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
+        public product_marketing GetTheData(int product_id)
+        {
+            return GetIQueryable().Where(x => x.product_id == product_id && x.marketing_endtime > DateTime.Now).OrderBy(x => x.create_time).Last();
         }
 
         /// <summary>
@@ -209,6 +231,7 @@ namespace Coldairarrow.Business.LuTuTravel
     {
         public String pId { get; set; }
         public String ptitle { get; set; }
+        public String porigin_price { get; set; }
         public String pprice { get; set; }
         public String pteam_price { get; set; }
         public String pteam_commission { get; set; }
