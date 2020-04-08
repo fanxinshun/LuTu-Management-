@@ -173,26 +173,26 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult UploadFileToServer(string UploadType, int id, string fileBase64, string fileName)
         {
-            string resultData = string.Empty;
-            var obj = _productBusiness.GetEntity(id);
             string name = FastDFSHelper.UploadFile(fileBase64, fileName);
             if (name.IsNullOrEmpty())
             {
                 return Error("上传失败");
             }
-            if (UploadType == "images")
+            var obj = _productBusiness.GetEntity(id);
+            if (obj != null)
             {
-                obj.images = obj.images.IsNullOrEmpty() ? name : obj.images + "," + name;
-                _productBusiness.UpdateAny(obj, new List<string>() { "images" });
-                resultData = obj.images;
+                if (UploadType == "images")
+                {
+                    obj.images = obj.images.IsNullOrEmpty() ? name : obj.images + "," + name;
+                    _productBusiness.UpdateAny(obj, new List<string>() { "images" });
+                }
+                else if (UploadType == "logo")
+                {
+                    obj.logo = name;
+                    _productBusiness.UpdateAny(obj, new List<string>() { "logo" });
+                }
             }
-            else if (UploadType == "logo")
-            {
-                obj.logo = name;
-                _productBusiness.UpdateAny(obj, new List<string>() { "logo" });
-                resultData = obj.logo;
-            }
-            return Success((object)resultData);
+            return Success((object)name);
         }
         #endregion
     }

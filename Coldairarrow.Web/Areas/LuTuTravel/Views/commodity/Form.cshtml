@@ -48,7 +48,7 @@
             <tr>
                 <th>农户照片</th>
                 <td>
-                    <input id="photooffarmers" type="hidden" name="images" value="@obj.photooffarmers">
+                    <input id="photooffarmers" type="hidden" name="photooffarmers" value="@obj.photooffarmers">
 
                     <input style="display:none" id="file1" type="file" accept="*">
                     <input id="file-display1" class="easyui-textbox" data-options="width:'200px',required:false,editable:false">
@@ -70,7 +70,7 @@
             <tr>
                 <th>商品照片</th>
                 <td>
-                    <input id="commodity_photo" type="hidden" name="logo" value="@obj.commodity_photo">
+                    <input id="commodity_photo" name="commodity_photo" type="hidden" value="@obj.commodity_photo">
 
                     <input style="display:none" id="file2" type="file" accept="*">
                     <input id="file-display2" class="easyui-textbox" data-options="width:'200px',required:false,editable:false">
@@ -270,10 +270,6 @@
             });
         };
         $('#aUploadFile1').click(function () {
-            if (theEntity.Id == '0') {
-                dialogError('请先录入产品其他信息，最后上传图片');
-                return;
-            }
             if (!$('#file-display1').textbox('getValue')) {
                 dialogError('请选择图片');
                 return;
@@ -283,7 +279,9 @@
                 $.postJSON(rootUrl + 'LuTuTravel/commodity/UploadFileToServer', { UploadType: 'photooffarmers', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
                     loading(false);
                     if (resJson.Success) {
-                        $('#hiddenImages').val(resJson.Data.toString());
+                        //$('#photooffarmers').val(resJson.Data);//单张图片
+                        var value = $('#photooffarmers').val();
+                        $('#photooffarmers').val(value + (value ? ',' : '') + resJson.Data);//多张
                         parent.dialogMsg('上传成功!');
                     }
                     else {
@@ -299,10 +297,6 @@
             });
         };
         $('#aUploadFile2').click(function () {
-            if (theEntity.Id == '0') {
-                dialogError('请先录入产品其他信息，最后上传图片');
-                return;
-            }
             if (!$('#file-display2').textbox('getValue')) {
                 dialogError('请选择图片');
                 return;
@@ -312,7 +306,9 @@
                 $.postJSON(rootUrl + 'LuTuTravel/commodity/UploadFileToServer', { UploadType: 'commodity_photo', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
                     loading(false);
                     if (resJson.Success) {
-                        $('#hiddenlogo').val(resJson.Data.toString());
+                        //$('#commodity_photo').val(resJson.Data);//单张图片
+                        var value = $('#commodity_photo').val();
+                        $('#commodity_photo').val(value + (value ? ',' : '') + resJson.Data);//多张
                         parent.dialogMsg('上传成功!');
                     }
                     else {

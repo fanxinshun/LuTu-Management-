@@ -213,7 +213,7 @@
                     <span>需提前</span>
                     <input name="advance_day" value="@obj.advance_day" class="easyui-numberbox" data-options="width:'40px',required:false,min:0,max:100">
                     <span>天，并在</span>
-                    <input name="advance_time" value="@obj.advance_time" class="easyui-timespinner" style="width:80px;" data-options="min:'00:01'">
+                    <input id="advance_time" name="advance_time" class="easyui-timespinner" style="width:80px;" data-options="min:'00:01'">
                     <span>前预定</span>
                 </td>
             </tr>
@@ -571,6 +571,7 @@
     }
 
     $(function () {
+        $('#advance_time').timespinner('setValue', '@obj.advance_time' ? '@obj.advance_time' : '23:59');
         var list = @datalistStr;
         var defaultContent = accordionPanelDayButton();//默认项
         var month = '';
@@ -608,20 +609,18 @@
             });
         };
         $('#aUploadFile1').click(function () {
-            if (theEntity.Id == '0') {
-                dialogError('请先录入产品其他信息，最后上传图片');
-                return;
-            }
             if (!$('#file-display1').textbox('getValue')) {
                 dialogError('请选择图片');
                 return;
             }
             loading();
             $('#file1').getFileBase64(function (base64, fileName) {
-                $.postJSON(rootUrl + 'LuTuTravel/Ticket/UploadFileToServer', { UploadType: 'images', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
+                $.postJSON(rootUrl + 'LuTuTravel/Product/UploadFileToServer', { UploadType: 'images', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
                     loading(false);
                     if (resJson.Success) {
-                        $('#hiddenImages').val(resJson.Data.toString());
+                        //$('#hiddenImages').val(resJson.Data);//单张图片
+                        var value = $('#hiddenImages').val();
+                        $('#hiddenImages').val(value + (value ? ',' : '') + resJson.Data);//多张
                         parent.dialogMsg('上传成功!');
                     }
                     else {
@@ -637,20 +636,17 @@
             });
         };
         $('#aUploadFile2').click(function () {
-            if (theEntity.Id == '0') {
-                dialogError('请先录入产品其他信息，最后上传图片');
-                return;
-            }
             if (!$('#file-display2').textbox('getValue')) {
                 dialogError('请选择图片');
                 return;
             }
             loading();
             $('#file2').getFileBase64(function (base64, fileName) {
-                $.postJSON(rootUrl + 'LuTuTravel/Ticket/UploadFileToServer', { UploadType: 'logo', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
+                $.postJSON(rootUrl + 'LuTuTravel/Product/UploadFileToServer', { UploadType: 'logo', id: theEntity.Id, fileName: fileName, fileBase64: base64 }, function (resJson) {
                     loading(false);
                     if (resJson.Success) {
-                        $('#hiddenlogo').val(resJson.Data.toString());
+                        $('#hiddenlogo').val(resJson.Data);//单张图片
+                        //$('#hiddenlogo').val(($('#hiddenImages').val() ? ',' : '') + resJson.Data);//多张
                         parent.dialogMsg('上传成功!');
                     }
                     else {

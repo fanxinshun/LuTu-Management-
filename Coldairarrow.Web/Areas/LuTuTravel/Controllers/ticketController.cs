@@ -132,37 +132,6 @@ namespace Coldairarrow.Web
 
             return Success("下架成功！");
         }
-
-        /// <summary>
-        /// 上传文件到文件系统服务器
-        /// </summary>
-        /// <param name="UploadType">图片字段</param>
-        /// <param name="fileBase64"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public ActionResult UploadFileToServer(string UploadType, int id, string fileBase64, string fileName)
-        {
-            string resultData = string.Empty;
-            var obj = _productBusiness.GetEntity(id);
-            string name = FastDFSHelper.UploadFile(fileBase64, fileName);
-            if (name.IsNullOrEmpty())
-            {
-                return Error("上传失败");
-            }
-            if (UploadType == "images")
-            {
-                obj.images = obj.images.IsNullOrEmpty() ? name : obj.images + "," + name;
-                _productBusiness.UpdateAny(obj, new List<string>() { "images" });
-                resultData = obj.images;
-            }
-            else if (UploadType == "logo")
-            {
-                obj.logo = name;
-                _productBusiness.UpdateAny(obj, new List<string>() { "logo" });
-                resultData = obj.logo;
-            }
-            return Success((object)resultData);
-        }
         #endregion
     }
 }

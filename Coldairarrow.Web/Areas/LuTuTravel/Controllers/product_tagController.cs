@@ -32,7 +32,7 @@ namespace Coldairarrow.Web
         #endregion
 
         #region 获取数据
-        
+
         /// <summary>
         /// 获取数据列表
         /// </summary>
@@ -121,18 +121,18 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult UploadFileToServer(string id, string fileBase64, string fileName)
         {
-            string resultData = string.Empty;
-            var obj = _product_tagBusiness.GetTheData(id);
             string name = FastDFSHelper.UploadFile(fileBase64, fileName);
             if (name.IsNullOrEmpty())
             {
                 return Error("上传失败");
             }
-            obj.img_url = name;
-            _product_tagBusiness.UpdateAny(obj, new List<string>() { "img_url" });
-            resultData = obj.img_url;
-
-            return Success((object)resultData);
+            var obj = _product_tagBusiness.GetTheData(id);
+            if (obj != null)
+            {
+                obj.img_url = name;
+                _product_tagBusiness.UpdateAny(obj, new List<string>() { "img_url" });
+            }
+            return Success((object)name);
         }
         #endregion
     }

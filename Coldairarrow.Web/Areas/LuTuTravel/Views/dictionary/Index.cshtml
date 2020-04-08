@@ -12,7 +12,11 @@
     <div class="search_wrapper">
         <div class="search_item">
             <label class="search_label">字典类别</label>
-            <input name="code" class="easyui-textbox" style="width:150px" />
+            <input name="code" class="easyui-combobox"
+                   data-options="width:'200px',editable:true,
+                                        valueField: 'code',
+                                        textField: 'code',
+                                        url: '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType'">
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>

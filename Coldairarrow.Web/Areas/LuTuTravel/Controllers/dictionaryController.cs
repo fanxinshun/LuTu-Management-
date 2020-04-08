@@ -89,20 +89,18 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult UploadFileToServer(string UploadType, string id, string fileBase64, string fileName)
         {
-            string resultData = string.Empty;
-            var obj = _dictionaryBusiness.GetEntity(id);
             string name = FastDFSHelper.UploadFile(fileBase64, fileName);
             if (name.IsNullOrEmpty())
             {
                 return Error("上传失败");
             }
-            if (UploadType == "images")
+            var obj = _dictionaryBusiness.GetEntity(id);
+            if (obj != null)
             {
                 obj.images = name;
                 _dictionaryBusiness.UpdateAny(obj, new List<string>() { "images" });
-                resultData = obj.images;
             }
-            return Success((object)resultData);
+            return Success((object)name);
         }
         /// <summary>
         /// 删除数据
@@ -110,8 +108,6 @@ namespace Coldairarrow.Web
         /// <param name="theData">删除的数据</param>
         public ActionResult DeleteData(string ids)
         {
-            _dictionaryBusiness.DeleteData(ids.ToList<string>());
-
             var listId = ids.ToList<string>();
             List<dictionary> dictionarys = new List<dictionary>();
             foreach (var item in listId)

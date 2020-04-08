@@ -135,27 +135,26 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult UploadFileToServer(string UploadType, int id, string fileBase64, string fileName)
         {
-            string resultData = string.Empty;
-            var obj = _productBusiness.GetEntity(id);
             string name = FastDFSHelper.UploadFile(fileBase64, fileName);
             if (name.IsNullOrEmpty())
             {
                 return Error("上传失败");
             }
-            if (UploadType == "photooffarmers")
+            var obj = _productBusiness.GetEntity(id);
+            if (obj != null)
             {
-                obj.photooffarmers = obj.photooffarmers.IsNullOrEmpty() ? name : obj.photooffarmers + "," + name;
-                _productBusiness.UpdateAny(obj, new List<string>() { "photooffarmers" });
-                resultData = obj.photooffarmers;
+                if (UploadType == "photooffarmers")
+                {
+                    obj.photooffarmers = obj.photooffarmers.IsNullOrEmpty() ? name : obj.photooffarmers + "," + name;
+                    _productBusiness.UpdateAny(obj, new List<string>() { "photooffarmers" });
+                }
+                else if (UploadType == "commodity_photo")
+                {
+                    obj.commodity_photo = obj.commodity_photo.IsNullOrEmpty() ? name : obj.commodity_photo + "," + name;
+                    _productBusiness.UpdateAny(obj, new List<string>() { "commodity_photo" });
+                }
             }
-            else if (UploadType == "commodity_photo")
-            {
-                //obj.commodity_photo = name;
-                obj.commodity_photo = obj.commodity_photo.IsNullOrEmpty() ? name : obj.commodity_photo + "," + name;
-                _productBusiness.UpdateAny(obj, new List<string>() { "commodity_photo" });
-                resultData = obj.commodity_photo;
-            }
-            return Success((object)resultData);
+            return Success((object)name);
         }
         #endregion
 
