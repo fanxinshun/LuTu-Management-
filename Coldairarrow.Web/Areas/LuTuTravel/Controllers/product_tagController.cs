@@ -83,6 +83,7 @@ namespace Coldairarrow.Web
 
                 _product_tagBusiness.AddData(parentTag);
                 theData.parent_id = parentTag.id;
+                theData.tagname = parentTag.tagname;
             }
             if (theData.id.IsNullOrEmpty())
             {
