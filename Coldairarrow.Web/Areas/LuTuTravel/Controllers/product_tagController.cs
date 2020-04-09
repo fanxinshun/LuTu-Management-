@@ -108,7 +108,21 @@ namespace Coldairarrow.Web
         /// <param name="theData">删除的数据</param>
         public ActionResult DeleteData(string ids)
         {
-            _product_tagBusiness.DeleteData(ids.ToList<string>());
+            List<string> idList = ids.ToList<string>();
+            var theDataList = _product_tagBusiness.GetList();
+            foreach (var item in idList)
+            {
+                var theData = theDataList.Find(x => x.id == item);
+                theDataList.Remove(theData);
+                _product_tagBusiness.Delete(theData);
+
+                var pObj = theDataList.Find(x => x.parent_id == theData.parent_id);
+                if (pObj == null)
+                {
+                    theDataList.Remove(theDataList.Find(x => x.id == theData.parent_id));
+                    _product_tagBusiness.Delete(theData.parent_id);
+                }
+            }
 
             return Success("删除成功！");
         }
