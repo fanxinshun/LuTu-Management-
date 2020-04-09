@@ -69,12 +69,12 @@ namespace Coldairarrow.Web
         /// <param name="theData">保存的数据</param>
         public ActionResult SaveData(productTagModel theData)
         {
-            product_tag parentTag = _product_tagBusiness.GetTheParentTag(theData.parent_id);
-            if (parentTag.IsNullOrEmpty())//如果传过来的标签不存在，说明这是输入的新的标签，parent_id就是输入的tagname，新增一个标签！
+            product_tag parentTag = _product_tagBusiness.GetTheParentTag(theData.product_type_id, theData.tagname);
+            if (parentTag == null)//如果 产品类型+标签不存在，说明这是新的标签，parent_id就是输入的tagname，新增一个标签！
             {
                 parentTag = theData.DeepClone();
                 parentTag.id = Guid.NewGuid().ToSequentialGuid();
-                parentTag.tagname = theData.parent_id;
+                parentTag.tagname = theData.tagname.IsNullOrEmpty() ? theData.parent_id : theData.tagname;
                 parentTag.parent_id = null;
                 parentTag.area_code = null;
                 parentTag.img_url = null;

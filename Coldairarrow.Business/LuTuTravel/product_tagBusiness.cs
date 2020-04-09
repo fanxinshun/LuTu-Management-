@@ -69,11 +69,11 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <summary>
         /// 获取指定的单条数据--获取城市标签
         /// </summary>
-        /// <param name="id">主键</param>
+        /// <param name="product_type_id">product_type_id</param>
         /// <returns></returns>
-        public product_tag GetTheParentTag(string id)
+        public product_tag GetTheParentTag(string product_type_id, string tagname)
         {
-            return GetEntity(id);
+            return GetIQueryable().Where(x => x.product_type_id == product_type_id && x.tagname == tagname && x.parent_id.IsNullOrEmpty()).FirstOrDefault();
         }
 
         /// <summary>

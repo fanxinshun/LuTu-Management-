@@ -11,7 +11,7 @@
         <div class="search_item">
             <label class="search_label">产品类型</label>
             <input name="product_type_id" class="easyui-combobox"
-                   data-options="width:'150px',editable:false,
+                   data-options="width:'150px',editable:true,
                                         valueField: 'id',
                                         textField: 'title',
                                         url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
@@ -19,7 +19,7 @@
         <div class="search_item">
             <label class="search_label">城市标签</label>
             <input name="parent_id" class="easyui-combobox"
-                   data-options="width:'150px',editable:false,
+                   data-options="width:'150px',editable:true,
                                         valueField: 'id',
                                         textField: 'tagname',
                                         url: '@Url.Content("~/")LuTuTravel/product_tag/GetpanentTagname'">
