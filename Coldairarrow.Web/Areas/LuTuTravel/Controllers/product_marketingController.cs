@@ -68,8 +68,9 @@ namespace Coldairarrow.Web
             {
                 return Error("结束时间必须大于开始时间");
             }
+            product product = _productBusiness.GetTheData(theData.product_id);
             //校验价格是否亏本
-            if (!_productBusiness.PaymentAmount(theData.product_id))
+            if (!_productBusiness.PaymentAmount(product, theData))
             {
                 return Error("价格异常！请检查产品价格及营销价格");
             }

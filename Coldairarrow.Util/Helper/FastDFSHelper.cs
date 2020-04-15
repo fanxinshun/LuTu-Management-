@@ -41,11 +41,11 @@ namespace Coldairarrow.Util.Helper
         public static string UploadFile(string fileBase64, string fileName)
         {
             byte[] bytes = fileBase64.ToBytes_FromBase64Str();
-            Stream stream = new MemoryStream(bytes);
-            using (BinaryReader reader = new BinaryReader(stream))
-            {
-                bytes = reader.ReadBytes((int)stream.Length);
-            }
+            //Stream stream = new MemoryStream(bytes);
+            //using (BinaryReader reader = new BinaryReader(stream))
+            //{
+            //    bytes = reader.ReadBytes((int)stream.Length);
+            //}
 
             //主文件
             return FastDFSClient.UploadFile(storageNode, bytes, Path.GetExtension(fileName).Replace(".", ""));

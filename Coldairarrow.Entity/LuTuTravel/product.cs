@@ -96,27 +96,27 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// <summary>
         /// 成本价
         /// </summary>
-        public Decimal? origin_price { get; set; }
+        public Decimal origin_price { get; set; }
 
         /// <summary>
         /// 市场价/建议零售价
         /// </summary>
-        public Decimal? price { get; set; }
+        public Decimal price { get; set; }
 
         /// <summary>
         /// 团购价
         /// </summary>
-        public Decimal? team_price { get; set; }
+        public Decimal team_price { get; set; }
 
         /// <summary>
         /// 团长返佣金额
         /// </summary>
-        public Decimal? team_commission { get; set; }
+        public Decimal team_commission { get; set; }
 
         /// <summary>
         /// 用户分享所得优惠券面值
         /// </summary>
-        public Decimal? share_amount { get; set; }
+        public Decimal share_amount { get; set; }
 
         /// <summary>
         /// 退款提前天数1

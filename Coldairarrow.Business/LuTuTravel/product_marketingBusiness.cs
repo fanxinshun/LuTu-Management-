@@ -178,7 +178,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <returns></returns>
         public product_marketing GetTheData(int product_id)
         {
-            return GetIQueryable().Where(x => x.product_id == product_id && x.marketing_endtime > DateTime.Now).OrderBy(x => x.create_time).Last();
+            return GetIQueryable().FirstOrDefault(x => x.product_id == product_id && x.marketing_endtime > DateTime.Now);
         }
 
         /// <summary>

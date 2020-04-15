@@ -5,19 +5,13 @@
 
     var obj = (product)(ViewData["theProduct"]);
     var objStr = Html.Raw(obj.ToJson());
-    obj.content = obj.content.IsNullOrEmpty() ? @"【开放时间】
-【取票地点】
-【入园凭证】
-【优惠政策】
-【发票说明】
+    obj.content = obj.content.IsNullOrEmpty() ? @"【入园凭证】
 【退改说明】
-【温馨提示】
-【联系电话】" : obj.content;
+【温馨提示】" : obj.content;
     obj.scenic_spot = obj.scenic_spot.IsNullOrEmpty() ? @"【景点简介】
 【景点特色】
 【景点包含】" : obj.scenic_spot;
-    obj.line_recommendation = obj.line_recommendation.IsNullOrEmpty() ? @"【报名方式】
-【公共交通】
+    obj.line_recommendation = obj.line_recommendation.IsNullOrEmpty() ? @"【公共交通】
 【自驾线路】" : obj.line_recommendation;
 
     var datalist = (List<product_date>)(ViewData["theProductData"]);
@@ -66,19 +60,19 @@
                 </td>
             </tr>
             <tr>
-                <th>预定须知</th>
-                <td>
-                    <textarea name="content" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.content</textarea>
-                </td>
-            </tr>
-            <tr>
-                <th>景点详情</th>
+                <th>景区介绍</th>
                 <td>
                     <textarea name="scenic_spot" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.scenic_spot</textarea>
                 </td>
             </tr>
             <tr>
-                <th>线路推荐</th>
+                <th>购买须知</th>
+                <td>
+                    <textarea name="content" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.content</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>交通路线</th>
                 <td>
                     <textarea name="line_recommendation" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.line_recommendation</textarea>
                 </td>
