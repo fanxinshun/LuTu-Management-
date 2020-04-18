@@ -148,18 +148,33 @@ namespace Coldairarrow.Business.LuTuTravel
 
 
         /// <summary>
-        /// 获取未参加营销的产品/门票数据
+        /// 获取产品及最新的营销数据
         /// </summary>
         /// <returns></returns>
-        public List<product> GetNoProductMarketingList()
+        public List<productMarketingModel> GetProductAndMarketingList(string product_type = null)
         {
+            List<DbParameter> paramters = new List<DbParameter>()
+            {
+                new MySqlParameter("@product_type_id", product_type)
+            };
             string sql = @"SELECT
-	                        Id,title
-                        FROM product
-                        WHERE enable_flag='1'";
+	                        a.*,
+	                        b.Id pId,
+	                        b.origin_price porigin_price,
+	                        b.price pprice,
+	                        b.title ptitle,
+	                        b.team_price pteam_price,
+	                        b.team_commission pteam_commission,
+	                        t.type_name pproduct_type_name
+                        FROM
+	                        product_marketing a
+	                        RIGHT JOIN product b ON a.product_id = b.Id AND a.create_time =(select MAX(create_time) FROM product_marketing WHERE product_id=a.product_id )
+                            LEFT JOIN product_type t on b.product_type_id = t.id
+                        WHERE b.enable_flag = '1' 
+                           AND (@product_type_id is null OR b.product_type_id = @product_type_id) 
+                           AND b.special_status = 0 ";//只查产品?
 
-            DataTable table = GetDataTableWithSql(sql);
-            return table.ToList<product>();
+            return GetListBySql<productMarketingModel>(sql, paramters);
         }
         /// <summary>
         /// 获取指定的单条数据
@@ -231,10 +246,11 @@ namespace Coldairarrow.Business.LuTuTravel
     {
         public String pId { get; set; }
         public String ptitle { get; set; }
-        public String porigin_price { get; set; }
-        public String pprice { get; set; }
-        public String pteam_price { get; set; }
-        public String pteam_commission { get; set; }
+        public decimal porigin_price { get; set; }
+        public decimal pprice { get; set; }
+        public decimal pteam_price { get; set; }
+        public decimal pteam_commission { get; set; }
         public String parea_name { get; set; }
+        public String pproduct_type_name { get; set; }
     }
 }

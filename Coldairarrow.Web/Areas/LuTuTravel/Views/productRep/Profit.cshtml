@@ -1,0 +1,113 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>productRep</title>
+    <script src="@Url.Scrpit("~/Scripts/echarts/echarts-en.common.min.js")"></script>
+    <style>
+        #mainDiv {
+            width: 90%;
+            text-align: center;
+            margin: 10px;
+        }
+
+            #mainDiv > div:first-child {
+                width: 100%;
+                height: 250px;
+                margin-top: 30px
+            }
+    </style>
+
+    <script>
+        var rootUrl = '@Url.Content("~/")';
+
+        function initTable(product_type) {
+            $('#dg').datagrid({
+                url: rootUrl + 'LuTuTravel/productRep/GetProductProfitDetail',
+                method: 'POST',
+                queryParams: { 'product_type': product_type },
+                idField: 'Id',
+                fit: true,
+                fitColumns: true,
+                singleSelect: false,
+                selectOnCheck: false,
+                checkOnSelect: false,
+                sortName: 'EstimateProfitMargin',
+                sortOrder: 'desc',
+                //rownumbers: true,
+                pagination: true,
+                pageSize: 10,
+                //nowrap: false,
+                pageList: [10, 20, 30, 50, 100, 150, 200],
+                //showFooter: true,
+                columns: [[
+
+                    { title: '产品id', field: 'Id', width: 100 },
+                    { title: '线路名称', field: 'ObjName', width: 200 },
+                    { title: '商品预估毛利', field: 'EstimateProfit', width: 200 },
+                    { title: '商品预估毛利率%', field: 'EstimateProfitMargin', width: 200 },
+                    { title: '毛利配占比', field: 'EstimateProfitRatio', width: 200 }
+                ]],
+                onBeforeLoad: function (param) {
+
+                },
+                onBeforeSelect: function () {
+                    return false;
+                }
+            });
+        }
+        $(function () {
+            initTable('全部');
+
+            var salesProfitChart = echarts.init(document.getElementById('salesProfit'));
+            salesProfitChart.on('click', function (params) {
+                $('#dg').datagrid('reload', { 'product_type': params.name });
+            });
+            $.getJSON(rootUrl + 'LuTuTravel/productRep/GetProductProfit', { }).done(function (resJson) {
+                if (resJson.Success) {
+                    salesProfitChart.setOption({
+                        title: {
+                            text: '预估毛利率'
+                        },
+                        tooltip: {
+                        },
+                        legend: {
+                            data: ['预估毛利率%']
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: resJson.Data.xAxisData
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '预估毛利率%',
+                            type: 'bar',
+                            data: resJson.Data.yAxisData
+                        }]
+                    });
+
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div id="mainDiv">
+        <!-- 产品利润 -->
+        <div id="salesProfit">
+
+        </div>
+
+        <div id="dg">
+
+        </div>
+    </div>
+</body>
+</html>

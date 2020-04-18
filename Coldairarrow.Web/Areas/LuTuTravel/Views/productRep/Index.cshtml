@@ -1,0 +1,114 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>productRep</title>
+    <script src="@Url.Scrpit("~/Scripts/echarts/echarts-en.common.min.js")"></script>
+    <style>
+        #mainDiv {
+            width: 90%;
+            text-align: center;
+            margin: 10px;
+        }
+
+            #mainDiv > div {
+                width: 100%;
+                height: 250px;
+                margin-top: 30px
+            }
+    </style>
+
+    <script>
+        var rootUrl = '@Url.Content("~/")';
+
+        $(function () {
+            var salesAmountChart = echarts.init(document.getElementById('salesAmount'));
+            var salesOrderChart = echarts.init(document.getElementById('salesOrder'));
+            $.getJSON(rootUrl + 'LuTuTravel/productRep/GetProductRepData', { days: 30 }).done(function (resJson) {
+                if (resJson.Success) {
+                    salesAmountChart.setOption({
+                        title: {
+                            text: '累计销售额'
+                        },
+                        tooltip: {
+                        },
+                        legend: {
+                            data: ['销售额']
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: resJson.Data.xAxisData
+                        },
+                        dataZoom: [
+                            {   // 这个dataZoom组件，默认控制x轴。
+                                type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                                start: 50,      // 左边在 10% 的位置。
+                                end: 100         // 右边在 60% 的位置。
+                            }
+                        ],
+                        yAxis: {},
+                        series: [{
+                            name: '累计销售额',
+                            type: 'line',
+                            data: resJson.Data.yAxisDataAmount, smooth: true
+                        }]
+                    });
+
+                    //每日订单数/人数
+                    salesOrderChart.setOption({
+                        title: {
+                            text: '每日订单数/人数'
+                        },
+                        tooltip: {
+
+                        },
+                        legend: {
+                            data: ['订单数', '人数']
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: resJson.Data.xAxisData
+                        },
+                        dataZoom: [
+                            {   // 这个dataZoom组件，默认控制x轴。
+                                type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                                start: 50,      // 左边在 10% 的位置。
+                                end: 100        // 右边在 60% 的位置。
+                            }
+                        ],
+                        yAxis: {},
+                        series: [{
+                            name: '订单数',
+                            type: 'bar',
+                            data: resJson.Data.yAxisDataOrders
+                        }, {
+                            name: '人数',
+                            type: 'bar',
+                            data: resJson.Data.yAxisDataPeoples
+                        }]
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div id="mainDiv">
+        <!-- 累计销售额 -->
+        <div id="salesAmount">
+
+        </div>
+        <!-- 每日订单数/人数 -->
+        <div id="salesOrder">
+
+        </div>
+    </div>
+</body>
+</html>

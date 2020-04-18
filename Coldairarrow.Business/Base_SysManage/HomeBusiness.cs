@@ -55,9 +55,7 @@ namespace Coldairarrow.Business.Base_SysManage
             data.T_TradingVolume = listPays.Where(x => x.pay_time?.ToString("yyyy-MM-dd") == currentTime).Sum(x => x.money);
             data.Y_TradingVolume = listPays.Where(x => x.pay_time?.ToString("yyyy-MM-dd") == yesterdayTime).Sum(x => x.money);
             data.A_TradingVolume = listPays.Where(x => x.pay_time != null).Sum(x => x.money);
-
-            data.xAxisData = new List<string>();
-            data.yAxisData = new List<decimal>();
+            
             decimal value = 0;
             for (int i = days - 1; i >= 0; i--)
             {
@@ -89,7 +87,7 @@ namespace Coldairarrow.Business.Base_SysManage
 
 }
 
-public class MainData
+public class MainData : EChartData
 {
     /// <summary>
     /// 今日浏览数
@@ -166,16 +164,6 @@ public class MainData
     /// 团长销售排行榜数据源
     /// </summary>
     public object TeamSaleRank { get; set; }
-
-    /// <summary>
-    /// 横坐标绑定数据
-    /// </summary>
-    public List<string> xAxisData { get; set; }
-    /// <summary>
-    /// 纵坐标绑定数据
-    /// </summary>
-    public List<decimal> yAxisData { get; set; }
-
 
 }
 
