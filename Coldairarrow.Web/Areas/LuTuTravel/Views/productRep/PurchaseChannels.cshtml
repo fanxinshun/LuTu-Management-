@@ -1,0 +1,86 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>productRep</title>
+    <script src="@Url.Scrpit("~/Scripts/echarts/echarts-en.common.min.js")"></script>
+    <style>
+        #mainDiv {
+            width: 90%;
+            text-align: center;
+            margin: 10px;
+        }
+
+            #mainDiv > div:first-child {
+                width: 100%;
+                height: 250px;
+                margin-top: 30px
+            }
+    </style>
+
+    <script>
+        var rootUrl = '@Url.Content("~/")';
+
+        $(function () {
+
+            var myChart = echarts.init(document.getElementById('myChart'));
+            $.getJSON(rootUrl + 'LuTuTravel/productRep/GetPurchaseChannels', { days: 30 }).done(function (resJson) {
+                if (resJson.Success) {
+                    myChart.setOption({
+                        title: {
+                            text: '商品购买渠道'
+                        },
+                        tooltip: {
+                        },
+                        legend: {
+                            data: ['自行购买', '团长渠道', '分享页面']
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: resJson.Data.xAxisData
+                        },
+                        dataZoom: [
+                            {   // 这个dataZoom组件，默认控制x轴。
+                                type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                                start: 50,      // 左边在 10% 的位置。
+                                end: 100         // 右边在 60% 的位置。
+                            }
+                        ],
+                        yAxis: {},
+                        series: [{
+                            name: '自行购买',
+                            type: 'line',
+                            data: resJson.Data.yAxisData, smooth: true
+                        }, {
+                            name: '团长渠道',
+                            type: 'line',
+                            data: resJson.Data.yAxisData2, smooth: true
+                        }, {
+                            name: '分享页面',
+                            type: 'line',
+                            data: resJson.Data.yAxisData3, smooth: true
+                        }]
+                    });
+
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div id="mainDiv">
+        <!-- 产品利润 -->
+        <div id="myChart">
+
+        </div>
+
+    </div>
+</body>
+</html>

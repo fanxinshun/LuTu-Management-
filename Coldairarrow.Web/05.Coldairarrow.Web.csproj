@@ -116,6 +116,9 @@
     <Content Update="Areas\Base_SysManage\Views\RapidDevelopment\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\LuTuTravel\Views\productRep\PurchaseChannels.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\LuTuTravel\Views\productRep\Profit.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

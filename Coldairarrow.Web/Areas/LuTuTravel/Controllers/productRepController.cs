@@ -29,6 +29,10 @@ namespace Coldairarrow.Web
         {
             return View();
         }
+        public ActionResult PurchaseChannels()
+        {
+            return View();
+        }
 
         #endregion
 
@@ -65,6 +69,15 @@ namespace Coldairarrow.Web
             var dataList = _productBusiness.GetProductProfitDetail(product_type, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
+        }
+        /// <summary>
+        /// 获取销售渠道
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetPurchaseChannels(int days)
+        {
+            var data = _productBusiness.GetPurchaseChannels(days);
+            return Success(data);
         }
         #endregion
 

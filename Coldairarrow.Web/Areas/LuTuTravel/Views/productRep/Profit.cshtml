@@ -29,6 +29,7 @@
 
         function initTable(product_type) {
             $('#dg').datagrid({
+                title: product_type,
                 url: rootUrl + 'LuTuTravel/productRep/GetProductProfitDetail',
                 method: 'POST',
                 queryParams: { 'product_type': product_type },
@@ -38,7 +39,7 @@
                 singleSelect: false,
                 selectOnCheck: false,
                 checkOnSelect: false,
-                sortName: 'EstimateProfitMargin',
+                sortName: 'EstimateProfit',
                 sortOrder: 'desc',
                 //rownumbers: true,
                 pagination: true,
@@ -51,7 +52,9 @@
                     { title: '产品id', field: 'Id', width: 100 },
                     { title: '线路名称', field: 'ObjName', width: 200 },
                     { title: '商品预估毛利', field: 'EstimateProfit', width: 200 },
+                    { title: '商品实际毛利', field: 'ActualProfit', width: 200 },
                     { title: '商品预估毛利率%', field: 'EstimateProfitMargin', width: 200 },
+                    { title: '商品实际毛利率%', field: 'ActualProfitMargin', width: 200 },
                     { title: '毛利配占比', field: 'EstimateProfitRatio', width: 200 }
                 ]],
                 onBeforeLoad: function (param) {
@@ -67,18 +70,18 @@
 
             var salesProfitChart = echarts.init(document.getElementById('salesProfit'));
             salesProfitChart.on('click', function (params) {
-                $('#dg').datagrid('reload', { 'product_type': params.name });
+                $('#dg').datagrid('reload', { 'product_type': params.name }).datagrid({ title: params.name });
             });
             $.getJSON(rootUrl + 'LuTuTravel/productRep/GetProductProfit', { }).done(function (resJson) {
                 if (resJson.Success) {
                     salesProfitChart.setOption({
                         title: {
-                            text: '预估毛利率'
+                            text: '商品利润表'
                         },
                         tooltip: {
                         },
                         legend: {
-                            data: ['预估毛利率%']
+                            data: ['预估毛利率%', '实际毛利率%']
                         },
                         xAxis: {
                             type: 'category',
@@ -88,8 +91,12 @@
                         series: [{
                             name: '预估毛利率%',
                             type: 'bar',
-                            data: resJson.Data.yAxisData
-                        }]
+                            data: resJson.Data.yAxisDataEstimateProfitMargin
+                        }, {
+                                name: '实际毛利率%',
+                                type: 'bar',
+                                data: resJson.Data.yAxisDataActualProfitMargin
+                            }]
                     });
 
                 }
