@@ -166,14 +166,24 @@ namespace Coldairarrow.Business.LuTuTravel
 	                        b.team_price pteam_price,
 	                        b.team_commission pteam_commission,
 	                        t.type_name pproduct_type_name,
-                            p.money,
-                            o.num
+                            t.money,
+                            t.num
                         FROM
 	                        product_marketing a
 	                        RIGHT JOIN product b ON a.product_id = b.Id AND a.create_time =(select MAX(create_time) FROM product_marketing WHERE product_id = a.product_id )
                             LEFT JOIN product_type t on b.product_type_id = t.id
-                            LEFT JOIN `order` o ON o.status = 1 AND b.Id = o.product_id 
-                            LEFT JOIN `pay` p ON p.status = 1 AND p.order_id = o.Id AND p.create_time =(select MAX(create_time) FROM `pay` WHERE order_id = p.order_id )
+                            LEFT JOIN (SELECT o.product_id,p.money,o.num 
+										 FROM `order` o
+								   INNER JOIN `pay` p ON p.order_id = o.Id AND p.STATUS = 1 AND o.STATUS =1
+											                              AND p.create_time =(
+																		            SELECT
+																			            MAX( create_time ) 
+																		            FROM
+																			            `pay`
+																		            WHERE
+																			            order_id = p.order_id 
+																		            )
+                                    ) t on  b.Id = t.product_id
                         WHERE 1=1 AND b.enable_flag = '1'
                            AND (@product_type_id is null OR b.product_type_id = @product_type_id) 
                            AND b.special_status = 0 ";//只查产品?
