@@ -182,7 +182,7 @@ namespace Coldairarrow.Business.LuTuTravel
             //总实际支付金额
             decimal money = productMarketingModels.Sum(x => x.money / (x.num ?? 1));
             //总实际毛利
-            profit.ActualProfit = money - amountOrigin_price;//付款金额/订单人数 - 成本价
+            profit.ActualProfit = money == 0 ? 0 : (money - amountOrigin_price);//付款金额/订单人数 - 成本价
             //总实际毛利率
             profit.ActualProfitMargin = money == 0 ? 0 : Math.Round(profit.ActualProfit / money * 100, 0, MidpointRounding.AwayFromZero);
             return profit;
@@ -208,7 +208,7 @@ namespace Coldairarrow.Business.LuTuTravel
             //实际支付金额
             decimal money = x.money / (x.num ?? 1);
             //实际毛利
-            profit.ActualProfit = (money - amountOrigin_price);//付款金额/订单人数 - 成本价
+            profit.ActualProfit = money == 0 ? 0 : (money - amountOrigin_price);//付款金额/订单人数 - 成本价
             //实际毛利率
             profit.ActualProfitMargin = money == 0 ? 0 : Math.Round(profit.ActualProfit / money * 100, 0, MidpointRounding.AwayFromZero);
             profit.Id = x.pId;

@@ -213,18 +213,18 @@
                 <th>适合最小年龄</th>
                 <td>
                     <div style="float:left">
-                        <input name="age_appropriate_min" value="@obj.age_appropriate_min" class="easyui-numberbox" data-options="required:true,min:0,max:100">
+                        <input name="age_appropriate_min" value="@obj.age_appropriate_min" class="easyui-numberbox" data-options="required:false,min:0,max:100">
                     </div>
                     <div style="float:left;line-height:30px;margin-left:15px">适合最大年龄</div>
                     <div style="float:left;margin-left:5px">
-                        <input name="age_appropriate_max" value="@obj.age_appropriate_max" class="easyui-numberbox" data-options="required:true,min:0,max:100">
+                        <input name="age_appropriate_max" value="@obj.age_appropriate_max" class="easyui-numberbox" data-options="required:false,min:0,max:100">
                     </div>
                 </td>
             </tr>
             <tr>
                 <th>下单风险提示开关</th>
                 <td>
-                    <input name="issue_risk" value="@obj.issue_risk" class="easyui-combobox"
+                    <input name="issue_risk" value="@(obj.issue_risk.IsNullOrEmpty()?"2":obj.issue_risk)" class="easyui-combobox"
                            data-options="required: true,
                                            valueField: 'value',
 		                                   textField: 'label',
@@ -257,19 +257,19 @@
             <tr>
                 <th>最大延迟付款时间</th>
                 <td>
-                    <input name="pay_time" value="@obj.pay_time" class="easyui-numberbox" data-options="required:true,min:10,max:60">分钟
+                    <input name="pay_time" value="@(obj.pay_time?? 30)" class="easyui-numberbox" data-options="required:true,min:10,max:60">分钟
                 </td>
             </tr>
             <tr>
                 <th>是否是推荐(0否 1是)</th>
                 <td>
-                    <input name="recommend_status" value="@obj.recommend_status" class="easyui-numberbox" data-options="required:true,min:0,max:1">
+                    <input name="recommend_status" value="@(obj.recommend_status?? 0)" class="easyui-numberbox" data-options="required:true,min:0,max:1">
                 </td>
             </tr>
             <tr>
                 <th>是否是特价(0否 1是)</th>
                 <td>
-                    <input name="bargain_price_status" value="@obj.bargain_price_status" class="easyui-numberbox" data-options="required:true,min:0,max:1">
+                    <input name="bargain_price_status" value="@(obj.bargain_price_status?? 0)" class="easyui-numberbox" data-options="required:true,min:0,max:1">
                 </td>
             </tr>
         </tbody>
