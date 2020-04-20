@@ -43,6 +43,11 @@ namespace Coldairarrow.Business.LuTuTravel
             return data;
         }
 
+        /// <summary>
+        /// 获取产品销售额、订单数、人数
+        /// </summary>
+        /// <param name="days"></param>
+        /// <returns></returns>
         public EChartData GetProductRepData(int days)
         {
             var data = new EChartData();
@@ -109,7 +114,7 @@ namespace Coldairarrow.Business.LuTuTravel
             //总预估毛利
             profit.EstimateProfit = (amountTeam_price - amountOrigin_price);//总预估成团价 - 总预估成本价
             //总预估毛利率
-            profit.EstimateProfitMargin = Math.Round(profit.EstimateProfit / amountTeam_price * 100, 0, MidpointRounding.AwayFromZero);
+            profit.EstimateProfitMargin = amountTeam_price == 0 ? 0 : Math.Round(profit.EstimateProfit / amountTeam_price * 100, 0, MidpointRounding.AwayFromZero);
 
             //总实际支付金额
             decimal money = productMarketingModels.Sum(x => x.money / (x.num ?? 1));
@@ -135,7 +140,7 @@ namespace Coldairarrow.Business.LuTuTravel
             //预估毛利
             profit.EstimateProfit = (amountTeam_price - amountOrigin_price);//预估成团价 - 成本价
             //预估毛利率
-            profit.EstimateProfitMargin = Math.Round(profit.EstimateProfit / amountTeam_price * 100, 0, MidpointRounding.AwayFromZero);
+            profit.EstimateProfitMargin = amountTeam_price == 0 ? 0 : Math.Round(profit.EstimateProfit / amountTeam_price * 100, 0, MidpointRounding.AwayFromZero);
 
             //实际支付金额
             decimal money = x.money / (x.num ?? 1);
