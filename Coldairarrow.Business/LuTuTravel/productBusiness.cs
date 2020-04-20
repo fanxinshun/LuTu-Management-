@@ -1,3 +1,4 @@
+using Coldairarrow.Business.Common;
 using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
 using System;
@@ -15,11 +16,19 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 获取数据列表
         /// </summary>
         /// <returns></returns>
-        public List<product> GetDataList(int special_status, string product_type_id, string title, string supplier, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
+        public List<product> GetDataList(int special_status,
+            string product_type_id,
+            string title,
+            string supplier,
+            DateTime? create_time1,
+            DateTime? create_time2,
+            Pagination pagination,
+            string enable_flag)
         {
-            var q = GetIQueryable().Where(x => x.enable_flag == "1" && x.special_status == special_status);
+            var q = GetIQueryable().Where(x => x.special_status == special_status);
+            if (!enable_flag.IsNullOrEmpty())
+                q = q.Where(x => x.enable_flag == enable_flag);
 
-            //模糊查询
             if (!product_type_id.IsNullOrEmpty())
                 q = q.Where(x => x.product_type_id == product_type_id);
 
@@ -39,8 +48,9 @@ namespace Coldairarrow.Business.LuTuTravel
 
             return resList;
         }
+
         /// <summary>
-        /// 获取所以产品门票数据
+        /// 获取上线的产品数据
         /// </summary>
         /// <returns></returns>
         public List<product> GetDataList()
@@ -82,6 +92,19 @@ namespace Coldairarrow.Business.LuTuTravel
         public void DeleteData(List<string> ids)
         {
             Delete(ids);
+        }
+
+        /// <summary>
+        /// 修改产品上线状态
+        /// </summary>
+        /// <param name="theData">删除的数据</param>
+        public void ChangeStatus(int id)
+        {
+            var theData = GetTheData(id);
+            theData.enable_flag = theData.enable_flag == "1" ? "0" : "1";
+            theData.update_by = Operator.UserId;
+            theData.update_time = DateTime.Now;
+            UpdateData(theData);
         }
 
         #endregion

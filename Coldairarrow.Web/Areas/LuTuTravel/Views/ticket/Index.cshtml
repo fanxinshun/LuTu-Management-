@@ -4,7 +4,7 @@
 @section toolbar{
     <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
     <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">下架</a>
+    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">上架/下架</a>
 }
 @section search{
     <div class="search_wrapper">
@@ -24,6 +24,13 @@
             <label class='search_label'>发布时间</label>
             <input name='create_time1' class='easyui-datebox' style='width:120px' />
             <input name='create_time2' class='easyui-datebox' style='width:120px' />
+        </div>
+        <div class='search_item'>
+            <label class='search_label'>上架状态</label>
+            <input name="enable_flag" class="easyui-combobox" data-options="width:'120px',editable:true,
+                                        valueField: 'id',
+                                        textField: 'text',
+                                        data:[{ id:'', text:'全部' },{ id:'1', text: '已上架' },{ id:'0', text: '已下架' }]">
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
@@ -60,63 +67,20 @@
                 { title: 'ck', field: 'ck', checkbox: true },
 
                 { title: '产品id', field: 'Id', width: 200 },
-                //{ title: '地区编码', field: 'area_code', width: 200 },
                 { title: '所属地区', field: 'area_code', width: 200 },
-                //{ title: '产品类型表id', field: 'product_type_id', width: 200 },
                 { title: '产品名称', field: 'title', width: 200 },
-                //{ title: '景区级别', field: 'special_category', width: 200 },
-                //{ title: '地区编码', field: 'area_code', width: 200 },
-                //{ title: '目的地', field: 'region', width: 200 },
-                //{ title: '出发地', field: 'region_start', width: 200 },
-                //{ title: '预定须知', field: 'content', width: 200 },
-                //{ title: '产品特色介绍', field: 'features', width: 200 },
-                //{ title: '费用明细', field: 'cost_detail', width: 200 },
-                //{ title: '景点详情', field: 'scenic_spot', width: 200 },
-                //{ title: '线路推荐', field: 'line_recommendation', width: 200 },
-                //{ title: '产品图片地址，多张图片用“,"隔开', field: 'images', width: 200 },
-                //{ title: '成本价', field: 'origin_price', width: 200 },
                 { title: '建议零售价', field: 'price', width: 200 },
-                //{ title: '团购价', field: 'team_price', width: 200 },
-                //{ title: '团长返佣金额', field: 'team_commission', width: 200 },
-                //{ title: '游玩天数', field: 'days', width: 200 },
                 { title: '成团价', field: 'team_price', width: 200 },
-                //{ title: '集合地点', field: 'address', width: 200 },
-                //{ title: '砍价时间开关', field: 'is_bargain', width: 200 },
-                //{ title: '提前预定时间开关', field: 'advance_booking', width: 200 },
-                //{ title: '提前天数', field: 'advance_day', width: 200 },
-                //{ title: '提前小时数', field: 'advance_hour', width: 200 },
-                //{ title: '提前分钟数', field: 'advance_minute', width: 200 },
-                //{ title: '产品砍价最低人数', field: 'people_minnum', width: 200 },
-                //{ title: '门票下单最高人数', field: 'people_maxnum', width: 200 },
-                //{ title: '适合年龄最小值', field: 'age_appropriate_min', width: 200 },
-                //{ title: '适合年龄最大值', field: 'age_appropriate_max', width: 200 },
-                //{ title: '下单风险提示开关', field: 'issue_risk', width: 200 },
-                //{ title: '下单风险提示内容', field: 'issue_risk_content', width: 200 },
                 {
                     title: '产品到期时间', field: 'product_endtime', width: 200, formatter: function (value, row, index) {
                         return value == null ? '' : value.split(' ')[0];
                     }
+                },
+                {
+                    title: '是否上架', field: 'enable_flag', width: 200, formatter: function (value, row, index) {
+                        return value == '1' ? '是' : '否';
+                    }
                 }
-                //{ title: '最大延迟付款时间', field: 'pay_time', width: 200 },
-                //{ title: '是否是特价门票(0否 1是)', field: 'special_status', width: 200 },
-                //{ title: '产品logo，用于封面展示', field: 'logo', width: 200 },
-                //{ title: '是否是推荐(0否 1是)', field: 'recommend_status', width: 200 },
-                //{ title: '创建人', field: 'create_by', width: 200 },
-                //{ title: '创建时间', field: 'create_time', width: 200 },
-                //{ title: '修改人', field: 'update_by', width: 200 },
-                //{ title: '修改时间', field: 'update_time', width: 200 },
-                //{ title: '供应商手机号', field: 'supplier_phone', width: 200 },
-                //{ title: '通知方式多选项', field: 'notice_item', width: 200 },
-                //{ title: '取票信息', field: 'tickets_info', width: 200 },
-                //{ title: '取票时间选项', field: 'tickets_time_item', width: 200 },
-                //{ title: '打印纸票选项', field: 'tickets_print_item', width: 200 },
-                //{ title: '打印门票内容', field: 'tickets_print_content', width: 200 },
-                //{ title: '炸鸡播报内容', field: 'tickets_broadcast', width: 200 },
-                //{ title: '有效期', field: 'validity_item', width: 200 }
-                //{ title: '入园验证', field: 'validity_admission', width: 200 },
-                //{ title: '可验证时间', field: 'validity_usefultime', width: 200 },
-                //{ title: '延迟验证', field: 'validity_delay', width: 200 },
-                //{ title: '分终端配置', field: 'validity_terminal', width: 200 }
             ]],
             onBeforeLoad: function (param) {
 
@@ -161,21 +125,19 @@
 
         //删除数据
         $('#delete').click(function () {
-            var checked = $("#dataTable").datagrid("getChecked");
-            if (!checked || !checked.length) {
-                dialogError('请选择要下架的记录!');
+            var selected = $("#dataTable").datagrid("getChecked");
+            if (!selected || !selected.length) {
+                dialogError('请选择要修改的记录!');
                 return;
             }
-            var ids = $.map(checked, function (item) {
-                return item['Id'];
-            });
+            var id = selected[0].Id;
 
-            dialogComfirm('确认下架吗？', function () {
-                $.postJSON(rootUrl + 'LuTuTravel/ticket/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+            dialogComfirm('是否更改产品上线状态？', function () {
+                $.postJSON(rootUrl + 'LuTuTravel/product/DeleteData', { id: id }, function (resJson) {
                     if (resJson.Success) {
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');
-                        dialogMsg('下架成功!');
+                        dialogMsg('操作成功!');
                     }
                     else {
                         dialogError(resJson.Msg);

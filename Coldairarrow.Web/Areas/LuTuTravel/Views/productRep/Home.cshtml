@@ -1,0 +1,195 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script src="@Url.Scrpit("~/Scripts/echarts/echarts-en.common.min.js")"></script>
+
+    <style type="text/css">
+        #mainDiv {
+            width: 90%;
+            text-align: center;
+            margin: 10px;
+        }
+
+        .topDiv {
+            width: 100%;
+            height: 80px;
+            text-align: left;
+        }
+
+            .topDiv div {
+                float: left;
+                width: 20%
+            }
+
+        #main {
+            width: 100%;
+            height: 250px;
+            margin-top: 30px
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mainDiv">
+        <div class="topDiv">
+            <div>今日浏览数：<span id="T_VisitsNum"></span></div>
+            <div>今日注册用户：<span id="T_RegisteredUsers"></span></div>
+            <div>今日团长新增：<span id="T_NewHead"></span></div>
+            <div>今日参团数：<span id="T_Participants"></span></div>
+            <div>今日交易额：<span id="T_TradingVolume"></span></div>
+            <div>昨日：<span id="Y_VisitsNum"></span></div>
+            <div>昨日：<span id="Y_RegisteredUsers"></span></div>
+            <div>昨日：<span id="Y_NewHead"></span></div>
+            <div>昨日：<span id="Y_Participants"></span></div>
+            <div>昨日：<span id="Y_TradingVolume"></span></div>
+            <div>共：<span id="A_VisitsNum"></span></div>
+            <div>共：<span id="A_RegisteredUsers"></span></div>
+            <div>共：<span id="A_NewHead"></span></div>
+            <div>共：<span id="A_Participants"></span></div>
+            <div>共：<span id="A_TradingVolume"></span></div>
+
+        </div>
+        <div style="clear:both"></div>
+
+        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main"></div>
+        <div style="margin-top: 200px;">
+            <div style="float: left;width: 50%;height:220px">
+                <div id="productSaleRank">
+                    <!--产品销售排行-->
+                </div>
+            </div>
+
+            <div style="float: left;width: 50%;height:220px">
+                <div id="teamSaleRank">
+                    <!--团长销售排行-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        function iniProductSaleRank() {
+            $('#productSaleRank').datagrid({
+                //url: rootUrl + 'Home/GetProductSaleRankData',
+                //method: 'POST',
+                title: '产品销售排行榜',
+                //queryParams: { 'id': id },
+                idField: 'name',
+                fit: true,
+                striped:true,
+                fitColumns: true,
+                singleSelect: false,
+                selectOnCheck: false,
+                checkOnSelect: false,
+                sortName: 'num',
+                sortOrder: 'desc',
+                rownumbers: true,
+                pagination: false,
+                pageSize: 10,
+                //nowrap: false,
+                pageList: [10, 20, 30, 50, 100, 150, 200],
+                //showFooter: true,
+                columns: [[
+                    { title: '产品名称', field: 'name', width: 200 },
+                    { title: '数量', field: 'num', width: 200 }
+                ]],
+                onBeforeSelect: function () {
+                    return false;
+                }
+            });
+        }
+
+        function iniTeamSaleRank() {
+            $('#teamSaleRank').datagrid({
+                //url: rootUrl + 'Home/GetProductSaleRankData',
+                //method: 'POST',
+                title: '团长销售排行榜',
+                //queryParams: { 'id': id },
+                //idField: 'Id',
+                fit: true,
+                striped: true,
+                fitColumns: true,
+                singleSelect: false,
+                selectOnCheck: false,
+                checkOnSelect: false,
+                sortName: 'num',
+                sortOrder: 'desc',
+                rownumbers: true,
+                pagination: false,
+                pageSize: 10,
+                //nowrap: false,
+                pageList: [10, 20, 30, 50, 100, 150, 200],
+                //showFooter: true,
+                columns: [[
+                    { title: '团长', field: 'name', width: 200 },
+                    { title: '数量', field: 'num', width: 200 }
+                ]],
+                onBeforeSelect: function () {
+                    return false;
+                }
+            });
+        }
+
+        var rootUrl = '@Url.Content("~/")';
+
+        $(function () {
+            iniProductSaleRank();
+            iniTeamSaleRank();
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+            myChart.on('click', function (params) {
+                // 控制台打印数据的名称
+                console.log(params.name);
+            });
+            myChart.showLoading();
+            $.getJSON(rootUrl + 'LuTuTravel/productRep/GetMainData', { days: 30 }).done(function (resJson) {
+                if (resJson.Success) {
+                    myChart.hideLoading();
+                    myChart.setOption({
+                        title: {
+                            text: '运营概况'
+                        },
+                        tooltip: {
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: resJson.Data.xAxisData
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '销售额',
+                            type: 'line',
+                            data: resJson.Data.yAxisData, smooth: true
+                        }]
+                    });
+                    $('#T_VisitsNum').html(resJson.Data.T_VisitsNum);
+                    $('#Y_VisitsNum').html(resJson.Data.Y_VisitsNum);
+                    $('#A_VisitsNum').html(resJson.Data.A_VisitsNum);
+                    $('#T_RegisteredUsers').html(resJson.Data.T_RegisteredUsers);
+                    $('#Y_RegisteredUsers').html(resJson.Data.Y_RegisteredUsers);
+                    $('#A_RegisteredUsers').html(resJson.Data.A_RegisteredUsers);
+                    $('#T_NewHead').html(resJson.Data.T_NewHead);
+                    $('#Y_NewHead').html(resJson.Data.Y_NewHead);
+                    $('#A_NewHead').html(resJson.Data.A_NewHead);
+                    $('#T_Participants').html(resJson.Data.T_Participants);
+                    $('#Y_Participants').html(resJson.Data.Y_Participants);
+                    $('#A_Participants').html(resJson.Data.A_Participants);
+                    $('#T_TradingVolume').html(resJson.Data.T_TradingVolume);
+                    $('#Y_TradingVolume').html(resJson.Data.Y_TradingVolume);
+                    $('#A_TradingVolume').html(resJson.Data.A_TradingVolume);
+                    $('#productSaleRank').datagrid('loadData', resJson.Data.ProductSaleRank);
+                    $('#teamSaleRank').datagrid('loadData', resJson.Data.TeamSaleRank);
+                }
+            });
+
+        });
+
+    </script>
+</body>
+</html>

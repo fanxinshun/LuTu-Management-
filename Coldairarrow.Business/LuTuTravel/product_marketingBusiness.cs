@@ -174,7 +174,7 @@ namespace Coldairarrow.Business.LuTuTravel
                             LEFT JOIN product_type t on b.product_type_id = t.id
                             LEFT JOIN `order` o ON o.status = 1 AND b.Id = o.product_id 
                             LEFT JOIN `pay` p ON p.status = 1 AND p.order_id = o.Id AND p.create_time =(select MAX(create_time) FROM `pay` WHERE order_id = p.order_id )
-                        WHERE b.enable_flag = '1' 
+                        WHERE 1=1 AND b.enable_flag = '1'
                            AND (@product_type_id is null OR b.product_type_id = @product_type_id) 
                            AND b.special_status = 0 ";//只查产品?
 

@@ -33,11 +33,22 @@ namespace Coldairarrow.Web
         {
             return View();
         }
-
+        public ActionResult Home()
+        {
+            return View();
+        }
         #endregion
 
         #region 获取数据
 
+        public ActionResult GetMainData(int days)
+        {
+            Pagination pagination = new Pagination() { SortField = "num", order = "desc" };
+            var res = _productBusiness.GetMainData(days, pagination);
+            
+            return Success(res);
+        }
+         
         /// <summary>
         /// 获取数据列表
         /// </summary>

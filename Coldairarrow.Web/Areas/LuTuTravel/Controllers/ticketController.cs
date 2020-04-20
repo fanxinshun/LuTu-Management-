@@ -65,9 +65,9 @@ namespace Coldairarrow.Web
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public ActionResult GetDataList(string product_type_id, string title, DateTime? create_time1, DateTime? create_time2, Pagination pagination)
+        public ActionResult GetDataList(string product_type_id, string title, DateTime? create_time1, DateTime? create_time2, Pagination pagination, string enable_flag)
         {
-            var dataList = _productBusiness.GetDataList(1, product_type_id, title, string.Empty, create_time1, create_time2, pagination);
+            var dataList = _productBusiness.GetDataList(1, product_type_id, title, string.Empty, create_time1, create_time2, pagination, enable_flag);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
@@ -122,22 +122,6 @@ namespace Coldairarrow.Web
             return Success();
         }
 
-        /// <summary>
-        /// 删除数据
-        /// </summary>
-        /// <param name="theData">删除的数据</param>
-        public ActionResult DeleteData(string ids)
-        {
-            var listId = ids.ToList<int>();
-            List<product> products = new List<product>();
-            foreach (var item in listId)
-            {
-                products.Add(new product() { Id = item, enable_flag = "0", update_by = Operator.UserId, update_time = DateTime.Now });
-            }
-            _productBusiness.UpdateAny(products, new List<string>() { "enable_flag" });
-
-            return Success("下架成功！");
-        }
         #endregion
     }
 }

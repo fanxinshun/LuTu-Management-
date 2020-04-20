@@ -1,23 +1,28 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 }
-
 @section toolbar{
     <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
     <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">下架</a>
+    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">上架/下架</a>
 }
-
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
             <label class="search_label">商品名称</label>
-            <input name="title" class="easyui-textbox" style="width:120px" />
+            <input name="title" class="easyui-textbox"/>
         </div>
         <div class='search_item'>
             <label class='search_label'>发布时间</label>
-            <input name='create_time1' class='easyui-datebox' style='width:120px' />
-            <input name='create_time2' class='easyui-datebox' style='width:120px' />
+            <input name='create_time1' class='easyui-datebox'/>
+            <input name='create_time2' class='easyui-datebox'/>
+        </div>
+        <div class='search_item'>
+            <label class='search_label'>上架状态</label>
+            <input name="enable_flag" class="easyui-combobox" data-options="editable:true,
+                                        valueField: 'id',
+                                        textField: 'text',
+                                        data:[{ id:'', text:'全部' },{ id:'1', text: '已上架' },{ id:'0', text: '已下架' }]">
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
@@ -25,9 +30,7 @@
     </div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var formWidth = 800;
@@ -65,7 +68,12 @@
                 { title: '团购价', field: 'team_price', width: 200 },
                 { title: '团长返佣金额', field: 'team_commission', width: 200 },
                 { title: '用户分享所得优惠券面值', field: 'share_amount', width: 200 },
-                { title: '是否是推荐(0否 1是)', field: 'recommend_status', width: 200 }
+                { title: '是否是推荐(0否 1是)', field: 'recommend_status', width: 200 },
+                {
+                    title: '是否上架', field: 'enable_flag', width: 200, formatter: function (value, row, index) {
+                        return value == '1' ? '是' : '否';
+                    }
+                }
             ]],
             onBeforeLoad: function (param) {
 
@@ -110,21 +118,19 @@
 
         //删除数据
         $('#delete').click(function () {
-            var checked = $("#dataTable").datagrid("getChecked");
-            if (!checked || !checked.length) {
-                dialogError('请选择要删除的记录!');
+            var selected = $("#dataTable").datagrid("getChecked");
+            if (!selected || !selected.length) {
+                dialogError('请选择要修改的记录!');
                 return;
             }
-            var ids = $.map(checked, function (item) {
-                return item['Id'];
-            });
+            var id = selected[0].Id;
 
-            dialogComfirm('确认删除吗？', function () {
-                $.postJSON(rootUrl + 'LuTuTravel/commodity/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+            dialogComfirm('是否更改产品上线状态？', function () {
+                $.postJSON(rootUrl + 'LuTuTravel/product/DeleteData', { id: id }, function (resJson) {
                     if (resJson.Success) {
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');
-                        dialogMsg('删除成功!');
+                        dialogMsg('操作成功!');
                     }
                     else {
                         dialogError(resJson.Msg);
