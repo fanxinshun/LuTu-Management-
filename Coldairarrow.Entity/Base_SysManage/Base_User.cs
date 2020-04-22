@@ -47,5 +47,10 @@ namespace Coldairarrow.Entity.Base_SysManage
         /// 出生日期
         /// </summary>
         public DateTime? Birthday { get; set; }
+
+        /// <summary>
+        /// 供应商
+        /// </summary>
+        public String Supplier { get; set; }
     }
 }

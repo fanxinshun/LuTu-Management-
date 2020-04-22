@@ -24,6 +24,16 @@
         <tbody>
 
             <tr>
+                <th>供应商</th>
+                <td>
+                    <input name="supplier" value="@obj.supplier" class="easyui-combobox"
+                           data-options="width:'30%',required:true,editable:false,
+                                        valueField: 'name',
+                                        textField: 'name',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetSupplieListByCode'">
+                </td>
+            </tr>
+            <tr>
                 <th>商品名称</th>
                 <td>
                     <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'80%',required:true,validType:'length[0,50]'">

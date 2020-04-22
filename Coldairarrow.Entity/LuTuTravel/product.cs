@@ -158,17 +158,28 @@ namespace Coldairarrow.Entity.LuTuTravel
         public String is_bargain { get; set; }
 
         /// <summary>
+        /// 砍价开始天数
+        /// </summary>
+        public Int32? advance_beginday { get; set; }
+
+        /// <summary>
+        /// 砍价开始时间
+        /// </summary>
+        public String advance_begintime { get; set; }
+
+
+        /// <summary>
         /// 提前预定时间开关
         /// </summary>
         public String advance_booking { get; set; }
 
         /// <summary>
-        /// 提前天数
+        /// 提前天数/砍价结束天数
         /// </summary>
         public Int32? advance_day { get; set; }
 
         /// <summary>
-        /// 提前时间
+        /// 提前时间/砍价结束时间
         /// </summary>
         public String advance_time { get; set; }
 

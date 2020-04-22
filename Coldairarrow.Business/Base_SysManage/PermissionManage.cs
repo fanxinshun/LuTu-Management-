@@ -227,6 +227,7 @@ namespace Coldairarrow.Business.Base_SysManage
         /// <returns></returns>
         public static List<string> GetUserPermissionValues(string userId)
         {
+            InitAllPermissionModules();
             string cacheKey = BuildCacheKey(userId);
             var permissions = CacheHelper.Cache.GetCache<List<string>>(cacheKey)?.DeepClone();
 

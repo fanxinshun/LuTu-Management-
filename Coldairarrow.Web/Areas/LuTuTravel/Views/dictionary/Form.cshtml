@@ -27,6 +27,7 @@
                 <th>值</th>
                 <td>
                     <input name="value" value="@obj.value" class="easyui-textbox" data-options="width:'200px',required:false">
+                    <span style="color:red">注意：该类别下的值不能重复，保存后不要修改！！</span>
                 </td>
             </tr>
             <tr>
@@ -61,7 +62,7 @@
             <tr>
                 <th>数据是否有效(0:无效;1:有效)</th>
                 <td>
-                    <input name="enable_flag" value="@obj.enable_flag" class="easyui-numberbox" data-options="width:'200px',required:true,min:0,max:1">
+                    <input name="enable_flag" value="@(obj.enable_flag?? "1")" class="easyui-numberbox" data-options="width:'200px',required:true,min:0,max:1">
                 </td>
             </tr>
         </tbody>

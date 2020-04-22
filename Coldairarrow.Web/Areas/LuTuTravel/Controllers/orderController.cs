@@ -1,3 +1,4 @@
+using Coldairarrow.Business.Common;
 using Coldairarrow.Business.LuTuTravel;
 using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
@@ -37,7 +38,7 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDataList(string product_id, string product_name, string product_area, string start_time1, string start_time2, string create_time1, string create_time2, Pagination pagination)
         {
-            var dataList = _orderBusiness.GetDataList(product_id, product_name, product_area, start_time1, start_time2, create_time1, create_time2, pagination);
+            var dataList = _orderBusiness.GetDataList(Operator.UserId, product_id, product_name, product_area, start_time1, start_time2, create_time1, create_time2, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }

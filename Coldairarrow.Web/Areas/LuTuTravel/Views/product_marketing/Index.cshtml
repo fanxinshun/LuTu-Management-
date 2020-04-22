@@ -1,13 +1,16 @@
+@using Coldairarrow.Business.Base_SysManage;
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
+    var manage = PermissionManage.OperatorHasPermissionValue("productmarketing.manage");
 }
-
 @section toolbar{
-    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
-    <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    @if (manage)
+    {
+        <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+        <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+        <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    }
 }
-
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
@@ -29,9 +32,7 @@
     </div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var formWidth = 500;
@@ -58,7 +59,7 @@
             //showFooter: true,
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
-                
+
                 { title: '产品ID', field: 'pId', width: 200 },
                 { title: '名称', field: 'ptitle', width: 200 },
                 { title: '所属地区', field: 'parea_name', width: 200 },

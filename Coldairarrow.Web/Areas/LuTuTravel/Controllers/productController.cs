@@ -41,6 +41,17 @@ namespace Coldairarrow.Web
 
         #region 获取数据
         /// <summary>
+        /// 获取供应商
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetSupplieListByCode()
+        {
+            var dataList = _dictionaryBusiness.GetDictionaryListByCode("supplier");
+
+            return Content(dataList.ToJson());
+        }
+
+        /// <summary>
         /// 获取景区类别
         /// </summary>
         /// <returns></returns>

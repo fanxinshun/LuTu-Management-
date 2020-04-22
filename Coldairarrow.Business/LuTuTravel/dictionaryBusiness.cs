@@ -26,7 +26,7 @@ namespace Coldairarrow.Business.LuTuTravel
             return result;
         }
         /// <summary>
-        /// 获取数据列表
+        /// 获取数据列表 根据Type
         /// </summary>
         /// <returns></returns>
         public List<dictionary> GetDictionaryListByCode(string code)
@@ -42,7 +42,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <returns></returns>
         public List<dictionary> GetDataList(string code, Pagination pagination)
         {
-            var q = GetIQueryable().Where(x => x.enable_flag == "1");
+            var q = GetIQueryable();//.Where(x => x.enable_flag == "1");
 
             //模糊查询
             if (!code.IsNullOrEmpty())

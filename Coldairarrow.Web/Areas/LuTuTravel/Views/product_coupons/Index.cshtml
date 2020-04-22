@@ -1,10 +1,15 @@
+@using Coldairarrow.Business.Base_SysManage;
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
+    var manage = PermissionManage.OperatorHasPermissionValue("productcoupons.manage");
 }
 @section toolbar{
-    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
-    <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    @if (manage)
+    {
+        <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+        <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+        <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    }
 }
 @section search{
     <div class="search_wrapper">

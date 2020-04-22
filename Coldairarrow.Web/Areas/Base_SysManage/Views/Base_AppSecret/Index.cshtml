@@ -1,20 +1,23 @@
-﻿@{
+﻿@using Coldairarrow.Business.Base_SysManage;
+@{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
+    var manage = PermissionManage.OperatorHasPermissionValue("appsecret.manage");
+    var manageSysPermission = PermissionManage.OperatorHasPermissionValue("appsecret.manageSysPermission");
 }
-
 @section toolbar{
-    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
-    <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    @if (manage)
+    {
+        <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+        <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+        <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    }
 }
-
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
             <label class="search_label">查询类别</label>
             <select name="condition" class="easyui-combobox" data-options="width:100">
                 <option value="">请选择</option>
-
                 <option value="AppName">应用名</option>
                 <option value="AppId">应用Id</option>
                 <option value="AppSecret">应用密钥</option>
@@ -27,11 +30,10 @@
     </div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
     var rootUrl = '@Url.Content("~/")';
+    var manageSysPermission =@manageSysPermission.ToString().ToLower();
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -58,8 +60,9 @@
                 {
                     title: '操作', field: '_', width: 200, fixed: true, formatter: function (value, row) {
                         var html = '';
-                        html += '<a href="javascript:;" onclick="setPermission(\'{0}\')">设置权限</a>'.format(row['AppId']);
-
+                        if (manageSysPermission && row['UserId'] != 'Admin') {
+                            html += '<a href="javascript:;" onclick="setPermission(\'{0}\')">设置权限</a>'.format(row['AppId']);
+                        }
                         return html;
                     }
                 }

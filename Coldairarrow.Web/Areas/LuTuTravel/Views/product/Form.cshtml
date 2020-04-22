@@ -50,7 +50,11 @@
             <tr>
                 <th>供应商</th>
                 <td>
-                    <input name="supplier" value="@obj.supplier" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,100]'">
+                    <input name="supplier" value="@obj.supplier" class="easyui-combobox"
+                           data-options="width:'30%',required:true,editable:false,
+                                        valueField: 'name',
+                                        textField: 'name',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetSupplieListByCode'">
                 </td>
             </tr>
             <tr>
@@ -168,8 +172,9 @@
                 </td>
             </tr>
             <tr>
-                <th>提前</th>
+                <th>退款规则</th>
                 <td>
+                    <div style="float:left;line-height:30px;">提前</div>
                     <div style="float:left">
                         <input name="drawback_days1" value="@obj.drawback_days1" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">天，
                     </div>
@@ -196,11 +201,17 @@
             <tr>
                 <th>砍价时间</th>
                 <td>
-                    <span>需提前</span>
-                    <input name="advance_day" value="@obj.advance_day" class="easyui-numberbox" data-options="width:'40px',required:false,min:0,max:100">
-                    <span>天，并在</span>
-                    <input id="advance_time" name="advance_time" class="easyui-timespinner" style="width:80px;" data-options="min:'00:01'">
-                    <span>前砍价</span>
+                    <span>提前</span>
+                    <input name="advance_beginday" value="@obj.advance_beginday" class="easyui-numberbox" data-options="width:'40px',required:true,min:0,max:100">
+                    <span>天，在</span>
+                    <input id="advance_begintime" name="advance_begintime" class="easyui-timespinner" style="width:80px;" data-options="required:true,min:'00:01'">
+                    <span>前开始</span>
+
+                    <span>提前</span>
+                    <input name="advance_day" value="@obj.advance_day" class="easyui-numberbox" data-options="width:'40px',required:true,min:0,max:100">
+                    <span>天，在</span>
+                    <input id="advance_time" name="advance_time" class="easyui-timespinner" style="width:80px;" data-options="required:true,min:'00:01'">
+                    <span>前结束</span>
                 </td>
             </tr>
             <tr>
@@ -380,6 +391,7 @@
     }
 
     $(function () {
+        $('#advance_begintime').timespinner('setValue', '@obj.advance_begintime' ? '@obj.advance_begintime' : '00:01');
         $('#advance_time').timespinner('setValue', '@obj.advance_time' ? '@obj.advance_time' : '23:59');
         var list = @datalistStr;
         var defaultContent = accordionPanelDayButton();//默认项

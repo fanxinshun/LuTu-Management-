@@ -1,13 +1,17 @@
-﻿@{
+﻿@using Coldairarrow.Business.Base_SysManage;
+@{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
+    var manage = PermissionManage.OperatorHasPermissionValue("sysrole.manage");
+    var manageSysPermission = PermissionManage.OperatorHasPermissionValue("sysrole.manageSysPermission");
 }
-
 @section toolbar{
-    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
-    <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    @if (manage)
+    {
+        <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+        <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+        <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    }
 }
-
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
@@ -24,11 +28,10 @@
     </div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
     var rootUrl = '@Url.Content("~/")';
+    var manageSysPermission =@manageSysPermission.ToString().ToLower();
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -53,8 +56,9 @@
                 {
                     title: '操作', field: '_', width: 200, fixed: true, formatter: function (value,row) {
                         var html = '';
-                        html += '<a href="javascript:;" onclick="setPermission(\'{0}\',\'{1}\')">设置权限</a>'.format(row['RoleId'], row['RoleName']);
-
+                        if (manageSysPermission && row['UserId'] != 'Admin') {
+                            html += '<a href="javascript:;" onclick="setPermission(\'{0}\',\'{1}\')">设置权限</a>'.format(row['RoleId'], row['RoleName']);
+                        }
                         return html;
                     }
                 }
