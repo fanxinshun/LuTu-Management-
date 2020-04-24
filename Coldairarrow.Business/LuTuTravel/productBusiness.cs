@@ -43,8 +43,14 @@ namespace Coldairarrow.Business.LuTuTravel
                 q = q.Where(x => x.create_time <= create_time2);
 
             var resList = q.GetPagination(pagination).ToList();
-            var areaBusiness = new AreaBusiness();
-            resList.ForEach(item => item.area_code = areaBusiness.GetTheData(item.area_code)?.name);
+            var areaList = new AreaBusiness().GetDataList();
+            var dictionaryList = new DictionaryBusiness().GetDictionaryListByCode("supplier");
+            resList.ForEach(item =>
+                {
+                    item.area_code = areaList.Find(x => x.code == item.area_code)?.name;
+                    item.supplier = dictionaryList.Find(x => x.Id == item.supplier)?.name;
+                }
+            );
 
             return resList;
         }
@@ -119,14 +125,15 @@ namespace Coldairarrow.Business.LuTuTravel
             //bool ck2 = theData.team_price < theData.origin_price;//成团价  < 成本价
             bool ck3 = theData.team_price > theData.origin_price + theData.team_commission + theData.share_amount;//成团价 > 成本价 + 返佣 + 分享所得优惠券
 
-            bool b1 = true, b2 = true, b3 = true;
+            bool b = true;
+            bool b3 = true;//儿童票
             if (market != null)
             {
                 //b1 = market.price < theData.price;//营销市场价 < 市场价
                 //b2 = market.team_price < theData.team_price;//营销团购价 < 团购价
-                b3 = market.team_price > theData.origin_price + market.team_commission + theData.share_amount;//营销团购价 > 成本价 + 营销返佣 + 分享所得优惠券
+                b = market.team_price > theData.origin_price + market.team_commission + theData.share_amount;//营销团购价 > 成本价 + 营销返佣 + 分享所得优惠券
             }
-            return ck3 && b3;
+            return ck3 && b && b3;
         }
 
         #region 私有成员

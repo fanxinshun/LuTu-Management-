@@ -18,7 +18,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<order> GetDataList(string userId, string product_id, string product_name, string product_area, string start_time1, string start_time2, string create_time1, string create_time2, Pagination pagination)
+        public List<order> GetDataList(int? special_status, string userId, string product_id, string product_name, string product_area, string start_time1, string start_time2, string create_time1, string create_time2, Pagination pagination)
         {
             var q = GetIQueryable();
             if (!product_id.IsNullOrEmpty())
@@ -51,6 +51,7 @@ namespace Coldairarrow.Business.LuTuTravel
             }
             var list = q.ToList();
             var listProduct = new ProductBusiness().GetIQueryable().ToList();//产品清单
+            list = list.Where(x => x.product_id == listProduct.Find(y => y.Id.ToString() == x.product_id && y.special_status == special_status)?.Id.ToString()).ToList();
             var user = new Base_UserBusiness().GetIQueryable().FirstOrDefault(x => x.UserId == userId);
             //如果是供应商登陆，则过滤出来该供应商的订单
             if (!user.Supplier.IsNullOrEmpty())

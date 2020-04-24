@@ -102,6 +102,20 @@ namespace Coldairarrow.Web
                 return Error("价格异常！请检查产品价格及营销价格");
             }
 
+            var supplier = _dictionaryBusiness.GetTheData(theData.supplier);
+            if (supplier == null)//创建供应商
+            {
+                var su = new dictionary()
+                {
+                    Id = Guid.NewGuid().ToSequentialGuid(),
+                    code = "supplier",
+                    name = theData.supplier,
+                    sort = 0,
+                    enable_flag = "1"
+                };
+                _dictionaryBusiness.AddData(su);
+                theData.supplier = su.Id;
+            }
             if (theData.Id == 0)
             {
                 theData.enable_flag = "1";

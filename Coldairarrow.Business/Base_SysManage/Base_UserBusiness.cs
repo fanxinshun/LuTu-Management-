@@ -1,5 +1,6 @@
 using Coldairarrow.Business.Cache;
 using Coldairarrow.Business.Common;
+using Coldairarrow.Business.LuTuTravel;
 using Coldairarrow.Entity.Base_SysManage;
 using Coldairarrow.Util;
 using System;
@@ -14,7 +15,7 @@ namespace Coldairarrow.Business.Base_SysManage
     {
         static Base_UserModelCache _cache { get; } = new Base_UserModelCache();
         static UserRoleCache _userRoleCache { get; } = new UserRoleCache();
-        
+
         #region 外部接口
 
         /// <summary>
@@ -44,7 +45,13 @@ namespace Coldairarrow.Business.Base_SysManage
             //    LogHelper.WriteLog_LocalTxt(log);
             //};
             var list = q.GetPagination(pagination).ToList();
-            
+
+            var dictionaryList = new DictionaryBusiness().GetDictionaryListByCode("supplier");
+            list.ForEach(item =>
+                {
+                    item.Supplier = dictionaryList.Find(x => x.Id == item.Supplier)?.name;
+                }
+            );
             return list;
         }
 

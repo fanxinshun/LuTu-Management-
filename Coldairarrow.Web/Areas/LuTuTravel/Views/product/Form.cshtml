@@ -51,8 +51,8 @@
                 <th>供应商</th>
                 <td>
                     <input name="supplier" value="@obj.supplier" class="easyui-combobox"
-                           data-options="width:'30%',required:true,editable:false,
-                                        valueField: 'name',
+                           data-options="width:'30%',required:true,editable:true,
+                                        valueField: 'Id',
                                         textField: 'name',
                                         url: '@Url.Content("~/")LuTuTravel/Product/GetSupplieListByCode'">
                 </td>
@@ -87,6 +87,12 @@
                 <th>目的地</th>
                 <td>
                     <input name="region" value="@obj.region" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,100]'">
+                </td>
+            </tr>
+            <tr>
+                <th>推荐语</th>
+                <td>
+                    <textarea name="cecommendation" class="easyui-textbox" data-options="width:'100%',height:'80px',required:true,multiline:true,validType:'length[0,1000]'">@obj.cecommendation</textarea>
                 </td>
             </tr>
             <tr>
@@ -169,6 +175,12 @@
                     <div style="float:left;margin-left:5px">
                         <input name="share_amount" value="@obj.share_amount" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100000,precision:2">
                     </div>
+                </td>
+            </tr>
+            <tr style="display:none">
+                <th>儿童价</th>
+                <td>
+                    <input name="child_price" value="@obj.child_price" class="easyui-numberbox" data-options="width:'55px',required:false,min:0,max:100000,precision:2">
                 </td>
             </tr>
             <tr>
@@ -496,15 +508,20 @@
                     var values = $(daysdiv[j]).getValues();
                     $.extend(theEntityProductData, values);
 
-                    if ($(daysdiv[j]).find(':checkbox').prop('checked'))
+                    if ($(daysdiv[j]).find(':checkbox').prop('checked')) {
                         theEntityProductData.is_opening = 1;
+                        if (!$(daysdiv[j]).find('.easyui-numberbox:first').numberbox('getValue') || !$(daysdiv[j]).find('.easyui-numberbox:last').numberbox('getValue')) {
+                            dialogError(values.open_date.split(' ')[0] + '该开团日，请输入团数和人数！');
+                            return false;
+                        }
+                    }
                     else
                         theEntityProductData.is_opening = 0;
                     datalistProductData.push(theEntityProductData);
                 }
             }
 
-            $.postJSON(rootUrl + 'LuTuTravel/Product/SaveData', { "theData": theEntity, "listProductDate":datalistProductData }, function (resJson) {
+            $.postJSON(rootUrl + 'LuTuTravel/Product/SaveData', { "theData": theEntity, "listProductDate": datalistProductData }, function (resJson) {
                 if (resJson.Success) {
                     parent.dialogMsg('保存成功!');
                     parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');

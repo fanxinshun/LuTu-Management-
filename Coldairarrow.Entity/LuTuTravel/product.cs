@@ -119,6 +119,11 @@ namespace Coldairarrow.Entity.LuTuTravel
         public Decimal share_amount { get; set; }
 
         /// <summary>
+        /// 儿童价
+        /// </summary>
+        public Decimal child_price { get; set; }
+
+        /// <summary>
         /// 退款提前天数1
         /// </summary>
         public Int32? drawback_days1 { get; set; }
@@ -235,9 +240,9 @@ namespace Coldairarrow.Entity.LuTuTravel
         public int? pay_time { get; set; }
 
         /// <summary>
-        /// 是否是特价门票(0否 1是)
+        /// 类别(0:产品，1:门票，2:扶贫商品)
         /// </summary>
-        public Int32? special_status { get; set; }
+        public int? special_status { get; set; }
 
         /// <summary>
         /// 产品logo，用于封面展示
@@ -377,6 +382,16 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 商品照片
         /// </summary>
         public String commodity_photo { get; set; }
+
+        /// <summary>
+        /// 推荐语
+        /// </summary>
+        public String cecommendation { get; set; }
+
+        /// <summary>
+        /// 团购基数
+        /// </summary>
+        public int? purchase_minnum { get; set; }
 
     }
 }

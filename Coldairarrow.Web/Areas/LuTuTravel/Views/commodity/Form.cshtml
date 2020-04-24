@@ -27,8 +27,8 @@
                 <th>供应商</th>
                 <td>
                     <input name="supplier" value="@obj.supplier" class="easyui-combobox"
-                           data-options="width:'30%',required:true,editable:false,
-                                        valueField: 'name',
+                           data-options="width:'30%',required:true,editable:true,
+                                        valueField: 'Id',
                                         textField: 'name',
                                         url: '@Url.Content("~/")LuTuTravel/Product/GetSupplieListByCode'">
                 </td>
@@ -37,6 +37,16 @@
                 <th>商品名称</th>
                 <td>
                     <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'80%',required:true,validType:'length[0,50]'">
+                </td>
+            </tr>
+            <tr>
+                <th>所属区域</th>
+                <td>
+                    <input id="area_code" name="area_code" value="@obj.area_code" class="easyui-combobox"
+                           data-options="required:true,editable:true,
+                                        valueField: 'code',
+                                        textField: 'name',
+                                        url: '@Url.Content("~/")LuTuTravel/area/GetAreaDataList'">
                 </td>
             </tr>
             <tr>
@@ -70,6 +80,12 @@
                 <th>商品介绍</th>
                 <td>
                     <textarea name="commodity_presentations" class="easyui-textbox" data-options="width:'80%',height:'160px',required:true,multiline:true,validType:'length[0,1000]'">@obj.commodity_presentations</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>推荐语</th>
+                <td>
+                    <textarea name="cecommendation" class="easyui-textbox" data-options="width:'100%',height:'80px',required:true,multiline:true,validType:'length[0,1000]'">@obj.cecommendation</textarea>
                 </td>
             </tr>
             <tr>
@@ -116,6 +132,12 @@
                 <th>用户分享所得优惠券面值</th>
                 <td>
                     <input name="share_amount" value="@obj.share_amount" class="easyui-numberbox" data-options="required:true,min:0,max:100000,precision:2">
+                </td>
+            </tr>
+            <tr>
+                <th>团购基数</th>
+                <td>
+                    <input name="purchase_minnum" value="@obj.purchase_minnum" class="easyui-numberbox" data-options="required:true,min:1">
                 </td>
             </tr>
             <tr>
@@ -331,9 +353,14 @@
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
 
+            var noSelect = $('#area_code').combobox('getValue') == $('#area_code').combobox('getText');
+            if (noSelect) {
+                dialogError('请选择所属区域');
+                return;
+            }
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
-            
+
             var datalistProductData = [];
             var panels = $('#accordion_time_available').accordion('panels');
             for (var i = 0; i < panels.length; i++) {
