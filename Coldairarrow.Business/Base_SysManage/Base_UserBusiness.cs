@@ -46,7 +46,7 @@ namespace Coldairarrow.Business.Base_SysManage
             //};
             var list = q.GetPagination(pagination).ToList();
 
-            var dictionaryList = new DictionaryBusiness().GetDictionaryListByCode("supplier");
+            var dictionaryList = new DictionaryBusiness().GetDictionaryAllByCode("supplier");
             list.ForEach(item =>
                 {
                     item.Supplier = dictionaryList.Find(x => x.Id == item.Supplier)?.name;

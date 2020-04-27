@@ -44,7 +44,7 @@ namespace Coldairarrow.Business.LuTuTravel
 
             var resList = q.GetPagination(pagination).ToList();
             var areaList = new AreaBusiness().GetDataList();
-            var dictionaryList = new DictionaryBusiness().GetDictionaryListByCode("supplier");
+            var dictionaryList = new DictionaryBusiness().GetDictionaryAllByCode("supplier");
             resList.ForEach(item =>
                 {
                     item.area_code = areaList.Find(x => x.code == item.area_code)?.name;

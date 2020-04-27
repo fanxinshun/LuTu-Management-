@@ -121,7 +121,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// <summary>
         /// 儿童价
         /// </summary>
-        public Decimal child_price { get; set; }
+        public Decimal? child_price { get; set; }
 
         /// <summary>
         /// 退款提前天数1

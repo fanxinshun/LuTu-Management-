@@ -30,7 +30,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// <summary>
         /// 排序
         /// </summary>
-        public Int32? sort { get; set; }
+        public Int32 sort { get; set; }
 
         /// <summary>
         /// 值

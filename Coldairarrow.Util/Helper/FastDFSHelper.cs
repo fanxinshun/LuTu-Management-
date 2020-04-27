@@ -174,11 +174,22 @@ namespace Coldairarrow.Util.Helper
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public string GetFilePath(string fileName)
+        public static string GetFilePath(string fileName)
         {
-            string trackers = ConfigHelper.GetValue("FastDFS", "fastdfs_storages");
+            string fastdfs_downloadServer = ConfigHelper.GetValue("FastDFS", "fastdfs_downloadServer");
             string groupname = ConfigHelper.GetValue("FastDFS", "fastdfs_groupname");
-            return trackers + "/" + groupname + "/" + fileName;
+            return fastdfs_downloadServer + "/" + groupname + "/" + fileName;
+        }
+        /// <summary>
+        /// 获取服务器路径
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string GetServicePath()
+        {
+            string fastdfs_downloadServer = ConfigHelper.GetValue("FastDFS", "fastdfs_downloadServer");
+            string groupname = ConfigHelper.GetValue("FastDFS", "fastdfs_groupname");
+            return fastdfs_downloadServer + "/" + groupname + "/";
         }
     }
 }

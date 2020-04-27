@@ -15,8 +15,9 @@ namespace Coldairarrow.Web
 
         #region 视图功能
 
-        public ActionResult Index()
+        public ActionResult Index(string dictionaryType)
         {
+            ViewData["dictionaryType"] = dictionaryType ?? "";
             return View();
         }
 
@@ -36,9 +37,9 @@ namespace Coldairarrow.Web
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public ActionResult GetDictionaryType()
+        public ActionResult GetDictionaryType(string code)
         {
-            var dataList = _dictionaryBusiness.GetDictionaryType();
+            var dataList = _dictionaryBusiness.GetDictionaryType(code);
 
             return Content(dataList.ToJson());
         }

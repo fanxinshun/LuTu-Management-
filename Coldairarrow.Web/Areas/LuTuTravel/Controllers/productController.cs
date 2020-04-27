@@ -34,6 +34,9 @@ namespace Coldairarrow.Web
             ViewData["theProduct"] = theProduct;
             ViewData["theProductData"] = theProductData;
             ViewData["emptyProductData"] = new product_date();
+            var _ImagesBusiness = new ImagesBusiness();
+            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(theProduct.images);
+            ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(theProduct.logo);
             return View();
         }
 
@@ -46,7 +49,7 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetSupplieListByCode()
         {
-            var dataList = _dictionaryBusiness.GetDictionaryListByCode("supplier");
+            var dataList = _dictionaryBusiness.GetDictionaryEnabledByCode("supplier");
 
             return Content(dataList.ToJson());
         }
@@ -188,36 +191,6 @@ namespace Coldairarrow.Web
 
             }
             return Success("复制成功！");
-        }
-        /// <summary>
-        /// 上传文件到文件系统服务器
-        /// </summary>
-        /// <param name="UploadType">图片字段</param>
-        /// <param name="fileBase64"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public ActionResult UploadFileToServer(string UploadType, int id, string fileBase64, string fileName)
-        {
-            string name = FastDFSHelper.UploadFile(fileBase64, fileName);
-            if (name.IsNullOrEmpty())
-            {
-                return Error("上传失败");
-            }
-            var obj = _productBusiness.GetEntity(id);
-            if (obj != null)
-            {
-                if (UploadType == "images")
-                {
-                    obj.images = obj.images.IsNullOrEmpty() ? name : obj.images + "," + name;
-                    _productBusiness.UpdateAny(obj, new List<string>() { "images" });
-                }
-                else if (UploadType == "logo")
-                {
-                    obj.logo = name;
-                    _productBusiness.UpdateAny(obj, new List<string>() { "logo" });
-                }
-            }
-            return Success((object)name);
         }
         #endregion
     }

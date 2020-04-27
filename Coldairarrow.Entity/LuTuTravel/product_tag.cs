@@ -15,7 +15,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 主键id
         /// </summary>
         [Key, Column(Order = 1)]
-        public String id { get; set; }
+        public String Id { get; set; }
 
         /// <summary>
         /// 产品类型表id

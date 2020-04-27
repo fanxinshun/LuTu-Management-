@@ -15,21 +15,30 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 获取DictionaryType
         /// </summary>
         /// <returns></returns>
-        public List<dictionary> GetDictionaryType()
+        public List<dictionary> GetDictionaryType(string code)
         {
             List<dictionary> result = new List<dictionary>();
-            var list = GetIQueryable().Where(x => x.enable_flag == "1").ToList().GroupBy(x => x.code);
+            var list = GetIQueryable().Where(x => x.enable_flag == "1" && (code.IsNullOrEmpty() || x.code == code)).ToList().GroupBy(x => x.code);
             foreach (var item in list)
             {
                 result.Add(new dictionary() { code = item.Key });
             }
             return result;
         }
+
         /// <summary>
-        /// 获取数据列表 根据Type
+        /// 获取所有的数据列表 根据Type
         /// </summary>
         /// <returns></returns>
-        public List<dictionary> GetDictionaryListByCode(string code)
+        public List<dictionary> GetDictionaryAllByCode(string code)
+        {
+            return GetIQueryable().Where(x => x.code == code).OrderBy(x => x.sort).ToList();
+        }
+        /// <summary>
+        /// 获取有效的数据列表 根据Type
+        /// </summary>
+        /// <returns></returns>
+        public List<dictionary> GetDictionaryEnabledByCode(string code)
         {
             return GetIQueryable().Where(x => x.code == code && x.enable_flag == "1").OrderBy(x => x.sort).ToList();
         }

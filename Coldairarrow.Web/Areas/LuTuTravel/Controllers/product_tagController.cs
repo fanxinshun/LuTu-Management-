@@ -26,6 +26,7 @@ namespace Coldairarrow.Web
         {
             var theData = id.IsNullOrEmpty() ? new productTagModel() : _product_tagBusiness.GetTheProductTagModel(id);
 
+            ViewData["ImagesDatas1"] = new ImagesBusiness().GetFilePath(theData.img_url);
             return View(theData);
         }
 
@@ -73,7 +74,7 @@ namespace Coldairarrow.Web
             if (parentTag == null)//如果 产品类型+标签不存在，说明这是新的标签，parent_id就是输入的tagname，新增一个标签！
             {
                 parentTag = theData.DeepClone();
-                parentTag.id = Guid.NewGuid().ToSequentialGuid();
+                parentTag.Id = Guid.NewGuid().ToSequentialGuid();
                 parentTag.tagname = theData.tagname.IsNullOrEmpty() ? theData.parent_id : theData.tagname;
                 parentTag.parent_id = null;
                 parentTag.area_code = null;
@@ -82,12 +83,12 @@ namespace Coldairarrow.Web
                 parentTag.create_time = DateTime.Now;
 
                 _product_tagBusiness.AddData(parentTag);
-                theData.parent_id = parentTag.id;
+                theData.parent_id = parentTag.Id;
                 theData.tagname = parentTag.tagname;
             }
-            if (theData.id.IsNullOrEmpty())
+            if (theData.Id.IsNullOrEmpty())
             {
-                theData.id = Guid.NewGuid().ToSequentialGuid();
+                theData.Id = Guid.NewGuid().ToSequentialGuid();
                 theData.create_by = Operator.UserId;
                 theData.create_time = DateTime.Now;
                 _product_tagBusiness.AddData(theData);
@@ -112,14 +113,14 @@ namespace Coldairarrow.Web
             var theDataList = _product_tagBusiness.GetList();
             foreach (var item in idList)
             {
-                var theData = theDataList.Find(x => x.id == item);
+                var theData = theDataList.Find(x => x.Id == item);
                 theDataList.Remove(theData);
                 _product_tagBusiness.Delete(theData);
 
                 var pObj = theDataList.Find(x => x.parent_id == theData.parent_id);
                 if (pObj == null)
                 {
-                    theDataList.Remove(theDataList.Find(x => x.id == theData.parent_id));
+                    theDataList.Remove(theDataList.Find(x => x.Id == theData.parent_id));
                     _product_tagBusiness.Delete(theData.parent_id);
                 }
             }

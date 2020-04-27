@@ -1,13 +1,12 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
+    var dictionaryType = ViewData["dictionaryType"];
 }
-
 @section toolbar{
     <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
     <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
     <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
 }
-
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
@@ -16,7 +15,8 @@
                    data-options="width:'200px',editable:true,
                                         valueField: 'code',
                                         textField: 'code',
-                                        url: '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType'">
+                                        value:'@dictionaryType',
+                                        url: '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType?code=@dictionaryType'">
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
@@ -24,19 +24,18 @@
     </div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var formWidth = 700;
     var formHeight = 450;
+    var dictionaryType = '@dictionaryType';
 
     function initTable() {
         $('#dataTable').datagrid({
             url: rootUrl + 'LuTuTravel/dictionary/GetDataList',
             method: 'POST',
-            //queryParams: { 'id': id },
+            queryParams: { 'code': '@dictionaryType' },
             idField: 'Id',
             fit: true,
             fitColumns: true,
@@ -53,7 +52,7 @@
             //showFooter: true,
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
-                
+
                 { title: '字典类别', field: 'code', width: 200 },
                 { title: '值', field: 'value', width: 200 },
                 { title: '名称', field: 'name', width: 200 },

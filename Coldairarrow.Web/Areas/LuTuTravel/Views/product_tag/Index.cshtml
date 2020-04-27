@@ -41,7 +41,7 @@
             url: rootUrl + 'LuTuTravel/product_tag/GetDataList',
             method: 'POST',
             //queryParams: { 'id': id },
-            idField: 'id',
+            idField: 'Id',
             fit: true,
             fitColumns: true,
             singleSelect: false,
@@ -97,7 +97,7 @@
                 dialogError('请选择要修改的记录!');
                 return;
             }
-            var id = selected[0].id;
+            var id = selected[0].Id;
 
             dialogOpen({
                 id: 'form',

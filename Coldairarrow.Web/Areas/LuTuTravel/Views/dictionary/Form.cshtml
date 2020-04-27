@@ -17,22 +17,23 @@
                 <th>字典类别</th>
                 <td>
                     <input name="code" value="@obj.code" class="easyui-combobox"
-                           data-options="width:'200px',required:true,editable:true,
+                           data-options="width:'200px',required:true,editable:!parent.dictionaryType,
                                         valueField: 'code',
                                         textField: 'code',
-                                        url: '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType'">
-                </td>
-            </tr>
-            <tr>
-                <th>值</th>
-                <td>
-                    <input name="value" value="@obj.value" class="easyui-textbox" data-options="width:'200px',required:false">
+                                        value: parent.dictionaryType,
+                                        url: '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType?code=\'parent.dictionaryType\''">
                 </td>
             </tr>
             <tr>
                 <th>名称</th>
                 <td>
                     <input name="name" value="@obj.name" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>值</th>
+                <td>
+                    <input name="value" value="@obj.value" class="easyui-textbox" data-options="width:'200px',required:false">
                 </td>
             </tr>
             <tr>

@@ -4,6 +4,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
+    var ImagesDatas1 = (List<ImagesData>)(ViewData["ImagesDatas1"]);
 
     var obj = (productTagModel)Model;
     var objStr = Html.Raw(obj.ToJson());
@@ -52,12 +53,17 @@
             <tr>
                 <th>标签logo</th>
                 <td>
-                    <input id="hiddenImages" type="hidden" name="img_url" value="@obj.img_url">
-
-                    <input style="display:none" id="file1" type="file" accept="*">
-                    <input id="file-display1" class="easyui-textbox" data-options="width:'200px',required:false,editable:false">
-                    <label for="file1" class="easyui-linkbutton" data-options="iconCls:'icon-add'">选择文件</label>
-                    <a id="aUploadFile1" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">上传</a>
+                    <div>
+                        <img style="width:120px;height:90px;display:none" />
+                        @{
+                            foreach (var item in ImagesDatas1)
+                            {
+                                <img style="width:120px;height:90px;" src="@item.ImageUrl" />
+                            }
+                        }
+                    </div>
+                    <input id="img_url" type="hidden" name="img_url" value="@obj.img_url">
+                    <a id="openUploadForm" onclick="openUploadForm(theEntity.Id,'img_url','0')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">打开文件上传窗口</a>
                 </td>
             </tr>
         </tbody>
@@ -73,34 +79,6 @@
     var theEntity = @objStr;
 
     $(function () {
-        //上传产品图片
-        document.getElementById('file1').onchange = function () {
-            $('#file1').getFileBase64(function (base64, fileName) {
-                $('#file-display1').textbox('setValue', fileName);
-            });
-        };
-        $('#aUploadFile1').click(function () {
-            if (!$('#file-display1').textbox('getValue')) {
-                dialogError('请选择图片');
-                return;
-            }
-            loading();
-            $('#file1').getFileBase64(function (base64, fileName) {
-                $.postJSON(rootUrl + 'LuTuTravel/product_tag/UploadFileToServer', { id: theEntity.id, fileName: fileName, fileBase64: base64 }, function (resJson) {
-                    loading(false);
-                    if (resJson.Success) {
-                        $('#hiddenImages').val(resJson.Data);//单张图片
-                        //var value = $('#hiddenImages').val();
-                        //$('#hiddenImages').val(value + (value ? ',' : '') + resJson.Data);//多张
-                        parent.dialogMsg('上传成功!');
-                    }
-                    else {
-                        dialogError(resJson.Msg);
-                    }
-                });
-            });
-        });
-
         $('#saveForm').click(function () {
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;

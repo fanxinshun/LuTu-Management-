@@ -131,6 +131,9 @@
     <Content Update="Areas\LuTuTravel\Views\ticket\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\LuTuTravel\Views\UploadFile\UploadFileForm.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Home\Desktop.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

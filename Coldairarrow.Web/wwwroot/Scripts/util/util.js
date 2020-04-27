@@ -508,3 +508,19 @@
         }
     }
 })();
+
+//打开文件上传窗口
+(function () {
+    if (window.openUploadForm)
+        return;
+
+    window.openUploadForm = function (Id, UploadType, Multiple) {
+        dialogOpen({
+            id: 'UploadFileForm',
+            title: '上传文件',
+            width: '400',
+            height: '150',
+            url: '/LuTuTravel/UploadFile/UploadFileForm?UploadType=' + UploadType + '&Id=' + Id + '&Multiple=' + Multiple
+        });
+    }
+})();

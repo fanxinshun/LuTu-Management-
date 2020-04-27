@@ -32,6 +32,9 @@ namespace Coldairarrow.Web
             ViewData["theProduct"] = theProduct;
             ViewData["theProductData"] = theProductData;
             ViewData["emptyProductData"] = new product_date();
+            var _ImagesBusiness = new ImagesBusiness();
+            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(theProduct.images);
+            ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(theProduct.logo);
             return View();
         }
 
@@ -44,7 +47,7 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDictionaryListByCode()
         {
-            var dataList = _dictionaryBusiness.GetDictionaryListByCode("special_category");
+            var dataList = _dictionaryBusiness.GetDictionaryEnabledByCode("special_category");
 
             return Content(dataList.ToJson());
         }

@@ -31,6 +31,10 @@ namespace Coldairarrow.Web
             ViewData["theProduct"] = theProduct;
             ViewData["theProductData"] = theProductData;
             ViewData["emptyProductData"] = new product_date();
+            var _ImagesBusiness = new ImagesBusiness();
+            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(theProduct.photooffarmers);
+            ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(theProduct.commodity_photo);
+            ViewData["ImagesDatas3"] = _ImagesBusiness.GetFilePath(theProduct.logo);
             return View();
         }
 
@@ -44,7 +48,7 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDictionaryListByCode()
         {
-            var dataList = _dictionaryBusiness.GetDictionaryListByCode("commodity");
+            var dataList = _dictionaryBusiness.GetDictionaryEnabledByCode("commodity");
 
             return Content(dataList.ToJson());
         }
@@ -113,38 +117,6 @@ namespace Coldairarrow.Web
             _product_dateBusiness.Insert(addProductDate);
             _product_dateBusiness.Update(updateProductDate);
             return Success();
-        }
-
-
-        /// <summary>
-        /// 上传文件到文件系统服务器
-        /// </summary>
-        /// <param name="UploadType">图片字段</param>
-        /// <param name="fileBase64"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public ActionResult UploadFileToServer(string UploadType, int id, string fileBase64, string fileName)
-        {
-            string name = FastDFSHelper.UploadFile(fileBase64, fileName);
-            if (name.IsNullOrEmpty())
-            {
-                return Error("上传失败");
-            }
-            var obj = _productBusiness.GetEntity(id);
-            if (obj != null)
-            {
-                if (UploadType == "photooffarmers")
-                {
-                    obj.photooffarmers = obj.photooffarmers.IsNullOrEmpty() ? name : obj.photooffarmers + "," + name;
-                    _productBusiness.UpdateAny(obj, new List<string>() { "photooffarmers" });
-                }
-                else if (UploadType == "commodity_photo")
-                {
-                    obj.commodity_photo = obj.commodity_photo.IsNullOrEmpty() ? name : obj.commodity_photo + "," + name;
-                    _productBusiness.UpdateAny(obj, new List<string>() { "commodity_photo" });
-                }
-            }
-            return Success((object)name);
         }
         #endregion
 
