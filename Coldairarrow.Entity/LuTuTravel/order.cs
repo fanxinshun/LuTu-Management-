@@ -63,6 +63,11 @@ namespace Coldairarrow.Entity.LuTuTravel
         public String name { get; set; }
 
         /// <summary>
+        /// 下单人身份证号
+        /// </summary>
+        public String id_card_number { get; set; }
+
+        /// <summary>
         /// 开团时间
         /// </summary>
         public DateTime start_time { get; set; }
@@ -86,5 +91,13 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 分享人id
         /// </summary>
         public String share_id { get; set; }
+        /// <summary>
+        /// 邮寄地址
+        /// </summary>
+        public String mail_address { get; set; }
+        /// <summary>
+        /// 处理状态(0:未处理，1:已处理)
+        /// </summary>
+        public int operate_status { get; set; }
     }
 }

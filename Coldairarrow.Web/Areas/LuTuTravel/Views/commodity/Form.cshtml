@@ -22,7 +22,7 @@
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
-            <col style="width:80px;" />
+            <col style="width:15%;" />
         </colgroup>
         <tbody>
 
@@ -39,7 +39,7 @@
             <tr>
                 <th>商品名称</th>
                 <td>
-                    <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'80%',required:true,validType:'length[0,50]'">
+                    <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,50]'">
                 </td>
             </tr>
             <tr>
@@ -65,7 +65,7 @@
             <tr>
                 <th>产地</th>
                 <td>
-                    <input name="placeofproduction" value="@obj.placeofproduction" class="easyui-textbox" data-options="width:'80%',required:true,validType:'length[0,100]'">
+                    <input name="placeofproduction" value="@obj.placeofproduction" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,100]'">
                 </td>
             </tr>
             <tr>
@@ -87,19 +87,19 @@
             <tr>
                 <th>商品介绍</th>
                 <td>
-                    <textarea name="commodity_presentations" class="easyui-textbox" data-options="width:'80%',height:'160px',required:true,multiline:true,validType:'length[0,1000]'">@obj.commodity_presentations</textarea>
+                    <textarea name="commodity_presentations" class="easyui-textbox" data-options="width:'100%',height:'160px',required:true,multiline:true,validType:'length[0,1000]'">@obj.commodity_presentations</textarea>
                 </td>
             </tr>
             <tr>
                 <th>推荐语</th>
                 <td>
-                    <input name="cecommendation" value="@obj.cecommendation" class="easyui-textbox" data-options="width:'80%',required:true,validType:'length[0,20]'">
+                    <input name="cecommendation" value="@obj.cecommendation" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,40]'">
                 </td>
             </tr>
             <tr>
                 <th>参考菜谱</th>
                 <td>
-                    <textarea name="reference_menu" class="easyui-textbox" data-options="width:'80%',height:'160px',required:false,multiline:true,validType:'length[0,1000]'">@obj.reference_menu</textarea>
+                    <textarea name="reference_menu" class="easyui-textbox" data-options="width:'100%',height:'160px',required:false,multiline:true,validType:'length[0,1000]'">@obj.reference_menu</textarea>
             </tr>
             <tr>
                 <th>产品logo</th>
@@ -216,11 +216,13 @@
         accordionPanelDays += '<input type="checkbox" ' + (obj.is_opening == '1' ? 'checked="checked" ' : '') + '>';
         accordionPanelDays += '<input type="hidden" name="open_date" value="' + obj.open_date + '">';
         accordionPanelDays += '<span>' + day.toString() + (day < 10 ? '&nbsp;' : '') + '</span>';
+        accordionPanelDays += '<span>团数</span><input class="easyui-numberbox" name="team_num" value="' + (obj.team_num || '') + '" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" />';
         accordionPanelDays += '</div>';
         return accordionPanelDays;
     }
     function accordionPanelDayButton() {
         var foottDiv = '<div style="float:left;width:100%;text-align:right">';//Panel Button
+        foottDiv += '<span>团数</span><input value="10" class="easyui-numberbox" data-options="width:\'45px\',height:\'22px\',min:1,max:1000"  />';
         foottDiv += '<a onclick="checkAll($(this).parent())" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-ok\'">默认/全选</a>';
         foottDiv += '<a onclick="goNextMonthPanel()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一月</a>';
         foottDiv += '</div>';
@@ -237,22 +239,27 @@
     }
     //按周选择
     function foottCheckboxClick(ck, wk) {
+        var b = $(ck).parent().prev().find('input:last').val();
         var divs = $(ck).parent().parent().find('div');
         for (var i = 0; i < $(divs).length - 2; i++) {
             var open_date = new Date($(divs).eq(i).find('input[name=open_date]').val());
             if (wk == open_date.getDay()) {
                 var isck = $(ck).prop('checked');
                 $(divs).eq(i).find(':checkbox').prop('checked', isck);
+                $(divs).eq(i).find('.easyui-numberbox:last').numberbox('setValue', isck ? b : '');
             }
         }
     }
 
     //默认/全选
     function checkAll(foottDiv) {
+        var b = $(foottDiv).find('input:last').val();
         var nochecked = $(foottDiv).parent().find(':checkbox:not(:checked)');
         if (nochecked.length > 0) {//存在没有勾选的
             $(foottDiv).parent().find(':checkbox').prop('checked', true);
+            $(foottDiv).prevAll().find('.easyui-numberbox:last').numberbox('setValue', b);
         } else {
+            $(foottDiv).prevAll().find('.easyui-numberbox').numberbox('setValue', '');
             $(foottDiv).parent().find(':checkbox').prop('checked', false);
         }
     }
@@ -304,7 +311,6 @@
             if (month != rmonth) {
                 $('#accordion_time_available').accordion('add', {
                     title: rmonth,
-                    height: '180px',
                     selected: true
                 });
 

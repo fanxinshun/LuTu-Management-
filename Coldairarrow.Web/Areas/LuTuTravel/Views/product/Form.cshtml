@@ -39,7 +39,7 @@
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
-            <col style="width:80px;" />
+            <col style="width:15%;" />
         </colgroup>
         <tbody>
 
@@ -319,7 +319,7 @@
     //生成每一天的样式
     function accordionPanelDay(obj) {
         var day = (new Date(obj.open_date)).getDate();
-        var accordionPanelDays = '<div style="float:left;width:25%">';//每一天的控件/布局
+        var accordionPanelDays = '<div style="float:left;width:20%">';//每一天的控件/布局
         accordionPanelDays += '<input type="hidden" name="product_date_id" value="' + (obj.product_date_id || '') + '">';
         accordionPanelDays += '<input type="checkbox" ' + (obj.is_opening == '1' ? 'checked="checked" ' : '') + '>';
         accordionPanelDays += '<input type="hidden" name="open_date" value="' + obj.open_date + '">';

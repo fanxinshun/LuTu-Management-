@@ -21,7 +21,7 @@
                                         valueField: 'code',
                                         textField: 'code',
                                         value: parent.dictionaryType,
-                                        url: '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType?code=\'parent.dictionaryType\''">
+                                        url: parent.dictionaryType? '' : '@Url.Content("~/")LuTuTravel/dictionary/GetDictionaryType'">
                 </td>
             </tr>
             <tr>

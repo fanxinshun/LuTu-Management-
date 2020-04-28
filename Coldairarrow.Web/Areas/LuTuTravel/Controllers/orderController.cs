@@ -29,13 +29,7 @@ namespace Coldairarrow.Web
             ViewData["special_status"] = "2";
             return View("Index");
         }
-
-        public ActionResult Form(string id)
-        {
-            var theData = id.IsNullOrEmpty() ? new order() : _orderBusiness.GetTheData(id);
-
-            return View(theData);
-        }
+        
 
         #endregion
 
@@ -57,37 +51,7 @@ namespace Coldairarrow.Web
         #endregion
 
         #region 提交数据
-
-        /// <summary>
-        /// 保存
-        /// </summary>
-        /// <param name="theData">保存的数据</param>
-        public ActionResult SaveData(order theData)
-        {
-            if (theData.Id.IsNullOrEmpty())
-            {
-                theData.Id = Guid.NewGuid().ToSequentialGuid();
-
-                _orderBusiness.AddData(theData);
-            }
-            else
-            {
-                _orderBusiness.UpdateData(theData);
-            }
-
-            return Success();
-        }
-
-        /// <summary>
-        /// 删除数据
-        /// </summary>
-        /// <param name="theData">删除的数据</param>
-        public ActionResult DeleteData(string ids)
-        {
-            _orderBusiness.DeleteData(ids.ToList<string>());
-
-            return Success("删除成功！");
-        }
+         
 
         #endregion
     }

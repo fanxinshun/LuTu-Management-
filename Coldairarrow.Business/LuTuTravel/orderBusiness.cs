@@ -1,8 +1,11 @@
 using Coldairarrow.Business.Base_SysManage;
 using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 
@@ -18,102 +21,54 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<order> GetDataList(int? special_status, string userId, string product_id, string product_name, string product_area, string start_time1, string start_time2, string create_time1, string create_time2, Pagination pagination)
+        public List<orderModule> GetDataList(int? special_status, string userId, string product_id, string product_name, string product_area, string start_time1, string start_time2, string create_time1, string create_time2, Pagination pagination)
         {
-            var q = GetIQueryable();
-            if (!product_id.IsNullOrEmpty())
-                q = q.Where(x => x.product_id == product_id);
-            if (!product_name.IsNullOrEmpty())
-                q = q.Where(x => x.product_name.Contains(product_name));
-            if (!product_area.IsNullOrEmpty())
-                q = q.Where(x => x.product_name == product_area);//区域问题暂不确定
-            //下单时间
-            if (!start_time1.IsNullOrEmpty())
+            var supplier = new Base_UserBusiness().GetIQueryable().FirstOrDefault(x => x.UserId == userId)?.Supplier;
+            List<DbParameter> paramters = new List<DbParameter>()
             {
-                var time = start_time1.ToDateTime();
-                q = q.Where(x => x.start_time >= time);
-            }
-            if (!start_time2.IsNullOrEmpty())
-            {
-                var time = start_time2.ToDateTime();
-                q = q.Where(x => x.start_time <= time);
-            }
-            //创建时间
-            if (!create_time1.IsNullOrEmpty())
-            {
-                var time = create_time1.ToDateTime();
-                q = q.Where(x => x.create_time >= time);
-            }
-            if (!create_time2.IsNullOrEmpty())
-            {
-                var time = create_time2.ToDateTime();
-                q = q.Where(x => x.create_time <= time);
-            }
-            var list = q.ToList();
-            var listProduct = new ProductBusiness().GetIQueryable().ToList();//产品清单
-            list = list.Where(x => x.product_id == listProduct.Find(y => y.Id.ToString() == x.product_id && y.special_status == special_status)?.Id.ToString()).ToList();
-            var user = new Base_UserBusiness().GetIQueryable().FirstOrDefault(x => x.UserId == userId);
-            //如果是供应商登陆，则过滤出来该供应商的订单
-            if (!user.Supplier.IsNullOrEmpty())
-            {
-                var supplier = new DictionaryBusiness().GetIQueryable().FirstOrDefault(x => x.code == "supplier" && x.name == user.Supplier);//供应商
-                if (supplier != null)
-                {
-                    list = list.Where(x => listProduct.Find(y => y.Id.ToString() == x.product_id).supplier == supplier.name).ToList();
-                }
-            }
-            list = list.GetPagination(pagination).ToList();
-            foreach (var item in list)
-            {
-                item.product_name = listProduct.Find(x => x.Id.ToString() == item.product_id)?.title;
-            }
-            return list;
+                new  MySqlParameter ("@special_status",special_status),
+                new  MySqlParameter ("@product_id",product_id),
+                new  MySqlParameter ("@product_name",product_name),
+                new  MySqlParameter ("@start_time1",start_time1),
+                new  MySqlParameter ("@start_time2",start_time2),
+                new  MySqlParameter ("@create_time1",create_time1),
+                new  MySqlParameter ("@create_time2",create_time2),
+                new  MySqlParameter ("@supplier",supplier)
+            };
+            DataTable table = GetDataTableWithSql(@"SELECT o.*,
+				                                            p.title productName,
+				                                            m.real_name realName,
+				                                            m.real_name nickName,
+				                                            py.`status` payStatus
+					                                   FROM `order` o
+		                                         INNER JOIN product p ON o.product_id = p.Id
+		                                          LEFT JOIN members m ON o.member_id = m.oppen_id
+		                                          LEFT JOIN pay py ON py.order_id = o.Id
+				                                      WHERE p.special_status = @special_status 
+                                                        AND (@product_id IS NULL OR p.Id = @product_id)
+				                                        AND (@product_name IS NULL OR p.title LIKE @product_name)
+				                                        AND (@start_time1 IS NULL OR o.start_time >= @start_time1)
+				                                        AND (@start_time2 IS NULL OR o.start_time <= @start_time2)
+				                                        AND (@create_time1 IS NULL OR o.create_time >= @create_time1)
+				                                        AND (@create_time2 IS NULL OR o.create_time <= @create_time2)
+				                                        AND (@supplier IS NULL OR p.supplier = @supplier)", paramters);
+
+            return table.ToList<orderModule>().GetPagination(pagination).ToList();
         }
 
-        /// <summary>
-        /// 获取指定的单条数据
-        /// </summary>
-        /// <param name="id">主键</param>
-        /// <returns></returns>
-        public order GetTheData(string id)
-        {
-            return GetEntity(id);
-        }
-
-        /// <summary>
-        /// 添加数据
-        /// </summary>
-        /// <param name="newData">数据</param>
-        public void AddData(order newData)
-        {
-            Insert(newData);
-        }
-
-        /// <summary>
-        /// 更新数据
-        /// </summary>
-        public void UpdateData(order theData)
-        {
-            Update(theData);
-        }
-
-        /// <summary>
-        /// 删除数据
-        /// </summary>
-        /// <param name="theData">删除的数据</param>
-        public void DeleteData(List<string> ids)
-        {
-            Delete(ids);
-        }
 
         #endregion
 
-        #region 私有成员
 
-        #endregion
-
-        #region 数据模型
-
-        #endregion
     }
+
+    #region 数据模型
+    public class orderModule : order
+    {
+        public string productName { get; set; }
+        public string nickName { get; set; }
+        public string realName { get; set; }
+        public int payStatus { get; set; }
+    }
+    #endregion
 }
