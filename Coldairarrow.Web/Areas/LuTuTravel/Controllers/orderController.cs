@@ -29,7 +29,7 @@ namespace Coldairarrow.Web
             ViewData["special_status"] = "2";
             return View("Index");
         }
-        
+
 
         #endregion
 
@@ -51,8 +51,16 @@ namespace Coldairarrow.Web
         #endregion
 
         #region 提交数据
-         
-
+        /// <summary>
+        /// 修改操作状态为已处理
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult ChangeOperateStatus(string id)
+        {
+            _orderBusiness.ChangeOperateStatus(id);
+            return Success();
+        }
         #endregion
     }
 }

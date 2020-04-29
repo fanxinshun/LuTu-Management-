@@ -58,7 +58,16 @@ namespace Coldairarrow.Business.LuTuTravel
 
 
         #endregion
-
+        /// <summary>
+        /// 修改操作状态为已处理
+        /// </summary>
+        /// <param name=""></param>
+        public void ChangeOperateStatus(string id)
+        {
+            var theData = this.GetEntity(id);
+            theData.operate_status = 1;//已处理
+            UpdateAny(theData, new List<string>() { "operate_status" });
+        }
 
     }
 

@@ -392,6 +392,10 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 团购基数
         /// </summary>
         public int? purchase_minnum { get; set; }
+        /// <summary>
+        /// 单位
+        /// </summary>
+        public String purchase_unit { get; set; }
 
     }
 }

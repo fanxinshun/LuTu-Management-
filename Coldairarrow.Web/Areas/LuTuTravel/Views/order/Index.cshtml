@@ -1,47 +1,43 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
     var special_status = ViewData["special_status"];
-
 }
-
 
 @section search{
-<div class="search_wrapper">
-    <div class='search_wrapper'>
-        <div class='search_item'>
-            <input name='special_status' style="display:none" value="@special_status" />
-            <label class='search_label'>产品ID</label>
-            <input name='product_id' class='easyui-textbox' style='width:150px' />
-        </div>
-        <div class='search_item'>
-            <label class='search_label'>产品名称</label>
-            <input name='product_name' class='easyui-textbox' style='width:150px'>
-        </div>
-        <div class='search_item'>
-            <label class='search_label'>区域</label>
-            <input name='product_area' class='easyui-textbox' style='width:150px' />
-        </div>
-        <br />
-        <div class='search_item'>
-            <label class='search_label'>拼团时间</label>
-            <input name='start_time1' class='easyui-datebox' style='width:150px' />
-            <input name='start_time2' class='easyui-datebox' style='width:150px' />
-        </div>
-        <div class='search_item'>
-            <label class='search_label'>下单时间</label>
-            <input name='create_time1' class='easyui-datebox' style='width:150px' />
-            <input name='create_time2' class='easyui-datebox' style='width:150px' />
-        </div>
-        <div class="search_submit">
-            <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+    <div class="search_wrapper">
+        <div class='search_wrapper'>
+            <div class='search_item'>
+                <input name='special_status' style="display:none" value="@special_status" />
+                <label class='search_label'>产品ID</label>
+                <input name='product_id' class='easyui-textbox' style='width:150px' />
+            </div>
+            <div class='search_item'>
+                <label class='search_label'>产品名称</label>
+                <input name='product_name' class='easyui-textbox' style='width:150px'>
+            </div>
+            <div class='search_item'>
+                <label class='search_label'>区域</label>
+                <input name='product_area' class='easyui-textbox' style='width:150px' />
+            </div>
+            <br />
+            <div class='search_item'>
+                <label class='search_label'>拼团时间</label>
+                <input name='start_time1' class='easyui-datebox' style='width:150px' />
+                <input name='start_time2' class='easyui-datebox' style='width:150px' />
+            </div>
+            <div class='search_item'>
+                <label class='search_label'>下单时间</label>
+                <input name='create_time1' class='easyui-datebox' style='width:150px' />
+                <input name='create_time2' class='easyui-datebox' style='width:150px' />
+            </div>
+            <div class="search_submit">
+                <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+            </div>
         </div>
     </div>
-</div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var formWidth = 500;
@@ -109,8 +105,8 @@
                     }
                 },
                 {
-                    title: '操作', field: 'operate_status', width: 200, formatter: function (value, row, index) {
-                        if (value == '0') return '<a onclick="#">未处理</a>';
+                    title: '操作', field: 'operate_status',  width: 200, formatter: function (value, row, index) {
+                        if (value == '0') return '<a onclick="operateStatus(\'' + row.Id + '\')">未处理</a>';
                         else if (value == '1') return '已处理';
                         else return value;// 0未处理 1已处理
                     }
@@ -125,33 +121,22 @@
         });
     }
 
+    function operateStatus(id) {
+        dialogComfirm('确认已处理吗？', function () {
+            $.postJSON(rootUrl + 'LuTuTravel/order/ChangeOperateStatus', { id: id }, function (resJson) {
+                if (resJson.Success) {
+                    $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                    $('#dataTable').datagrid('reload');
+                    dialogMsg('处理成功!');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    }
     $(function () {
         initTable();
         
-
-        //删除数据
-        $('#delete').click(function () {
-            var checked = $("#dataTable").datagrid("getChecked");
-            if (!checked || !checked.length) {
-                dialogError('请选择要删除的记录!');
-                return;
-            }
-            var ids = $.map(checked, function (item) {
-                return item['Id'];
-            });
-
-            dialogComfirm('确认删除吗？', function () {
-                $.postJSON(rootUrl + 'LuTuTravel/order/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
-                    if (resJson.Success) {
-                        $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
-                        $('#dataTable').datagrid('reload');
-                        dialogMsg('删除成功!');
-                    }
-                    else {
-                        dialogError(resJson.Msg);
-                    }
-                });
-            });
-        });
     });
 </script>

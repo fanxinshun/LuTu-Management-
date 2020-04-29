@@ -70,7 +70,7 @@
 
             var salesProfitChart = echarts.init(document.getElementById('salesProfit'));
             salesProfitChart.on('click', function (params) {
-                $('#dg').datagrid('reload', { 'product_type': params.name }).datagrid('title', params.name);
+                $('#dg').datagrid('reload', { 'product_type': params.name }).datagrid({ 'title': params.name });
             });
             $.getJSON(rootUrl + 'LuTuTravel/productRep/GetProductProfit', { }).done(function (resJson) {
                 if (resJson.Success) {
