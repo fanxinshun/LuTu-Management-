@@ -105,7 +105,7 @@
                     }
                 },
                 {
-                    title: '操作', field: 'operate_status',  width: 200, formatter: function (value, row, index) {
+                    title: '操作', field: 'operate_status', width: 200, formatter: function (value, row, index) {
                         if (value == '0') return '<a onclick="operateStatus(\'' + row.Id + '\')">未处理</a>';
                         else if (value == '1') return '已处理';
                         else return value;// 0未处理 1已处理

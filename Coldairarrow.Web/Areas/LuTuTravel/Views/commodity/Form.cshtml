@@ -163,10 +163,10 @@
                 </td>
             </tr>
             <tr>
-                <th>团购基数</th>
+                <th>最少购买数量</th>
                 <td>
                     <input name="purchase_minnum" value="@obj.purchase_minnum" class="easyui-numberbox" data-options="required:true,min:1">
-                    <input name="purchase_unit" value="@obj.purchase_unit" class="easyui-textbox" data-options="required:true">
+                    <input name="purchase_unit" value="@obj.purchase_unit" class="easyui-textbox" data-options="required:true">单位
                 </td>
             </tr>
             <tr>
@@ -212,18 +212,18 @@
     //生成每一天的样式
     function accordionPanelDay(obj) {
         var day = (new Date(obj.open_date)).getDate();
-        var accordionPanelDays = '<div style="float:left;width:13%">';//每一天的控件/布局
+        var accordionPanelDays = '<div style="float:left;width:20%">';//每一天的控件/布局
         accordionPanelDays += '<input type="hidden" name="product_date_id" value="' + (obj.product_date_id || '') + '">';
         accordionPanelDays += '<input type="checkbox" ' + (obj.is_opening == '1' ? 'checked="checked" ' : '') + '>';
         accordionPanelDays += '<input type="hidden" name="open_date" value="' + obj.open_date + '">';
         accordionPanelDays += '<span>' + day.toString() + (day < 10 ? '&nbsp;' : '') + '</span>';
-        accordionPanelDays += '<span>团数</span><input class="easyui-numberbox" name="team_num" value="' + (obj.team_num || '') + '" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" />';
+        accordionPanelDays += '<span>数量</span> <input class="easyui-numberbox" name="team_people_num" value="' + (obj.team_people_num || '') + '" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" /><span>团数</span><input class="easyui-numberbox" name="team_num" value="' + (obj.team_num || '') + '" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" />';
         accordionPanelDays += '</div>';
         return accordionPanelDays;
     }
     function accordionPanelDayButton() {
         var foottDiv = '<div style="float:left;width:100%;text-align:right">';//Panel Button
-        foottDiv += '<span>团数</span><input value="10" class="easyui-numberbox" data-options="width:\'45px\',height:\'22px\',min:1,max:1000"  />';
+        foottDiv += '<span>默认人数</span> <input value="20" class="easyui-numberbox" data-options="width:\'45px\',height:\'22px\',min:1,max:1000" /><span>团数</span><input value="10" class="easyui-numberbox" data-options="width:\'45px\',height:\'22px\',min:1,max:1000"  />';
         foottDiv += '<a onclick="checkAll($(this).parent())" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-ok\'">默认/全选</a>';
         foottDiv += '<a onclick="goNextMonthPanel()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一月</a>';
         foottDiv += '</div>';
@@ -240,6 +240,7 @@
     }
     //按周选择
     function foottCheckboxClick(ck, wk) {
+        var a = $(ck).parent().prev().find('input:first').val();
         var b = $(ck).parent().prev().find('input:last').val();
         var divs = $(ck).parent().parent().find('div');
         for (var i = 0; i < $(divs).length - 2; i++) {
@@ -247,6 +248,7 @@
             if (wk == open_date.getDay()) {
                 var isck = $(ck).prop('checked');
                 $(divs).eq(i).find(':checkbox').prop('checked', isck);
+                $(divs).eq(i).find('.easyui-numberbox:first').numberbox('setValue', isck ? a : '');
                 $(divs).eq(i).find('.easyui-numberbox:last').numberbox('setValue', isck ? b : '');
             }
         }
@@ -254,11 +256,13 @@
 
     //默认/全选
     function checkAll(foottDiv) {
+        var a = $(foottDiv).find('input:first').val();
         var b = $(foottDiv).find('input:last').val();
         var nochecked = $(foottDiv).parent().find(':checkbox:not(:checked)');
         if (nochecked.length > 0) {//存在没有勾选的
-            $(foottDiv).parent().find(':checkbox').prop('checked', true);
+            $(foottDiv).prevAll().find('.easyui-numberbox:first').numberbox('setValue', a);
             $(foottDiv).prevAll().find('.easyui-numberbox:last').numberbox('setValue', b);
+            $(foottDiv).parent().find(':checkbox').prop('checked', true);
         } else {
             $(foottDiv).prevAll().find('.easyui-numberbox').numberbox('setValue', '');
             $(foottDiv).parent().find(':checkbox').prop('checked', false);
