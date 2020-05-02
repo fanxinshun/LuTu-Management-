@@ -12,11 +12,19 @@ namespace Coldairarrow.Web
     [Area("LuTuTravel")]
     public class TicketController : BaseMvcController
     {
-        ProductBusiness _productBusiness = new ProductBusiness();
-        DictionaryBusiness _dictionaryBusiness = new DictionaryBusiness();
-        AreaBusiness _areaBusiness = new AreaBusiness();
-        product_dateBusiness _product_dateBusiness = new product_dateBusiness();
-        TeamBusiness _teamBusiness = new TeamBusiness();
+        ProductBusiness _productBusiness;
+        DictionaryBusiness _dictionaryBusiness;
+        AreaBusiness _areaBusiness;
+        product_dateBusiness _product_dateBusiness;
+        TeamBusiness _teamBusiness;
+        public TicketController()
+        {
+            _productBusiness = new ProductBusiness();
+            _dictionaryBusiness = new DictionaryBusiness();
+            _areaBusiness = new AreaBusiness();
+            _product_dateBusiness = new product_dateBusiness();
+            _teamBusiness = new TeamBusiness();
+        }
 
         #region 视图功能
 

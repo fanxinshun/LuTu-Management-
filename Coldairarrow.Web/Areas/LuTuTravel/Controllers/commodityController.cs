@@ -12,9 +12,17 @@ namespace Coldairarrow.Web
     [Area("LuTuTravel")]
     public class commodityController : BaseMvcController
     {
-        ProductBusiness _productBusiness = new ProductBusiness();
-        product_dateBusiness _product_dateBusiness = new product_dateBusiness();
-        DictionaryBusiness _dictionaryBusiness = new DictionaryBusiness();
+        ProductBusiness _productBusiness = null;
+        product_dateBusiness _product_dateBusiness = null;
+        DictionaryBusiness _dictionaryBusiness = null;
+        TeamBusiness _teamBusiness = null;
+        public commodityController()
+        {
+            _productBusiness = new ProductBusiness();
+            _product_dateBusiness = new product_dateBusiness();
+            _dictionaryBusiness = new DictionaryBusiness();
+            _teamBusiness = new TeamBusiness();
+        }
 
         #region 视图功能
 
@@ -101,6 +109,7 @@ namespace Coldairarrow.Web
 
             var addProductDate = new List<product_date>();
             var updateProductDate = new List<product_date>();
+            var teamlist = new List<team>();
             //保存或更新开团日期
             foreach (var item in listProductDate)
             {
@@ -108,6 +117,7 @@ namespace Coldairarrow.Web
                 if (item.product_date_id == 0)
                 {
                     addProductDate.Add(item);
+                    teamlist.Add(new team() { product_id = theData.Id, start_time = item.open_date, status = 1 });
                 }
                 else
                 {
@@ -116,6 +126,7 @@ namespace Coldairarrow.Web
             }
             _product_dateBusiness.Insert(addProductDate);
             _product_dateBusiness.Update(updateProductDate);
+            _teamBusiness.Insert(teamlist);
             return Success();
         }
         #endregion

@@ -13,12 +13,21 @@ namespace Coldairarrow.Web
     [Area("LuTuTravel")]
     public class ProductController : BaseMvcController
     {
-        ProductBusiness _productBusiness = new ProductBusiness();
-        DictionaryBusiness _dictionaryBusiness = new DictionaryBusiness();
-        AreaBusiness _areaBusiness = new AreaBusiness();
-        product_dateBusiness _product_dateBusiness = new product_dateBusiness();
-        product_typeBusiness _product_typeBusiness = new product_typeBusiness();
-        TeamBusiness _teamBusiness = new TeamBusiness();
+        ProductBusiness _productBusiness = null;
+        DictionaryBusiness _dictionaryBusiness = null;
+        AreaBusiness _areaBusiness = null;
+        product_dateBusiness _product_dateBusiness = null;
+        product_typeBusiness _product_typeBusiness = null;
+        TeamBusiness _teamBusiness = null;
+        public ProductController()
+        {
+            _productBusiness = new ProductBusiness();
+            _dictionaryBusiness = new DictionaryBusiness();
+            _areaBusiness = new AreaBusiness();
+            _product_dateBusiness = new product_dateBusiness();
+            _product_typeBusiness = new product_typeBusiness();
+            _teamBusiness = new TeamBusiness();
+        }
 
         #region 视图功能
 
