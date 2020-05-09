@@ -24,7 +24,7 @@ namespace Coldairarrow.Util
         /// <returns></returns>
         public static long ToJsTimestamp(this DateTime dateTime)
         {
-            var startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1, 0, 0, 0, 0));
+            var startTime = TimeZoneInfo.ConvertTimeToUtc(new DateTime(1970, 1, 1, 0, 0, 0, 0));
             long result = (dateTime.Ticks - startTime.Ticks) / 10000;   //除10000调整为13位
             return result;
         }
