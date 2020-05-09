@@ -11,7 +11,7 @@ namespace Coldairarrow.Util.Helper
     public class FastDFSHelper
     {
         private static List<IPEndPoint> trackerIPs = new List<IPEndPoint>();
-        //private static IPEndPoint endPoint;
+        private static IPEndPoint endPoint;
         private static StorageNode storageNode;
         private static string groupName = ConfigHelper.GetValue("FastDFS", "fastdfs_groupname");
 
