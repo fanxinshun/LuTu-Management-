@@ -9,7 +9,27 @@
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
-            <label class="search_label">产品类型</label>
+            <label class="search_label">标签分类</label>
+            <input name="flag_type" class="easyui-combobox"
+                   data-options="width:'150px',editable:true,
+                                        valueField: 'valueField',
+                                        textField: 'textField',
+                                        data:[{
+			                                    textField: '普通标签',
+			                                    valueField: '0'
+		                                    },{
+			                                    textField: '精品旅游限时推荐标签',
+			                                    valueField: '1'
+		                                    },{
+			                                    textField: '门票限时推荐标签',
+			                                    valueField: '2'
+		                                    },{
+			                                    textField: '商品限时推荐标签',
+			                                    valueField: '3'
+		                                    }]">
+        </div>
+        <div class="search_item">
+            <label class="search_label">产品类别</label>
             <input name="product_type_id" class="easyui-combobox"
                    data-options="width:'150px',editable:true,
                                         valueField: 'id',
@@ -17,7 +37,7 @@
                                         url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
         </div>
         <div class="search_item">
-            <label class="search_label">城市标签</label>
+            <label class="search_label">标签名称</label>
             <input name="parent_id" class="easyui-combobox"
                    data-options="width:'150px',editable:true,
                                         valueField: 'Id',
@@ -34,7 +54,7 @@
 <script>
     var rootUrl = '@Url.Content("~/")';
     var formWidth = 500;
-    var formHeight = 375;
+    var formHeight = 420;
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -60,9 +80,9 @@
 
                 //{ title: '主键id', field: 'id', width: 200 },
                 //{ title: '产品类型表id', field: 'product_type_id', width: 200 },
-                { title: '产品类型', field: 'product_type_name', width: 200 },
+                { title: '产品类别', field: 'product_type_name', width: 200 },
                 //{ title: '地区编码', field: 'area_code', width: 200 },
-                { title: '城市标签', field: 'panentName', width: 200 },
+                { title: '标签名称', field: 'tagname', width: 200 },
                 { title: '城市', field: 'areaName', width: 200 },
                 { title: '标签logo', field: 'img_url', width: 200 }
                 //{ title: '父级id', field: 'parent_id', width: 200 }

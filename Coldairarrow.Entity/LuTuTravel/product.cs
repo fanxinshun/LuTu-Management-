@@ -36,12 +36,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 线路名称,景点名称
         /// </summary>
         public String title { get; set; }
-
-        /// <summary>
-        /// 景区级别
-        /// </summary>
-        public String special_category { get; set; }
-
+        
         /// <summary>
         /// 地区编码
         /// </summary>
@@ -348,13 +343,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 分终端配置
         /// </summary>
         public String validity_terminal { get; set; }
-
-
-
-        /// <summary>
-        /// 商品所属类别
-        /// </summary>
-        public String commodity_type { get; set; }
+        
 
         /// <summary>
         /// 产地

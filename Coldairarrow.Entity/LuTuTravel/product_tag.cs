@@ -64,5 +64,9 @@ namespace Coldairarrow.Entity.LuTuTravel
         public DateTime? update_time { get; set; }
 
 
+        /// <summary>
+        /// 0普通标签 1精品旅游限时推荐标签 2门票限时推荐标签 3商品限时推荐标签
+        /// </summary>
+        public int? flag_type { get; set; }
     }
 }

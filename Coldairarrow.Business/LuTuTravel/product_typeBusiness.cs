@@ -29,6 +29,20 @@ namespace Coldairarrow.Business.LuTuTravel
         }
 
         /// <summary>
+        /// 获取GetProductType
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
+        public List<product_type> GetList(int? type)
+        {
+            var q = GetIQueryable();
+            if (type != null)
+            {
+                q = q.Where(x => x.type == type);
+            }
+            return q.OrderBy(x => x.sort).ToList();
+        }
+        /// <summary>
         /// 获取指定的单条数据
         /// </summary>
         /// <param name="id">主键</param>
@@ -36,6 +50,15 @@ namespace Coldairarrow.Business.LuTuTravel
         public product_type GetTheData(string id)
         {
             return GetEntity(id);
+        }
+        /// <summary>
+        /// 获取指定的单条数据
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
+        public product_type GetTheData(int type, string type_name)
+        {
+            return GetIQueryable().FirstOrDefault(x => x.type == type && x.type_name == type_name);
         }
 
         /// <summary>

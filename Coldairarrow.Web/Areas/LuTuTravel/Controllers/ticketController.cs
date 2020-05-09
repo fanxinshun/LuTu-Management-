@@ -49,16 +49,7 @@ namespace Coldairarrow.Web
         #endregion
 
         #region 获取数据
-        /// <summary>
-        /// 获取景区级别
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult GetDictionaryListByCode()
-        {
-            var dataList = _dictionaryBusiness.GetDictionaryEnabledByCode("special_category");
 
-            return Content(dataList.ToJson());
-        }
         /// <summary>
         /// 获取地区列表
         /// </summary>

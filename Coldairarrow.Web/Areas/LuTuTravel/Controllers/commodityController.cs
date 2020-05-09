@@ -70,7 +70,7 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDataList(string product_type_id, string title, DateTime? create_time1, DateTime? create_time2, Pagination pagination, string enable_flag)
         {
-            var dataList = _productBusiness.GetDataList(2, string.Empty, title, string.Empty, create_time1, create_time2, pagination, enable_flag);
+            var dataList = _productBusiness.GetDataList(2, product_type_id, title, string.Empty, create_time1, create_time2, pagination, enable_flag);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }

@@ -13,38 +13,78 @@
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
-            <col style="width:80px;" />
+            <col style="width:40%;" />
         </colgroup>
         <tbody>
             <tr>
-                <th>产品类型</th>
+                <th>标签分类</th>
                 <td>
-                    <input name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
-                           data-options="width:'50%',required:true,editable:false,
+                    <input id="flag_type" name="flag_type" value="@obj.flag_type" class="easyui-combobox"
+                           data-options="width:'90%',required:true,editable:false,
+                                        valueField: 'valueField',
+                                        textField: 'textField',
+                                        data:[{
+			                                    textField: '普通标签',
+			                                    valueField: '0'
+		                                    },{
+			                                    textField: '精品旅游限时推荐标签',
+			                                    valueField: '1'
+		                                    },{
+			                                    textField: '门票限时推荐标签',
+			                                    valueField: '2'
+		                                    },{
+			                                    textField: '商品限时推荐标签',
+			                                    valueField: '3'
+		                                    }]">
+                </td>
+            </tr>
+            <tr class="common">
+                <th>精品旅游/特价门票/扶贫商品</th>
+                <td>
+                    <input id="product_type_type" value="@obj.product_type_type" class="easyui-combobox"
+                           data-options="width:'90%',required:false,editable:false,
+                                        valueField: 'valueField',
+                                        textField: 'textField',
+                                        data:[{
+			                                    textField: '精品旅游',
+			                                    valueField: '1'
+		                                    },{
+			                                    textField: '特价门票',
+			                                    valueField: '2'
+		                                    },{
+			                                    textField: '扶贫商品',
+			                                    valueField: '3'
+		                                    }]">
+                </td>
+            </tr>
+            <tr class="common">
+                <th>产品类别</th>
+                <td>
+                    <input id="product_type_id" name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
+                           data-options="width:'90%',required:false,editable:false,
                                         valueField: 'id',
-                                        textField: 'title',
-                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
+                                        textField: 'title'">
                 </td>
             </tr>
             <tr>
-                <th>城市标签</th>
+                <th>标签名称</th>
                 <td>
                     <input name="parent_id" value="@obj.parent_id" class="easyui-combobox"
-                           data-options="width:'50%',required:true,
+                           data-options="width:'90%',required:true,
                                         valueField: 'Id',
                                         textField: 'tagname',
                                         url: '@Url.Content("~/")LuTuTravel/product_tag/GetpanentTagname',
                                         onSelect:function(rec){
                                              $('input[name=tagname]').val(rec.tagname);
                                          }">
-                    <input type="hidden" name="tagname" value="@obj.tagname"/>
+                    <input type="hidden" name="tagname" value="@obj.tagname" />
                 </td>
             </tr>
             <tr>
                 <th>城市</th>
                 <td>
                     <input id="area_code" name="area_code" value="@obj.area_code" class="easyui-combobox"
-                           data-options="width:'50%',required:true,editable:true,
+                           data-options="width:'90%',required:false,editable:true,
                                         valueField: 'code',
                                         textField: 'name',
                                         url: '@Url.Content("~/")LuTuTravel/area/GetAreaDataList'">
@@ -79,15 +119,35 @@
     var theEntity = @objStr;
 
     $(function () {
+        $('#product_type_type').combobox({
+            width: '90%',
+            onSelect: function (rec) {
+                $('#product_type_id').combobox('reload', { type: rec.valueField });
+            },
+            onLoadSuccess: function () {
+                $('#product_type_id').combobox('reload', { type: $(this).combobox('getValue') });
+            }
+        });
+        $('#product_type_id').combobox({
+            width: '90%',
+            url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'
+        });
+
+        $('#flag_type').combobox({
+            width: '90%',
+            onSelect: function (rec) {
+                if (rec.valueField == '0') $('.common').show();
+                else $('.common').hide();
+            },
+            onLoadSuccess: function () {
+                if ($(this).combobox('getValue') == '0') $('.common').show();
+                else $('.common').hide();
+            }
+        });
         $('#saveForm').click(function () {
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
-
-            var noSelect = $('#area_code').combobox('getValue') == $('#area_code').combobox('getText');
-            if (noSelect) {
-                dialogError('请选择所属区域');
-                return;
-            }
+            
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
             $.postJSON(rootUrl + 'LuTuTravel/product_tag/SaveData', theEntity, function (resJson) {

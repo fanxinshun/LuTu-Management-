@@ -64,12 +64,12 @@ namespace Coldairarrow.Web
         }
 
         /// <summary>
-        /// 获取景区类别
+        /// 获取类别
         /// </summary>
         /// <returns></returns>
-        public ActionResult GetProductType()
+        public ActionResult GetProductType(int? type)
         {
-            var dataList = _product_typeBusiness.GetList();
+            var dataList = _product_typeBusiness.GetList(type);
 
             return Content(dataList.ToJson());
         }

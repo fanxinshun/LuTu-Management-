@@ -30,7 +30,7 @@
                 <th>供应商</th>
                 <td>
                     <input name="supplier" value="@obj.supplier" class="easyui-combobox"
-                           data-options="width:'30%',required:true,editable:true,
+                           data-options="required:true,editable:true,
                                         valueField: 'Id',
                                         textField: 'name',
                                         url: '@Url.Content("~/")LuTuTravel/Product/GetSupplieListByCode'">
@@ -53,13 +53,13 @@
                 </td>
             </tr>
             <tr>
-                <th>所属类别</th>
+                <th>产品类别</th>
                 <td>
-                    <input name="commodity_type" value="@obj.commodity_type" class="easyui-combobox"
+                    <input name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
                            data-options="required:true,editable:false,
-                                        valueField: 'value',
-                                        textField: 'name',
-                                        url: '@Url.Content("~/")LuTuTravel/commodity/GetDictionaryListByCode'">
+                                        valueField: 'id',
+                                        textField: 'title',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType?type=3'">
                 </td>
             </tr>
             <tr>

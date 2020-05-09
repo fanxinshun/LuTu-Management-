@@ -37,13 +37,13 @@
                 </td>
             </tr>
             <tr>
-                <th>景区级别</th>
+                <th>产品类别</th>
                 <td>
-                    <input name="special_category" value="@obj.special_category" class="easyui-combobox"
-                           data-options="width:'30%',required:false,
-                                        valueField: 'value',
-                                        textField: 'name',
-                                        url: '@Url.Content("~/")LuTuTravel/Ticket/GetDictionaryListByCode'">
+                    <input name="product_type_id" value="@obj.product_type_id" class="easyui-combobox"
+                           data-options="width:'30%',required:true,editable:false,
+                                        valueField: 'id',
+                                        textField: 'title',
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType?type=2'">
                 </td>
             </tr>
             <tr>

@@ -40,9 +40,9 @@ namespace Coldairarrow.Web
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public ActionResult GetDataList(string product_type_id, string parent_id, Pagination pagination)
+        public ActionResult GetDataList(int? flag_type,string product_type_id, string parent_id, Pagination pagination)
         {
-            var dataList = _product_tagBusiness.GetProductTagModel(product_type_id, parent_id, pagination);
+            var dataList = _product_tagBusiness.GetProductTagModel(flag_type,product_type_id, parent_id, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }

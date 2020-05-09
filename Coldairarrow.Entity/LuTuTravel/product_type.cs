@@ -18,7 +18,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         public String id { get; set; }
 
         /// <summary>
-        /// 产品标识(1 热门 2西北等,可与产品协商确定)
+        /// 1 精品旅游 2特价门票 3扶贫商品
         /// </summary>
         public Int32? type { get; set; }
 

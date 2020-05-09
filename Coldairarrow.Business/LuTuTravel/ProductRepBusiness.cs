@@ -227,7 +227,7 @@ namespace Coldairarrow.Business.LuTuTravel
         {
             if (product_type != "全部")
             {
-                product_type = new product_typeBusiness().GetIQueryable().FirstOrDefault(x => x.type_name == product_type)?.id;
+                product_type = new product_typeBusiness().GetTheData(1, product_type)?.id;
             }
             else
             {

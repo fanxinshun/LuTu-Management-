@@ -67,7 +67,7 @@
                                data-options="required:true,editable:false,
                                         valueField: 'id',
                                         textField: 'title',
-                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType'">
+                                        url: '@Url.Content("~/")LuTuTravel/Product/GetProductType?type=1'">
                     </div>
                     <div style="float:left;line-height: 30px;margin-left:15px">所属区域</div>
                     <div style="float:left;margin-left:5px">
@@ -100,19 +100,19 @@
             <tr>
                 <th>行程特色介绍</th>
                 <td>
-                    <textarea name="features" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true,validType:'length[0,1000]'">@obj.features</textarea>
+                    <textarea name="features" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true">@obj.features</textarea>
                 </td>
             </tr>
             <tr>
                 <th>费用明细</th>
                 <td>
-                    <textarea name="cost_detail" class="easyui-textbox" data-options="width:'100%',height:'180px',required:true,multiline:true,validType:'length[0,1000]'">@obj.cost_detail</textarea>
+                    <textarea name="cost_detail" class="easyui-textbox" data-options="width:'100%',height:'180px',required:true,multiline:true">@obj.cost_detail</textarea>
                 </td>
             </tr>
             <tr>
                 <th>预定须知</th>
                 <td>
-                    <textarea name="content" class="easyui-textbox" data-options="width:'100%',height:'160px',required:true,multiline:true,validType:'length[0,1000]'">@obj.content</textarea>
+                    <textarea name="content" class="easyui-textbox" data-options="width:'100%',height:'160px',required:true,multiline:true">@obj.content</textarea>
                 </td>
             </tr>
             <tr>

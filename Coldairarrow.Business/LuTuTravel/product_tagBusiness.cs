@@ -20,25 +20,26 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<productTagModel> GetProductTagModel(string product_type_id, string parent_id, Pagination pagination)
+        public List<productTagModel> GetProductTagModel(int? flag_type, string product_type_id, string parent_id, Pagination pagination)
         {
             List<DbParameter> paramters = new List<DbParameter>()
             {
+                new  MySqlParameter ("@flag_type",flag_type),
                 new  MySqlParameter ("@product_type_id",product_type_id),
                 new  MySqlParameter ("@parent_id",parent_id)
             };
             DataTable table = GetDataTableWithSql(@"SELECT
 	                                                    a.*,
-	                                                    b.tagname panentName,
 	                                                    c.NAME areaName,
-	                                                    d.title product_type_name
+	                                                    d.title product_type_name,
+	                                                    d.type product_type_type
                                                     FROM
 	                                                    `product_tag` a
 	                                                    LEFT JOIN `product_tag` b ON b.id = a.parent_id
 	                                                    LEFT JOIN `area` c ON a.area_code = c.`code`
 	                                                    LEFT JOIN `product_type` d ON a.product_type_id = d.id 
-                                                    WHERE
-	                                                    (a.parent_id IS NOT NULL or a.parent_id ='')
+                                                    WHERE a.parent_id IS NOT NULL
+                                                        AND (@flag_type is null or a.flag_type=@flag_type )
                                                         AND (@product_type_id is null or a.product_type_id=@product_type_id )
                                                         AND (@parent_id is null or a.parent_id=@parent_id)", paramters);
 
@@ -89,9 +90,9 @@ namespace Coldairarrow.Business.LuTuTravel
             };
             DataTable table = GetDataTableWithSql(@"SELECT
 	                                                    a.*,
-	                                                    b.tagname panentName,
 	                                                    c.NAME areaName,
-	                                                    d.title product_type_name
+	                                                    d.title product_type_name,
+	                                                    d.type product_type_type
                                                     FROM
 	                                                    `product_tag` a
 	                                                    LEFT JOIN `product_tag` b ON b.id = a.parent_id
@@ -140,10 +141,6 @@ namespace Coldairarrow.Business.LuTuTravel
     #region 数据模型
     public class productTagModel : product_tag
     {
-        /// <summary>
-        /// 城市标签名
-        /// </summary>
-        public String panentName { get; set; }
 
         /// <summary>
         /// 所属区域
@@ -154,6 +151,11 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 产品类型
         /// </summary>
         public String product_type_name { get; set; }
+
+        /// <summary>
+        /// 产品分类
+        /// </summary>
+        public String product_type_type { get; set; }
     }
     #endregion
 }
