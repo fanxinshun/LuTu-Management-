@@ -33,6 +33,15 @@ namespace Coldairarrow.Util.Helper
         }
 
         /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <param name="fileStream">文件流</param>
+        /// <returns>返回主文件路径</returns>
+        public static void RemoveFile(string fileName)
+        {
+            FastDFSClient.RemoveFile(groupName, fileName);
+        }
+        /// <summary>
         /// 上传文件
         /// </summary>
         /// <param name="fileStream">文件流</param>
@@ -41,12 +50,6 @@ namespace Coldairarrow.Util.Helper
         public static string UploadFile(string fileBase64, string fileName)
         {
             byte[] bytes = fileBase64.ToBytes_FromBase64Str();
-            //Stream stream = new MemoryStream(bytes);
-            //using (BinaryReader reader = new BinaryReader(stream))
-            //{
-            //    bytes = reader.ReadBytes((int)stream.Length);
-            //}
-
             //主文件
             return FastDFSClient.UploadFile(storageNode, bytes, Path.GetExtension(fileName).Replace(".", ""));
         }

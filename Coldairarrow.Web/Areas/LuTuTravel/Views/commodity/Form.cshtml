@@ -72,11 +72,11 @@
                 <th>农户照片</th>
                 <td>
                     <div>
-                        <img style="width:120px;height:90px;display:none" />
+                        <img onclick="DeleteFileToServer(theEntity.Id,'photooffarmers',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas1)
                             {
-                                <img style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'photooffarmers',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>
@@ -105,11 +105,11 @@
                 <th>产品logo</th>
                 <td>
                     <div>
-                        <img style="width:120px;height:90px;display:none" />
+                        <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas3)
                             {
-                                <img style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>
@@ -120,11 +120,11 @@
                 <th>商品照片</th>
                 <td>
                     <div>
-                        <img style="width:120px;height:90px;display:none" />
+                        <img onclick="DeleteFileToServer(theEntity.Id,'commodity_photo',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas2)
                             {
-                                <img style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'commodity_photo',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>

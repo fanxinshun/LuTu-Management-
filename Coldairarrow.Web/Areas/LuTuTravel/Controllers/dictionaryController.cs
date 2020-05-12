@@ -24,6 +24,8 @@ namespace Coldairarrow.Web
         public ActionResult Form(string id)
         {
             var theData = id.IsNullOrEmpty() ? new dictionary() : _dictionaryBusiness.GetTheData(id);
+            var _ImagesBusiness = new ImagesBusiness();
+            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(theData.images);
 
             return View(theData);
         }
@@ -81,28 +83,6 @@ namespace Coldairarrow.Web
             return Success();
         }
 
-        /// <summary>
-        /// 上传文件到文件系统服务器
-        /// </summary>
-        /// <param name="UploadType">图片字段</param>
-        /// <param name="fileBase64"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public ActionResult UploadFileToServer(string UploadType, string id, string fileBase64, string fileName)
-        {
-            string name = FastDFSHelper.UploadFile(fileBase64, fileName);
-            if (name.IsNullOrEmpty())
-            {
-                return Error("上传失败");
-            }
-            var obj = _dictionaryBusiness.GetEntity(id);
-            if (obj != null)
-            {
-                obj.images = name;
-                _dictionaryBusiness.UpdateAny(obj, new List<string>() { "images" });
-            }
-            return Success((object)name);
-        }
         /// <summary>
         /// 删除数据
         /// </summary>

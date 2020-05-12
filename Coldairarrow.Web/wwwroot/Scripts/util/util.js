@@ -7,7 +7,7 @@
                 var resJson = JSON.parse(res);
                 if (resJson.ErrorCode == 1)
                     top.document.location.href = '/Home/Login';
-            } catch(ex) {
+            } catch (ex) {
 
             }
             return res;
@@ -521,6 +521,27 @@
             width: '400',
             height: '150',
             url: '/LuTuTravel/UploadFile/UploadFileForm?UploadType=' + UploadType + '&Id=' + Id + '&Multiple=' + Multiple
+        });
+    }
+})();
+//打开文件上传窗口
+(function () {
+    if (window.DeleteFileToServer)
+        return;
+
+    window.DeleteFileToServer = function (Id, deleteType, fileName) {
+
+        dialogComfirm('是否删除图片？', function () {
+            $.postJSON('/LuTuTravel/UploadFile/DeleteFileToServer', { 'deleteType': deleteType, 'Id': theEntity.Id, 'fileName': fileName }, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogMsg('删除成功!');
+                    $('img[src="' + resJson.Data.ServicePath + resJson.Data.ImageName + '"]').remove();
+                    $('#' + deleteType).val($('#' + deleteType).val().replace(resJson.Data.ImageName + ',', '').replace(',' + resJson.Data.ImageName, '').replace(resJson.Data.ImageName, ''));//多张
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
         });
     }
 })();

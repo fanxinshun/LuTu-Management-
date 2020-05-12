@@ -90,11 +90,11 @@
                 <th>上传产品图片</th>
                 <td>
                     <div>
-                        <img style="width:120px;height:90px;display:none"/>
+                        <img onclick="DeleteFileToServer(theEntity.Id,'images',$(this).attr('src'))" style="width:120px;height:90px;display:none"/>
                         @{
                             foreach (var item in ImagesDatas1)
                             {
-                                <img style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'images',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>
@@ -106,11 +106,11 @@
                 <th>产品logo，用于封面展示</th>
                 <td>
                     <div>
-                        <img style="width:120px;height:90px;display:none" />
+                        <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas2)
                             {
-                                <img style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>

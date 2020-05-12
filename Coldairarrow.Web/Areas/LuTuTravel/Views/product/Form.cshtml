@@ -119,11 +119,11 @@
                 <th>上传产品图片</th>
                 <td>
                     <div>
-                        <img style="width:120px;height:90px;display:none" />
+                        <img onclick="DeleteFileToServer(theEntity.Id,'images',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas1)
                             {
-                                <img style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'images',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>
@@ -135,11 +135,11 @@
                 <th>产品logo，用于封面展示</th>
                 <td>
                     <div>
-                        <img style="width:120px;height:90px;display:none" />
+                        <img onclick="DeleteFileToServer(theEntity.Id,'images',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas2)
                             {
-                                <img style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>
@@ -199,19 +199,19 @@
                 <td>
                     <div style="float:left;line-height:30px;">提前</div>
                     <div style="float:left">
-                        <input name="drawback_days1" value="@obj.drawback_days1" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">天，
+                        <input name="drawback_days1" value="@(obj.drawback_days1?? 3)" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">天，
                     </div>
                     <div style="float:left;line-height:30px;">退款</div>
                     <div style="float:left;margin-left:5px">
-                        <input name="drawback_money1" value="@obj.drawback_money1" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">%
+                        <input name="drawback_money1" value="@(obj.drawback_money1?? 100)" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">%
                     </div>
                     <div style="float:left;line-height:30px;margin-left:15px">提前</div>
                     <div style="float:left;margin-left:5px">
-                        <input name="drawback_days2" value="@obj.drawback_days2" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">天，
+                        <input name="drawback_days2" value="@(obj.drawback_days2?? 1)" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">天，
                     </div>
                     <div style="float:left;line-height:30px;">退款额度比例2</div>
                     <div style="float:left;margin-left:5px">
-                        <input name="drawback_money2" value="@obj.drawback_money2" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">%
+                        <input name="drawback_money2" value="@(obj.drawback_money2?? 50)" class="easyui-numberbox" data-options="width:'55px',required:true,min:0,max:100">%
                     </div>
                 </td>
             </tr>
@@ -225,13 +225,13 @@
                 <th>砍价时间</th>
                 <td>
                     <span>提前</span>
-                    <input name="advance_beginday" value="@obj.advance_beginday" class="easyui-numberbox" data-options="width:'40px',required:true,min:0,max:100">
+                    <input name="advance_beginday" value="@(obj.advance_beginday?? 7)" class="easyui-numberbox" data-options="width:'40px',required:true,min:0,max:100">
                     <span>天，在</span>
                     <input id="advance_begintime" name="advance_begintime" class="easyui-timespinner" style="width:80px;" data-options="required:true,min:'00:01'">
                     <span>前开始</span>
 
                     <span>提前</span>
-                    <input name="advance_day" value="@obj.advance_day" class="easyui-numberbox" data-options="width:'40px',required:true,min:0,max:100">
+                    <input name="advance_day" value="@(obj.advance_day?? 2)" class="easyui-numberbox" data-options="width:'40px',required:true,min:0,max:100">
                     <span>天，在</span>
                     <input id="advance_time" name="advance_time" class="easyui-timespinner" style="width:80px;" data-options="required:true,min:'00:01'">
                     <span>前结束</span>
@@ -443,7 +443,7 @@
                 $(panel).panel({ 'content': monthContent + defaultContent });
             }
         }
-        
+
         $('#saveForm').click(function () {
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
@@ -453,7 +453,6 @@
                 dialogError('请选择所属区域');
                 return;
             }
-            debugger;
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
             var datalistProductData = [];

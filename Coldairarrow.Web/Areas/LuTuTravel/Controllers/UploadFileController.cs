@@ -42,6 +42,18 @@ namespace Coldairarrow.Web.Controllers
             AjaxResult res = _ImagesBusiness.UploadFileToServer(uploadType, id, multiple, fileBase64, fileName);
             return Content(res.ToJson());
         }
+        /// <summary>
+        /// 删除文件及记录
+        /// </summary>
+        /// <param name="UploadType">图片字段</param>
+        /// <param name="fileBase64"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public ActionResult DeleteFileToServer(string deleteType, string id, string fileName)
+        {
+            AjaxResult res = _ImagesBusiness.DeleteFileToServer(deleteType, id, fileName);
+            return Content(res.ToJson());
+        }
 
         #endregion
     }
