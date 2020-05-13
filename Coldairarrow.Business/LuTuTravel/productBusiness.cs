@@ -25,6 +25,7 @@ namespace Coldairarrow.Business.LuTuTravel
             Pagination pagination,
             string enable_flag)
         {
+            var dictionaryList = new DictionaryBusiness().GetDictionaryAllByCode("supplier").ToList();
             var q = GetIQueryable().Where(x => x.special_status == special_status);
             if (!enable_flag.IsNullOrEmpty())
                 q = q.Where(x => x.enable_flag == enable_flag);
@@ -35,7 +36,7 @@ namespace Coldairarrow.Business.LuTuTravel
             if (!title.IsNullOrEmpty())
                 q = q.Where(x => x.title.Contains(title));
             if (!supplier.IsNullOrEmpty())
-                q = q.Where(x => x.supplier.Contains(supplier));
+                q = q.Where(x => dictionaryList.Find(y => y.Id == x.supplier).name.Contains(supplier));
 
             if (create_time1 != null)
                 q = q.Where(x => x.create_time >= create_time1);
@@ -44,7 +45,6 @@ namespace Coldairarrow.Business.LuTuTravel
 
             var resList = q.GetPagination(pagination).ToList();
             var areaList = new AreaBusiness().GetDataList();
-            var dictionaryList = new DictionaryBusiness().GetDictionaryAllByCode("supplier");
             resList.ForEach(item =>
                 {
                     item.area_code = areaList.Find(x => x.code == item.area_code)?.name;
