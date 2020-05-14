@@ -59,7 +59,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         public String content { get; set; }
 
         /// <summary>
-        /// 产品特色介绍
+        /// 行程特色
         /// </summary>
         public String features { get; set; }
 

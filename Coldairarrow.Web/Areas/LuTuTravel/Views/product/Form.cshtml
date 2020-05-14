@@ -31,7 +31,9 @@
     var objStr = Html.Raw(obj.ToJson());
 
     var datalist = (List<product_date>)(ViewData["theProductData"]);
+    var theProductIntroduction = (List<product_date>)(ViewData["theProductIntroduction"]);
     var datalistStr = Html.Raw(datalist.ToJson());
+    var theProductIntroductionStr = Html.Raw(theProductIntroduction.ToJson());
 
     var emptyProductData = (product_date)(ViewData["emptyProductData"]);
     var emptyProductDataStr = Html.Raw(emptyProductData.ToJson());
@@ -98,9 +100,17 @@
                 </td>
             </tr>
             <tr>
-                <th>行程特色介绍</th>
+                <th>行程特色</th>
                 <td>
                     <textarea name="features" class="easyui-textbox" data-options="width:'100%',height:'120px',required:true,multiline:true">@obj.features</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>行程介绍</th>
+                <td>
+                    <div id="Introduction" class="easyui-accordion" style="width:100%;">
+
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -413,15 +423,22 @@
         }
     }
 
+    var productIntroductionHtml = '';
     $(function () {
         $('#advance_begintime').timespinner('setValue', '@obj.advance_begintime' ? '@obj.advance_begintime' : '00:01');
         $('#advance_time').timespinner('setValue', '@obj.advance_time' ? '@obj.advance_time' : '23:59');
-        var list = @datalistStr;
+
+        var theProductIntroductionStr = @theProductIntroductionStr;
+        for (var i = 0; i < theProductIntroductionStr.length; i++) {
+
+        }
+
+        var datalist = @datalistStr;
         var defaultContent = accordionPanelDayButton();//默认项
         var month = '';
         var monthContent = '';
-        for (var i = 0; i < list.length; i++) {
-            var rmonth = list[i].open_date.substr(0, 7);
+        for (var i = 0; i < datalist.length; i++) {
+            var rmonth = datalist[i].open_date.substr(0, 7);
             if (month != rmonth) {
                 $('#accordion_time_available').accordion('add', {
                     title: rmonth,
@@ -436,8 +453,8 @@
                 month = rmonth;
                 monthContent = '';//清空
             }
-            monthContent += accordionPanelDay(list[i]);
-            if (i == list.length - 1) {
+            monthContent += accordionPanelDay(datalist[i]);
+            if (i == datalist.length - 1) {
                 //最后一天填充当月数据
                 var panel = $('#accordion_time_available').accordion('getPanel', month);
                 $(panel).panel({ 'content': monthContent + defaultContent });
@@ -464,7 +481,6 @@
                     var values = $(daysdiv[j]).getValues();
                     $.extend(theEntityProductData, values);
 
-                    debugger;
                     if ($(daysdiv[j]).find(':checkbox').prop('checked')) {
                         theEntityProductData.is_opening = 1;
                         if (!$(daysdiv[j]).find('.easyui-numberbox:first').numberbox('getValue') || !$(daysdiv[j]).find('.easyui-numberbox:last').numberbox('getValue')) {

@@ -18,6 +18,8 @@ namespace Coldairarrow.Web
         AreaBusiness _areaBusiness = null;
         product_dateBusiness _product_dateBusiness = null;
         product_typeBusiness _product_typeBusiness = null;
+        product_IntroductionBusiness _product_IntroductionBusiness = null;
+
         TeamBusiness _teamBusiness = null;
         public ProductController()
         {
@@ -27,6 +29,7 @@ namespace Coldairarrow.Web
             _product_dateBusiness = new product_dateBusiness();
             _product_typeBusiness = new product_typeBusiness();
             _teamBusiness = new TeamBusiness();
+            _product_IntroductionBusiness = new product_IntroductionBusiness();
         }
 
         #region 视图功能
@@ -40,6 +43,7 @@ namespace Coldairarrow.Web
         {
             var theProduct = id == null ? new product() : _productBusiness.GetTheData(id);
             List<product_date> theProductData = id == null ? new List<product_date>() : _product_dateBusiness.GetDataList(id);
+            List<product_Introduction> theProductIntroduction = id == null ? new List<product_Introduction>() : _product_IntroductionBusiness.GetDataList(id);
             ViewData["theProduct"] = theProduct;
             ViewData["theProductData"] = theProductData;
             ViewData["emptyProductData"] = new product_date();
