@@ -26,7 +26,7 @@ namespace Coldairarrow.Web
         {
             var theData = id.IsNullOrEmpty() ? new productTagModel() : _product_tagBusiness.GetTheProductTagModel(id);
 
-            ViewData["ImagesDatas1"] = new ImagesBusiness().GetFilePath(theData.img_url);
+            ViewData["ImagesDatas1"] = new ImagesBusiness().GetFilePath(id, "img_url", theData.img_url);
             return View(theData);
         }
 

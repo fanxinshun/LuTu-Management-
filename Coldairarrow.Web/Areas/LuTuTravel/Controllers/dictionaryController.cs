@@ -25,7 +25,7 @@ namespace Coldairarrow.Web
         {
             var theData = id.IsNullOrEmpty() ? new dictionary() : _dictionaryBusiness.GetTheData(id);
             var _ImagesBusiness = new ImagesBusiness();
-            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(theData.images);
+            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(id, "images", theData.images);
 
             return View(theData);
         }
@@ -72,7 +72,10 @@ namespace Coldairarrow.Web
             if (theData.Id.IsNullOrEmpty())
             {
                 theData.Id = Guid.NewGuid().ToSequentialGuid();
-
+                if (theData.code == "citypartne")
+                {
+                    theData.value = RandomHelper.GenRandom(6);
+                }
                 _dictionaryBusiness.AddData(theData);
             }
             else

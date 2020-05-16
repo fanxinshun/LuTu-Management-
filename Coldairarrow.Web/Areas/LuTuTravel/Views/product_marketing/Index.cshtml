@@ -35,8 +35,8 @@
 </div>
 <script>
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 500;
-    var formHeight = 585;
+    var formWidth = '80%';
+    var formHeight = '100%';
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -70,16 +70,6 @@
                 { title: '营销团购价', field: 'team_price', width: 200 },
                 { title: '团长返佣金额', field: 'pteam_commission', width: 200 },
                 { title: '营销返佣金额', field: 'team_commission', width: 200 },
-                {
-                    title: '开始时间', field: 'marketing_starttime', width: 200, formatter: function (value, row, index) {
-                        return value == null ? '' : value.split(' ')[0];
-                    }
-                },
-                {
-                    title: '结束时间', field: 'marketing_endtime', width: 200, formatter: function (value, row, index) {
-                        return value == null ? '' : value.split(' ')[0];
-                    }
-                },
                 { title: '备注', field: 'remark', width: 200 }
             ]],
             onBeforeLoad: function (param) {

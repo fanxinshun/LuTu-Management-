@@ -23,15 +23,14 @@ namespace Coldairarrow.Entity.LuTuTravel
         public Int32? product_id { get; set; }
 
         /// <summary>
-        /// 营销开始时间
+        /// 营销主题
         /// </summary>
-        public DateTime? marketing_starttime { get; set; }
+        public String title { get; set; }
 
         /// <summary>
-        /// 营销结束时间
+        /// 成本价
         /// </summary>
-        public DateTime? marketing_endtime { get; set; }
-
+        public Decimal? origin_price { get; set; }
         /// <summary>
         /// 市场价/建议零售价
         /// </summary>

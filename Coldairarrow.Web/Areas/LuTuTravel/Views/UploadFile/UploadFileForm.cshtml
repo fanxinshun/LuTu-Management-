@@ -46,18 +46,20 @@
                 $.postJSON('/LuTuTravel/UploadFile/UploadFileToServer', { uploadType: uploadType, id: id, multiple: multiple, fileName: fileName, fileBase64: base64 }, function (resJson) {
                     loading(false);
                     if (resJson.Success) {
-                        var prevDiv = parent.$('#' + uploadType).prev();
+                        debugger;
+                        var imagesDiv = parent.$('#' + uploadType).prev();
+                        var imageHtml = $('#defaultImg').clone(true).attr('id', resJson.Data.ImageName).attr('src', resJson.Data.ServicePath + resJson.Data.ImageName).show();
                         if (multiple == '0') {//单张图片
                             parent.$('#' + uploadType).val(resJson.Data.ImageName);
                             //加载图片
-                            $(prevDiv).html(prevDiv.children().first().clone().attr('src', resJson.Data.ServicePath + resJson.Data.ImageName).show());
+                            $(imagesDiv).append($(imageHtml));
                             parent.dialogClose('UploadFileForm');
                         }
                         if (multiple == '1') {//多张图片
                             var value = parent.$('#' + uploadType).val();
                             parent.$('#' + uploadType).val(value + (value ? ',' : '') + resJson.Data.ImageName);//多张
                             //加载图片
-                            $(prevDiv).append(prevDiv.children().first().clone().attr('src', resJson.Data.ServicePath + resJson.Data.ImageName).show());
+                            $(imagesDiv).append($(imageHtml));
                         }
                         parent.parent.dialogMsg('上传成功!');
                     }

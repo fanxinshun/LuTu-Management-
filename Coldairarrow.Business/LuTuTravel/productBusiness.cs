@@ -119,19 +119,18 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 校验价格是否异常
         /// </summary>
         /// <returns></returns>
-        public bool PaymentAmount(product theData, product_marketing market)
+        public bool PaymentAmount(product theData)
         {
+            var markets = new product_marketingBusiness().GetIQueryable().Where(x => x.product_id == theData.Id).ToList();
             //bool ck1 = theData.origin_price < theData.price;//成本价 < 市场价
             //bool ck2 = theData.team_price < theData.origin_price;//成团价  < 成本价
             bool ck3 = theData.team_price > theData.origin_price + theData.team_commission + theData.share_amount;//成团价 > 成本价 + 返佣 + 分享所得优惠券
 
             bool b = true;
             bool b3 = true;//儿童票
-            if (market != null)
+            foreach (var item in markets)
             {
-                //b1 = market.price < theData.price;//营销市场价 < 市场价
-                //b2 = market.team_price < theData.team_price;//营销团购价 < 团购价
-                b = market.team_price > theData.origin_price + market.team_commission + theData.share_amount;//营销团购价 > 成本价 + 营销返佣 + 分享所得优惠券
+                b = item.team_price > item.origin_price + item.team_commission + theData.share_amount;//营销团购价 > 成本价 + 营销返佣 + 分享所得优惠券
             }
             return ck3 && b && b3;
         }

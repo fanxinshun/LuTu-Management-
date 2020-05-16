@@ -40,9 +40,9 @@ namespace Coldairarrow.Web
             ViewData["theProductData"] = theProductData;
             ViewData["emptyProductData"] = new product_date();
             var _ImagesBusiness = new ImagesBusiness();
-            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(theProduct.photooffarmers);
-            ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(theProduct.commodity_photo);
-            ViewData["ImagesDatas3"] = _ImagesBusiness.GetFilePath(theProduct.logo);
+            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(id, "photooffarmers", theProduct.photooffarmers);
+            ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(id, "commodity_photo", theProduct.commodity_photo);
+            ViewData["ImagesDatas3"] = _ImagesBusiness.GetFilePath(id, "logo", theProduct.logo);
             return View();
         }
 
@@ -85,9 +85,8 @@ namespace Coldairarrow.Web
         /// <param name="theData">保存的数据</param>
         public ActionResult SaveData(product theData, List<product_date> listProductDate)
         {
-            product_marketing market = new product_marketingBusiness().GetTheData(theData.Id);
             //校验价格是否亏本
-            if (!_productBusiness.PaymentAmount(theData, market))
+            if (!_productBusiness.PaymentAmount(theData))
             {
                 return Error("价格异常！请检查产品价格及营销价格");
             }

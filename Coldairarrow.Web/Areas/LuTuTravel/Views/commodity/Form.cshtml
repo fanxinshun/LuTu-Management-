@@ -72,7 +72,6 @@
                 <th>农户照片</th>
                 <td>
                     <div>
-                        <img onclick="DeleteFileToServer(theEntity.Id,'photooffarmers',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas1)
                             {
@@ -105,7 +104,6 @@
                 <th>产品logo</th>
                 <td>
                     <div>
-                        <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas3)
                             {
@@ -120,7 +118,6 @@
                 <th>商品照片</th>
                 <td>
                     <div>
-                        <img onclick="DeleteFileToServer(theEntity.Id,'commodity_photo',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas2)
                             {
@@ -128,8 +125,8 @@
                             }
                         }
                     </div>
-                    <input id="commodity_photo" name="commodityd_photo" type="hidden" value="@obj.commodity_photo">
-                    <a id="openUploadForm" onclick="openUploadForm('commodity_photo','1')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">打开文件上传窗口</a>
+                    <input id="commodity_photo" name="commodity_photo" type="hidden" value="@obj.commodity_photo">
+                    <a id="openUploadForm" onclick="openUploadForm(theEntity.Id,'commodity_photo','1')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">打开文件上传窗口</a>
                 </td>
             </tr>
             <tr>
@@ -307,31 +304,29 @@
     }
 
     $(function () {
-        var list = @datalistStr;
+        var datalist = @datalistStr;
         var defaultContent = accordionPanelDayButton();//默认项
-        var month = '';
+        var month = datalist.length > 0 ? datalist[0].open_date.substr(0, 7) : '';//第一个月份
         var monthContent = '';
-        for (var i = 0; i < list.length; i++) {
-            var rmonth = list[i].open_date.substr(0, 7);
+        for (var i = 0; i < datalist.length; i++) {
+            var rmonth = datalist[i].open_date.substr(0, 7);
             if (month != rmonth) {
                 $('#accordion_time_available').accordion('add', {
-                    title: rmonth,
-                    selected: true
+                    title: month,
+                    selected: true,
+                    content: monthContent + defaultContent
                 });
-
-                if (month != '') {
-                    //每月一号填充上月数据
-                    var panel = $('#accordion_time_available').accordion('getPanel', month);
-                    $(panel).panel({ 'content': monthContent + defaultContent });
-                }
                 month = rmonth;
                 monthContent = '';//清空
             }
-            monthContent += accordionPanelDay(list[i]);
-            if (i == list.length - 1) {
+            monthContent += accordionPanelDay(datalist[i]);
+            if (i == datalist.length - 1) {
                 //最后一天填充当月数据
-                var panel = $('#accordion_time_available').accordion('getPanel', month);
-                $(panel).panel({ 'content': monthContent + defaultContent });
+                $('#accordion_time_available').accordion('add', {
+                    title: rmonth,
+                    selected: true,
+                    content: monthContent + defaultContent
+                });
             }
         }
         

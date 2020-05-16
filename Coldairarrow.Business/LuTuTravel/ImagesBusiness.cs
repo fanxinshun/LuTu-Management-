@@ -12,17 +12,24 @@ namespace Coldairarrow.Business.LuTuTravel
 {
     public class ImagesBusiness : BaseBusiness<ImagesData>
     {
-        public List<ImagesData> GetFilePath(string fileNames)
+        /// <summary>
+        /// 图片对象
+        /// </summary>
+        /// <param name="imgObject">图片归属对象</param>
+        /// <param name="imgType">图片分类</param>
+        /// <param name="imageNames">图片集合</param>
+        /// <returns></returns>
+        public List<ImagesData> GetFilePath(object imgObject, string imgType, string imageNames)
         {
             var imagesDatas = new List<ImagesData>() { };
-            if (fileNames.IsNullOrEmpty())
+            if (imageNames.IsNullOrEmpty())
             {
                 return imagesDatas;
             }
-            string[] names = fileNames.Split(',');
+            string[] names = imageNames.Split(',');
             for (int i = 0; i < names.Length; i++)
             {
-                var imagesData = new ImagesData();
+                var imagesData = new ImagesData() { ImgObject = imgObject, ImgType = imgType };
                 imagesData.ImageUrl = imagesData.ServicePath + names[i];
                 imagesDatas.Add(imagesData);
             }
@@ -47,6 +54,7 @@ namespace Coldairarrow.Business.LuTuTravel
             var _ProductBusiness = new ProductBusiness();
             var _product_tagBusiness = new product_tagBusiness();
             var _DictionaryBusiness = new DictionaryBusiness();
+            var _product_IntroductionBusiness = new product_IntroductionBusiness();
             switch (uploadType)
             {
                 case "images":
@@ -62,6 +70,7 @@ namespace Coldairarrow.Business.LuTuTravel
                     obj = (dictionary)_DictionaryBusiness.GetEntity(id);
                     break;
                 default:
+                    obj = (product_Introduction)_product_IntroductionBusiness.GetTheData(uploadType);
                     break;
             }
             if (obj != null)
@@ -85,14 +94,16 @@ namespace Coldairarrow.Business.LuTuTravel
                         _ProductBusiness.UpdateAny(obj, new List<string>() { "commodity_photo" });
                         break;
                     case "img_url"://热门城市logo 
-                        obj.img_url = multiple == "0" ? name : (string.IsNullOrEmpty(obj.img_url.IsNullOrEmpty) ? name : obj.img_url + "," + name);
+                        obj.img_url = multiple == "0" ? name : (string.IsNullOrEmpty(obj.img_url) ? name : obj.img_url + "," + name);
                         _product_tagBusiness.UpdateAny(obj, new List<string>() { "img_url" });
                         break;
                     case "dicimages"://数据字典照片 
-                        obj.images = multiple == "0" ? name : (string.IsNullOrEmpty(obj.images.IsNullOrEmpty) ? name : obj.images + "," + name);
+                        obj.images = multiple == "0" ? name : (string.IsNullOrEmpty(obj.images) ? name : obj.images + "," + name);
                         _DictionaryBusiness.UpdateAny(obj, new List<string>() { "images" });
                         break;
                     default:
+                        obj.picture = multiple == "0" ? name : (string.IsNullOrEmpty(obj.picture) ? name : obj.picture + "," + name);
+                        _product_IntroductionBusiness.UpdateAny(obj, new List<string>() { "picture" });
                         break;
                 }
             }
@@ -119,6 +130,7 @@ namespace Coldairarrow.Business.LuTuTravel
             var _ProductBusiness = new ProductBusiness();
             var _product_tagBusiness = new product_tagBusiness();
             var _DictionaryBusiness = new DictionaryBusiness();
+            var _product_IntroductionBusiness = new product_IntroductionBusiness();
             switch (uploadType)
             {
                 case "images":
@@ -134,6 +146,7 @@ namespace Coldairarrow.Business.LuTuTravel
                     obj = (dictionary)_DictionaryBusiness.GetEntity(id);
                     break;
                 default:
+                    obj = (product_Introduction)_product_IntroductionBusiness.GetEntity(uploadType);
                     break;
             }
             string tempName = string.Empty;
@@ -172,6 +185,9 @@ namespace Coldairarrow.Business.LuTuTravel
                         _DictionaryBusiness.UpdateAny(obj, new List<string>() { "images" });
                         break;
                     default:
+                        tempName = obj.picture;
+                        obj.picture = tempName.Replace(fileName + ",", "").Replace("," + fileName, "").Replace(fileName, "");
+                        _product_IntroductionBusiness.UpdateAny(obj, new List<string>() { "picture" });
                         break;
                 }
             }

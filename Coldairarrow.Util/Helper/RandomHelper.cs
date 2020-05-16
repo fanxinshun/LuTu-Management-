@@ -33,5 +33,20 @@ namespace Coldairarrow.Util
         {
             return source.ToList()[Next(0, source.Count())];
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static string GenRandom(int len)
+        {
+            string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            Random randrom = new Random((int)DateTime.Now.Ticks);
+            string str = "";
+            for (int i = 0; i < len; i++)
+            {
+                str += chars[randrom.Next(chars.Length)];
+            }
+            return str;
+        }
     }
 }

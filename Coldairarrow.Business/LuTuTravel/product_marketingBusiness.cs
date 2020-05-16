@@ -190,25 +190,7 @@ namespace Coldairarrow.Business.LuTuTravel
 
             return GetListBySql<productMarketingModel>(sql, paramters);
         }
-        /// <summary>
-        /// 校验产品是否有营销
-        /// </summary>
-        /// <returns></returns>
-        public bool CheckTheDataByProductId(product_marketing theData)
-        {
-            var q = GetIQueryable().Where(x => x.product_id == theData.product_id && x.marketing_endtime >= theData.marketing_starttime);
-            return q.ToList().Count > 0;
-        }
 
-        /// <summary>
-        /// 获取产品最新的营销活动
-        /// </summary>
-        /// <param name="id">主键</param>
-        /// <returns></returns>
-        public product_marketing GetTheData(int product_id)
-        {
-            return GetIQueryable().FirstOrDefault(x => x.product_id == product_id && x.marketing_endtime > DateTime.Now);
-        }
 
         /// <summary>
         /// 获取指定的单条数据

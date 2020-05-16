@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Coldairarrow.Util.Helper;
+using Microsoft.AspNetCore.Hosting;
 using System;
 
 namespace Coldairarrow.Util
@@ -30,6 +31,10 @@ namespace Coldairarrow.Util
         /// 网站根地址
         /// </summary>
         public static string WebRootUrl { get; set; } = "http://localhost:51126";
+        /// <summary>
+        /// 文件服务器地址
+        /// </summary>
+        public static string fastdfs_downloadServer { get; set; } = FastDFSHelper.GetServicePath();
 
         #endregion
 
@@ -38,7 +43,7 @@ namespace Coldairarrow.Util
         /// <summary>
         /// 运行模式
         /// </summary>
-        public static RunModel RunModel { get; } = RunModel.Publish;
+        public static RunModel RunModel { get; } = RunModel.LocalTest;
 
         /// <summary>
         /// 网站文件根路径

@@ -53,11 +53,10 @@
                 <th>上传图片</th>
                 <td>
                     <div>
-                        <img onclick="DeleteFileToServer(theEntity.Id,'dicimages',$(this).attr('src'))" class="deleteImg" onclick="DeleteFileToServer(theEntity.Id,'images',$(this).attr('src'))" style="width:120px;height:90px;display:none" />
                         @{
                             foreach (var item in ImagesDatas1)
                             {
-                                <img onclick="DeleteFileToServer(theEntity.Id,'dicimages',$(this).attr('src'))" class="deleteImg" onclick="DeleteFileToServer(theEntity.Id,'images',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
+                                <img onclick="DeleteFileToServer(theEntity.Id,'dicimages',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
                             }
                         }
                     </div>

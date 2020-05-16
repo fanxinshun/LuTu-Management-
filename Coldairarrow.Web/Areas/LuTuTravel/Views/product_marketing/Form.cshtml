@@ -10,10 +10,15 @@
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
-            <col style="width:80px;" />
+            <col style="width:15%;" />
         </colgroup>
         <tbody>
-
+            <tr>
+                <th>主题</th>
+                <td>
+                    <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'50%',required:false">
+                </td>
+            </tr>
             <tr>
                 <th>产品/门票</th>
                 <td>
@@ -28,6 +33,7 @@
                                            $('span[name=pprice]').html(record.price);
                                            $('span[name=pteam_price]').html(record.team_price);
                                            $('span[name=pteam_commission]').html(record.team_commission);
+                                           loadProductData(record.Id);
                                        },
                                         onBeforeLoad:function(){
                                             if('@obj.product_marketing_id'){
@@ -52,6 +58,12 @@
                     <span name="porigin_price">
                         @obj.porigin_price
                     </span>
+                </td>
+            </tr>
+            <tr>
+                <th>营销成本价</th>
+                <td>
+                    <input name="origin_price" value="@obj.origin_price" class="easyui-numberbox" data-options="width:'50%',required:true,min:0,max:100000,precision:2">
                 </td>
             </tr>
             <tr>
@@ -97,15 +109,11 @@
                 </td>
             </tr>
             <tr>
-                <th>营销开始时间</th>
+                <th>营销时间段</th>
                 <td>
-                    <input name="marketing_starttime" value="@obj.marketing_starttime" class="easyui-datebox" data-options="width:'50%',required:true,min:new Date()">
-                </td>
-            </tr>
-            <tr>
-                <th>营销结束时间</th>
-                <td>
-                    <input name="marketing_endtime" value="@obj.marketing_endtime" class="easyui-datebox" data-options="width:'50%',required:true">
+                    <div id="accordion_time_available" class="easyui-accordion" style="width:100%;">
+
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -123,15 +131,163 @@
 <script>
     var rootUrl = '@Url.Content("~/")';
     var theEntity = @objStr;
+    //生成每一天的样式
+    function accordionPanelDay(obj) {
+        var day = (new Date(obj.open_date)).getDate();
+        var accordionPanelDays = '<div style="float:left;width:13%">';//每一天的控件/布局
+        accordionPanelDays += '<input type="hidden" id="product_date_id" value="' + (obj.product_date_id || '') + '">';
+        accordionPanelDays += '<input type="hidden" id="product_marketing_id" value="' + (obj.product_marketing_id || '') + '">';
+        accordionPanelDays += '<input type="checkbox" ' + (obj.product_marketing_id && obj.product_marketing_id == theEntity.product_marketing_id ? 'checked="checked" ' : '') + (obj.product_marketing_id && obj.product_marketing_id != theEntity.product_marketing_id ? 'disabled="disabled" ' : '') + '>';
+        accordionPanelDays += '<input type="hidden" name="open_date" value="' + obj.open_date + '">';
+        accordionPanelDays += '<span>' + day.toString() + (day < 10 ? '&nbsp;' : '') + '</span>';
+        accordionPanelDays += '</div>';
+        return accordionPanelDays;
+    }
+    function accordionPanelDayButton() {
+        var foottDiv = '<div style="float:left;width:100%;text-align:right">';//Panel Button
+        foottDiv += '<a onclick="checkAll($(this).parent())" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-ok\'">默认/全选</a>';
+        foottDiv += '<a onclick="goNextMonthPanel()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一月</a>';
+        foottDiv += '</div>';
+        foottDiv += '<div id="foottCheckboxDiv" style="float:left;width:100%;text-align:right">';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,1)">周一&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,2)">周二&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,3)">周三&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,4)">周四&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,5)">周五&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,6)">周六&nbsp';
+        foottDiv += '<input type="checkbox" onclick="foottCheckboxClick(this,0)">周日&nbsp';
+        foottDiv += '</div>';
+        return foottDiv;
+    }
+    //按周选择
+    function foottCheckboxClick(ck, wk) {
+        var divs = $(ck).parent().parent().find('div');
+        for (var i = 0; i < $(divs).length - 2; i++) {
+            var input_open_date = $(divs).eq(i).find('input[name=open_date]');//开团时间隐藏框
+            var ckbox = $(input_open_date).prev(':checkbox:not(:disabled)');//勾选框
+            if (ckbox) {
+                if (wk == new Date($(input_open_date).val()).getDay()) {
+                    var isck = $(ck).prop('checked');
+                    $(divs).eq(i).find(':checkbox:not(:disabled)').prop('checked', isck);
+                }
+            }
+        }
+    }
 
+    //默认/全选
+    function checkAll(foottDiv) {
+        var nochecked = $(foottDiv).parent().find(':checkbox:not(:disabled):not(:checked)');
+        if (nochecked.length > 0) {//存在没有勾选的
+            $(foottDiv).parent().find(':checkbox:not(:disabled)').prop('checked', true);
+        } else {
+            $(foottDiv).parent().find(':checkbox:not(:disabled)').prop('checked', false);
+        }
+    }
+    //下一月
+    function goNextMonthPanel() {
+        var panel = $('#accordion_time_available').accordion('getSelected');
+        var title = $(panel).panel('options').title;
+        var date = new Date(title);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var newdate = new Date(year, month + 1, 0);
+        time_availableClick(newdate);
+    }
+    //初始化一个pannel
+    function time_availableClick(date) {
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var newdate = new Date(year, month, 0);
+        var d = newdate.getDate();
+
+        month = month < 10 ? ('0' + month) : month.toString();
+        var title = year.toString() + '-' + month;
+
+        var content = '';
+        for (var i = 1; i <= d; i++) {
+            content += accordionPanelDay({ open_date: title + '-' + (i < 10 ? '0' : '') + i.toString() });
+        }
+        content += accordionPanelDayButton();
+
+        var panel = $('#accordion_time_available').accordion('getPanel', title);
+        if (panel) {
+            $('#accordion_time_available').accordion('select', title);
+        } else {
+            dialogError('请在产品页面维护开团时间');
+        }
+    }
+    var pId = '@obj.pId';
+
+    function loadProductData(productId) {
+        if (!productId) return;
+        $.postJSON(rootUrl + 'LuTuTravel/product_marketing/GetProductDataList', { 'productId': productId }, function (resJson) {
+            if (resJson.Success) {
+                debugger;
+                datalist = resJson.Data;
+                pId = productId;
+                var defaultContent = accordionPanelDayButton();//默认项
+                var month = datalist.length > 0 ? datalist[0].open_date.substr(0, 7) : '';//第一个月份
+                var monthContent = '';
+                for (var i = 0; i < datalist.length; i++) {
+                    var rmonth = datalist[i].open_date.substr(0, 7);
+                    if (month != rmonth) {
+                        $('#accordion_time_available').accordion('add', {
+                            title: month,
+                            selected: true,
+                            content: monthContent + defaultContent
+                        });
+                        month = rmonth;
+                        monthContent = '';//清空
+                    }
+                    debugger;
+                    monthContent += accordionPanelDay(datalist[i]);
+                    if (i == datalist.length - 1) {
+                        //最后一天填充当月数据
+                        $('#accordion_time_available').accordion('add', {
+                            title: rmonth,
+                            selected: true,
+                            content: monthContent + defaultContent
+                        });
+                    }
+                }
+            }
+            else {
+                debugger;
+                dialogError(resJson.Msg);
+            }
+        });
+
+    }
+
+    var datalist = '';
     $(function () {
+        loadProductData(pId);
+
         $('#saveForm').click(function () {
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
-
+            debugger;
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
-            $.postJSON(rootUrl + 'LuTuTravel/product_marketing/SaveData', theEntity, function (resJson) {
+            var datalistProductData = [];
+            var panels = $('#accordion_time_available').accordion('panels');
+            for (var i = 0; i < panels.length; i++) {
+                var daysdiv = $(panels[i]).panel('body').find('div');
+                for (var j = 0; j < daysdiv.length - 2; j++) {
+                    var theEntityProductData = new Object();
+                    theEntityProductData.product_date_id = $(daysdiv).eq(j).find('input[id=product_date_id]').val();
+                    if ($(daysdiv[j]).find(':checkbox').prop('checked')) {
+                        theEntityProductData.is_opening = '1';//是否勾选当天营销数据
+                        theEntityProductData.product_marketing_id = theEntity.product_marketing_id;
+                    }
+                    else {
+                        theEntityProductData.is_opening = '0';
+                        theEntityProductData.product_marketing_id = $(daysdiv).eq(j).find('input[id=product_marketing_id]').val();
+                    }
+                    datalistProductData.push(theEntityProductData);
+                }
+            }
+            $.postJSON(rootUrl + 'LuTuTravel/product_marketing/SaveData', { "theData": theEntity, "listProductDate": datalistProductData }, function (resJson) {
                 if (resJson.Success) {
                     parent.dialogMsg('保存成功!');
                     parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');

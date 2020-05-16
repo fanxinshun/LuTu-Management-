@@ -42,14 +42,35 @@ namespace Coldairarrow.Web
         public ActionResult Form(int? id)
         {
             var theProduct = id == null ? new product() : _productBusiness.GetTheData(id);
-            List<product_date> theProductData = id == null ? new List<product_date>() : _product_dateBusiness.GetDataList(id);
-            List<product_Introduction> theProductIntroduction = id == null ? new List<product_Introduction>() : _product_IntroductionBusiness.GetDataList(id);
             ViewData["theProduct"] = theProduct;
+
+            List<product_date> theProductData = id == null ? new List<product_date>() : _product_dateBusiness.GetDataList(id);
             ViewData["theProductData"] = theProductData;
-            ViewData["emptyProductData"] = new product_date();
+
             var _ImagesBusiness = new ImagesBusiness();
-            ViewData["ImagesDatas1"] = _ImagesBusiness.GetFilePath(theProduct.images);
-            ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(theProduct.logo);
+            List<ImagesData> allImageDatas = new List<ImagesData>();
+            List<product_Introduction> theProductIntroduction = id == null ? new List<product_Introduction>() { new product_Introduction() { days = 1 } } : _product_IntroductionBusiness.GetDataList(id);
+            if (theProductIntroduction == null || theProductIntroduction.Count == 0)
+            {
+                theProductIntroduction = new List<product_Introduction>() { new product_Introduction() { Id = "", days = 1 } };
+            }
+            else
+            {
+                var IntroductionImages = new Dictionary<string, List<ImagesData>>() { };
+                foreach (var item in theProductIntroduction)
+                {
+                    allImageDatas.AddRange(_ImagesBusiness.GetFilePath(id, item.Id, item.picture));
+                }
+                ViewData["IntroductionImages"] = IntroductionImages;
+
+            }
+            ViewData["theProductIntroduction"] = theProductIntroduction;
+
+            ViewData["emptyProductData"] = new product_date();
+
+            allImageDatas.AddRange(_ImagesBusiness.GetFilePath(id, "images", theProduct.images));
+            allImageDatas.AddRange(_ImagesBusiness.GetFilePath(id, "logo", theProduct.logo));
+            ViewData["allImageDatas"] = allImageDatas;
             return View();
         }
 
@@ -109,11 +130,10 @@ namespace Coldairarrow.Web
         /// 保存
         /// </summary>
         /// <param name="theData">保存的数据</param>
-        public ActionResult SaveData(product theData, List<product_date> listProductDate)
+        public ActionResult SaveData(product theData, List<product_date> listProductDate, List<product_Introduction> datalistIntroduction)
         {
-            product_marketing market = new product_marketingBusiness().GetTheData(theData.Id);
             //校验价格是否亏本
-            if (!_productBusiness.PaymentAmount(theData, market))
+            if (!_productBusiness.PaymentAmount(theData))
             {
                 return Error("价格异常！请检查产品价格及营销价格");
             }
@@ -146,6 +166,43 @@ namespace Coldairarrow.Web
                 theData.update_time = DateTime.Now;
                 _productBusiness.UpdateData(theData);
             }
+
+            var addIntroductions = new List<product_Introduction>();
+            foreach (var item in datalistIntroduction)
+            {
+                if (item.Id.IsNullOrEmpty())
+                {
+                    addIntroductions.Add(new product_Introduction()
+                    {
+                        Id = Guid.NewGuid().ToSequentialGuid(),
+                        productId = theData.Id,
+                        days = item.days,
+                        title = item.title,
+                        scheduling = item.scheduling,
+                        stay = item.stay,
+                        food = item.food,
+                        create_by = Operator.UserId,
+                        create_time = DateTime.Now
+                    });
+                }
+                else
+                {
+                    var introduction = new product_Introduction()
+                    {
+                        Id = item.Id,
+                        days = item.days,
+                        title = item.title,
+                        scheduling = item.scheduling,
+                        stay = item.stay,
+                        food = item.food,
+                        update_by = Operator.UserId,
+                        update_time = DateTime.Now
+                    };
+                    _product_IntroductionBusiness.UpdateAny(introduction, new List<string>() { "days", "title", "scheduling", "stay", "food", "update_by", "update_time" });
+                }
+            }
+            _product_IntroductionBusiness.Insert(addIntroductions);
+
             var addProductDate = new List<product_date>();
             var updateProductDate = new List<product_date>();
             var teamlist = new List<team>();

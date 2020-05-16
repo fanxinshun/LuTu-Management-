@@ -534,9 +534,9 @@
         dialogComfirm('是否删除图片？', function () {
             $.postJSON('/LuTuTravel/UploadFile/DeleteFileToServer', { 'deleteType': deleteType, 'Id': theEntity.Id, 'fileName': fileName }, function (resJson) {
                 if (resJson.Success) {
-                    parent.dialogMsg('删除成功!');
                     $('img[src="' + resJson.Data.ServicePath + resJson.Data.ImageName + '"]').remove();
-                    $('#' + deleteType).val($('#' + deleteType).val().replace(resJson.Data.ImageName + ',', '').replace(',' + resJson.Data.ImageName, '').replace(resJson.Data.ImageName, ''));//多张
+                    $('#' + deleteType).val($('#' + deleteType).val().replace(resJson.Data.ImageName + ',', '').replace(',' + resJson.Data.ImageName, '').replace(resJson.Data.ImageName, ''));
+                    parent.dialogMsg('删除成功!');
                 }
                 else {
                     dialogError(resJson.Msg);

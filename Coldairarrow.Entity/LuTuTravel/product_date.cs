@@ -23,6 +23,11 @@ namespace Coldairarrow.Entity.LuTuTravel
         public Int32 product_id { get; set; }
 
         /// <summary>
+        /// 营销表Id
+        /// </summary>
+        public string product_marketing_id { get; set; }
+
+        /// <summary>
         /// 当天是否开团
         /// </summary>
         public String is_opening { get; set; }

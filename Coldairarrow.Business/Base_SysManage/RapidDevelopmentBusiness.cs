@@ -315,7 +315,7 @@ namespace Coldairarrow.Web
                 }
 
                     //数据表格列
-                string end = (index == tableInfoList.Count - 2) ? "" : ",";
+                string end = (index == tableInfoList.Count - 1) ? "" : ",";
                 string newCol =$@"
                 {{ title: '{aField.Description}', field: '{aField.Name}', width: 200 }}{end}";
                 tableColsBuilder.Append(newCol);

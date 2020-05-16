@@ -132,5 +132,20 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// </summary>
         public String real_name { get; set; }
 
+        /// <summary>
+        /// 1 一级团长 2 二级团长 3城市合伙人
+        /// </summary>
+        public Int32? header_level { get; set; }
+
+        /// <summary>
+        /// 邀请码
+        /// </summary>
+        public String invite_code { get; set; }
+
+        /// <summary>
+        /// 邀请人的邀请码
+        /// </summary>
+        public String share_invite_code { get; set; }
+
     }
 }
