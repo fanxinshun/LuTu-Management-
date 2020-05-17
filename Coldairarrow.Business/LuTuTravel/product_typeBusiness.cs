@@ -17,13 +17,13 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<product_type> GetDataList(string condition, string keyword, Pagination pagination)
+        public List<product_type> GetDataList(string type_name, Pagination pagination)
         {
             var q = GetIQueryable();
 
             //模糊查询
-            if (!condition.IsNullOrEmpty() && !keyword.IsNullOrEmpty())
-                q = q.Where($@"{condition}.Contains(@0)", keyword);
+            if (!type_name.IsNullOrEmpty())
+                q = q.Where(x => x.type_name.Contains(type_name));
 
             return q.GetPagination(pagination).ToList();
         }
@@ -84,7 +84,10 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="theData">删除的数据</param>
         public void DeleteData(List<string> ids)
         {
-            Delete(ids);
+            var list = GetIQueryable().Where(x => ids.Contains(x.id)).ToList();
+            list.ForEach(x => x.enable_flag = 0);
+
+            UpdateAny(list, new List<string>() { "enable_flag" });
         }
 
         #endregion

@@ -1,0 +1,73 @@
+@using Coldairarrow.Entity.LuTuTravel;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (product_type)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            
+            <tr>
+                <th>产品类型名称</th>
+                <td>
+                    <input name="type_name" value="@obj.type_name" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>产品标题</th>
+                <td>
+                    <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>排序</th>
+                <td>
+                    <input name="sort" value="@obj.sort" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>1 精品旅游 2特价门票 3扶贫商品</th>
+                <td>
+                    <input name="type" value="@obj.type" class="easyui-numberbox" data-options="width:'200px',required:true,min:1,max:3">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'LuTuTravel/product_type/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogMsg('保存成功!');
+                    parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>

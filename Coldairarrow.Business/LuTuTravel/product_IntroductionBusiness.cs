@@ -19,7 +19,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <returns></returns>
         public List<product_Introduction> GetDataList(int? productId)
         {
-            return GetIQueryable().Where(x => x.productId == productId).ToList();
+            return GetIQueryable().Where(x => x.productId == productId).OrderBy(x => x.days).ToList();
         }
 
         /// <summary>

@@ -18,11 +18,6 @@ namespace Coldairarrow.Entity.LuTuTravel
         public String id { get; set; }
 
         /// <summary>
-        /// 1 精品旅游 2特价门票 3扶贫商品
-        /// </summary>
-        public Int32? type { get; set; }
-
-        /// <summary>
         /// 产品类型(华东,华南等)
         /// </summary>
         public String type_name { get; set; }
@@ -56,6 +51,15 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 排序
         /// </summary>
         public Int32 sort { get; set; }
+
+        /// <summary>
+        /// 1 精品旅游 2特价门票 3扶贫商品
+        /// </summary>
+        public Int32? type { get; set; }
+        /// <summary>
+        /// 是否生效(1:有效，0:无效)
+        /// </summary>
+        public Int32? enable_flag { get; set; }
 
     }
 }

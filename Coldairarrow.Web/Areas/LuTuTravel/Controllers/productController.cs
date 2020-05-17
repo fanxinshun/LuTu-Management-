@@ -236,6 +236,18 @@ namespace Coldairarrow.Web
             _productBusiness.ChangeStatus(id);
             return Success();
         }
+
+        /// <summary>
+        /// DeleteIntroduction
+        /// </summary>
+        /// <param name="theData">删除的数据</param>
+        public ActionResult DeleteIntroduction(string id)
+        {
+            var theData = _product_IntroductionBusiness.GetTheData(id);
+            _product_IntroductionBusiness.Delete(theData);
+            return Success();
+        }
+
         /// <summary>
         /// 复制产品
         /// </summary>
