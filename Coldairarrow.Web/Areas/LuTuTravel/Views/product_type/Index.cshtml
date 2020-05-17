@@ -52,7 +52,7 @@
                 
                 { title: '产品类型名称', field: 'type_name', width: 200 },
                 { title: '标题', field: 'title', width: 200 },
-                { title: '排序', field: 'type', width: 200 },
+                { title: '排序', field: 'sort', width: 200 },
                 {
                     title: '归类', field: 'type', width: 200, formatter: function (value, row, index) {
                         if (value == '1') return '精品旅游';
@@ -61,13 +61,7 @@
                     }
                 },
                 { title: '是否生效(1:有效，0:无效)', field: 'enable_flag', width: 200 }
-            ]],
-            onBeforeLoad: function (param) {
-
-            },
-            onBeforeSelect: function () {
-                return false;
-            }
+            ]]
         });
     }
 
@@ -81,7 +75,7 @@
                 title: '添加数据',
                 width: formWidth,
                 height: formHeight,
-                url: rootUrl + 'LuTuTravel/product_type/Form',
+                url: rootUrl + 'LuTuTravel/product_type/Form'
             });
         });
 
@@ -99,7 +93,7 @@
                 title: '修改数据',
                 width: formWidth,
                 height: formHeight,
-                url: rootUrl + 'LuTuTravel/product_type/Form?id=' + id,
+                url: rootUrl + 'LuTuTravel/product_type/Form?id=' + id
             });
         });
 
