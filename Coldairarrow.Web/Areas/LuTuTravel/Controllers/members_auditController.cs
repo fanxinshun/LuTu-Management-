@@ -24,6 +24,8 @@ namespace Coldairarrow.Web
         {
             var theData = id.IsNullOrEmpty() ? new members_audit() : _members_auditBusiness.GetTheData(id);
 
+            var _ImagesBusiness = new ImagesBusiness();
+            ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(id, "commodity_photo", theData.image_group);
             return View(theData);
         }
 

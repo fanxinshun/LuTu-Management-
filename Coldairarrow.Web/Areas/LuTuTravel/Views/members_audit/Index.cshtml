@@ -29,8 +29,8 @@
 
 <script>
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 500;
-    var formHeight = 410;
+    var formWidth = '80%';
+    var formHeight = '80%';
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -60,7 +60,7 @@
                 { title: '群名称', field: 'image_group_name', width: 200 },
                 { title: '邀请码', field: 'invite_code', width: 200 },
                 {
-                    title: '状态', field: 'status', width: 200, formatter: function (value, row, index) {
+                    title: '审核状态', field: 'status', width: 200, formatter: function (value, row, index) {
                         if (value == '0') return '待审核';
                         else if (value == '1') return '已通过';
                         else if (value == '3') return '已拒绝';
@@ -72,7 +72,7 @@
                         var ret = '';
                         if (row.status != '1')
                             ret = '<a onclick="ChangeOperateStatusAgree(\'' + row.id + '\',\'1\')">通过</a>' + '&nbsp&nbsp<a onclick="ChangeOperateStatusDisAgree(\'' + row.id + '\',\'3\')">拒绝</a>';
-                        return ret;//+ '&nbsp&nbsp<a onclick="show(\'' + row.id + '\')">查看</a>';
+                        return ret + '&nbsp&nbsp<a onclick="show(\'' + row.id + '\')">查看</a>';
                     }
                 },
             ]],
@@ -82,6 +82,16 @@
             onBeforeSelect: function () {
                 return false;
             }
+        });
+    }
+
+    function show(id) {
+        dialogOpen({
+            id: 'form',
+            title: '查看',
+            width: formWidth,
+            height: formHeight,
+            url: rootUrl + 'LuTuTravel/members_audit/Form?id=' + id,
         });
     }
     function ChangeOperateStatusAgree(id) {

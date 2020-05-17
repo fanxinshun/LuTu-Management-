@@ -373,7 +373,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         public String commodity_photo { get; set; }
 
         /// <summary>
-        /// 推荐语
+        /// 温馨提示
         /// </summary>
         public String cecommendation { get; set; }
 

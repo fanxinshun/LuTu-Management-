@@ -423,31 +423,27 @@
     }
     var IntroductionImages = @theProductIntroductionImages;
     function getTheProductIntroductionImagesStr(id) {
-        if (!id) return '';
-
         var upImagesHtml = '<div>';
         for (var i = 0; i < IntroductionImages.length; i++) {
             if (id == IntroductionImages[i].ImgType) {
                 debugger;
-                var img = '<img id = "' + IntroductionImages[i].ImageUrl + '" onclick="DeleteFileToServer(theEntity.Id,\'logo\',$(this).attr(\'src\'))" style="width:120px;height:90px" src="' + IntroductionImages[i].ImageUrl + '" />';
+                var img = '<img id = "' + IntroductionImages[i].ImageUrl + '" onclick="DeleteFileToServer(theEntity.Id,$(this).parent().next(\'input:hidden\').attr(\'id\'),$(this).attr(\'src\'))" style="width:120px;height:90px" src="' + IntroductionImages[i].ImageUrl + '" />';
                 upImagesHtml += img;
             }
         }
-
         upImagesHtml += '</div>';
-        upImagesHtml += '<input id="' + id + '" type="hidden" name="picture" value="">';
+        upImagesHtml += '<input id="' + (id || Number(Math.random().toString().substr(3, length) + Date.now()).toString(36)) + '" type="hidden" name="picture" >';
         upImagesHtml += '<a id = "openUploadForm" onclick = "openUploadForm(theEntity.Id,$(this).prev().attr(\'id\'),\'1\')" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'" > 打开文件上传窗口</a>';
         return upImagesHtml;
     }
 
     function getProductIntroductionHtml(obj) {
-        obj.Id = obj.Id || '';
-        var productIntroductionHtml = '<input type = "hidden" value = "' + obj.Id + '" />';
-        productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">第' + obj.days + '天行程主题：</div><div> <input value="' + (obj.title || '') + '" class="easyui-textbox" data-options="width:\'70%\',required:true,validType:\'length[0, 100]\'" /></div></div>';
+        var productIntroductionHtml = '<input type = "hidden" value = "' + (obj.Id || '') + '" />';
+        productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">第' + (obj.days || '') + '天行程主题：</div><div> <input value="' + (obj.title || '') + '" class="easyui-textbox" data-options="width:\'70%\',required:true,validType:\'length[0, 100]\'" /></div></div>';
         productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">行程安排：</div><div> <input value="' + (obj.scheduling || '') + '" class="easyui-textbox" data-options="height:\'120px\',width:\'70%\',required:true,multiline:true,validType:\'length[0, 2000]\'" /></div></div>';
         productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">住宿：</div><div> <input value="' + (obj.stay || '') + '" class="easyui-textbox" data-options="height:\'80px\',width:\'70%\',required:true,multiline:true,validType:\'length[0, 1000]\'" /></div></div>';
         productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">餐饮：</div><div> <input value="' + (obj.food || '') + '" class="easyui-textbox" data-options="width:\'70%\',required:true,validType:\'length[0, 1000]\'" /></div></div>';
-        productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%"></div>';
+        productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">图片：</div>';
         productIntroductionHtml += '<div>' + getTheProductIntroductionImagesStr(obj.Id) + '</div>';
         productIntroductionHtml += '<div style="text-align:right;width:99%"><a onclick="goNextProductIntroduction()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一天</a></div>';
         return productIntroductionHtml;
@@ -472,9 +468,12 @@
     $(function () {
         $('#advance_begintime').timespinner('setValue', '@obj.advance_begintime' ? '@obj.advance_begintime' : '00:01');
         $('#advance_time').timespinner('setValue', '@obj.advance_time' ? '@obj.advance_time' : '23:59');
-
+        debugger;
         var theProductIntroductionStr = @theProductIntroductionStr;
         for (var i = 0; i < theProductIntroductionStr.length; i++) {
+            debugger;
+            if (!theProductIntroductionStr[i].days)
+                theProductIntroductionStr[i].days = i;
             $('#Introduction').accordion('add', {
                 title: '第' + (i + 1) + "天",
                 selected: (i + 1) == theProductIntroductionStr.length,
@@ -492,7 +491,7 @@
                 $('#accordion_time_available').accordion('add', {
                     title: month,
                     selected: true,
-                    content: monthContent + defaultContent 
+                    content: monthContent + defaultContent
                 });
                 month = rmonth;
                 monthContent = '';//清空

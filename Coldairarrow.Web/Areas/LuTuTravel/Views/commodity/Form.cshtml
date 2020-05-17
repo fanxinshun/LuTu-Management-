@@ -2,13 +2,11 @@
 @using Coldairarrow.Util;
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
-    var ImagesDatas1 = (List<ImagesData>)(ViewData["ImagesDatas1"]);
     var ImagesDatas2 = (List<ImagesData>)(ViewData["ImagesDatas2"]);
-    var ImagesDatas3 = (List<ImagesData>)(ViewData["ImagesDatas3"]);
 
     var obj = (product)(ViewData["theProduct"]);
-    obj.commodity_presentations = obj.commodity_presentations.IsNullOrEmpty() ? @"【成长周期】
-【所用肥料】" : obj.commodity_presentations;
+    obj.commodity_presentations = obj.commodity_presentations.IsNullOrEmpty() ? @"【介绍】
+【选购说明】" : obj.commodity_presentations;
 
     obj.reference_menu = obj.reference_menu.IsNullOrEmpty() ? @"" : obj.reference_menu;
 
@@ -46,7 +44,7 @@
                 <th>所属区域</th>
                 <td>
                     <input id="area_code" name="area_code" value="@obj.area_code" class="easyui-combobox"
-                           data-options="required:true,editable:true,
+                           data-options="required:false,editable:true,
                                         valueField: 'code',
                                         textField: 'name',
                                         url: '@Url.Content("~/")LuTuTravel/area/GetAreaDataList'">
@@ -69,53 +67,13 @@
                 </td>
             </tr>
             <tr>
-                <th>农户照片</th>
-                <td>
-                    <div>
-                        @{
-                            foreach (var item in ImagesDatas1)
-                            {
-                                <img onclick="DeleteFileToServer(theEntity.Id,'photooffarmers',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
-                            }
-                        }
-                    </div>
-                    <input id="photooffarmers" type="hidden" name="photooffarmers" value="@obj.photooffarmers">
-                    <a id="openUploadForm" onclick="openUploadForm(theEntity.Id,'photooffarmers','1')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">打开文件上传窗口</a>
-                </td>
-            </tr>
-            <tr>
                 <th>商品介绍</th>
                 <td>
                     <textarea name="commodity_presentations" class="easyui-textbox" data-options="width:'100%',height:'160px',required:true,multiline:true,validType:'length[0,1000]'">@obj.commodity_presentations</textarea>
                 </td>
             </tr>
             <tr>
-                <th>推荐语</th>
-                <td>
-                    <input name="cecommendation" value="@obj.cecommendation" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,40]'">
-                </td>
-            </tr>
-            <tr>
-                <th>参考菜谱</th>
-                <td>
-                    <textarea name="reference_menu" class="easyui-textbox" data-options="width:'100%',height:'160px',required:false,multiline:true,validType:'length[0,1000]'">@obj.reference_menu</textarea>
-            </tr>
-            <tr>
-                <th>产品logo</th>
-                <td>
-                    <div>
-                        @{
-                            foreach (var item in ImagesDatas3)
-                            {
-                                <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
-                            }
-                        }
-                    </div>
-                    <input id="logo" type="hidden" name="logo" value="@obj.logo">
-                    <a id="openUploadForm" onclick="openUploadForm(theEntity.Id,'logo','0')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">打开文件上传窗口</a>
-            </tr>
-            <tr>
-                <th>商品照片</th>
+                <th>商品展示</th>
                 <td>
                     <div>
                         @{
@@ -127,6 +85,12 @@
                     </div>
                     <input id="commodity_photo" name="commodity_photo" type="hidden" value="@obj.commodity_photo">
                     <a id="openUploadForm" onclick="openUploadForm(theEntity.Id,'commodity_photo','1')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">打开文件上传窗口</a>
+                </td>
+            </tr>
+            <tr>
+                <th>温馨提示</th>
+                <td>
+                    <input name="cecommendation" value="@obj.cecommendation" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,40]'">
                 </td>
             </tr>
             <tr>
@@ -175,7 +139,7 @@
             <tr>
                 <th>是否是推荐(0否 1是)</th>
                 <td>
-                    <input name="recommend_status" value="@obj.recommend_status" class="easyui-numberbox" data-options="required:true,min:0,max:1">
+                    <input name="recommend_status" value="@(obj.recommend_status??0)" class="easyui-numberbox" data-options="required:true,min:0,max:1">
                 </td>
             </tr>
             <tr>
