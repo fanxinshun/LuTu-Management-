@@ -52,7 +52,7 @@
                         if (multiple == '0') {//单张图片
                             parent.$('#' + uploadType).val(resJson.Data.ImageName);
                             //加载图片
-                            $(imagesDiv).append($(imageHtml));
+                            $(imagesDiv).html($(imageHtml));
                             parent.dialogClose('UploadFileForm');
                         }
                         if (multiple == '1') {//多张图片

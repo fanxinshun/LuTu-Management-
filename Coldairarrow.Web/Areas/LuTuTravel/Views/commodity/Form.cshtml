@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
     var ImagesDatas2 = (List<ImagesData>)(ViewData["ImagesDatas2"]);
+    var ImagesDatas3 = (List<ImagesData>)(ViewData["ImagesDatas3"]);
 
     var obj = (product)(ViewData["theProduct"]);
     obj.commodity_presentations = obj.commodity_presentations.IsNullOrEmpty() ? @"【介绍】
@@ -92,6 +93,20 @@
                 <td>
                     <input name="cecommendation" value="@obj.cecommendation" class="easyui-textbox" data-options="width:'100%',required:true,validType:'length[0,40]'">
                 </td>
+            </tr>
+            <tr>
+                <th>产品logo</th>
+                <td>
+                    <div>
+                        @{
+                            foreach (var item in ImagesDatas3)
+                            {
+                                <img onclick="DeleteFileToServer(theEntity.Id,'logo',$(this).attr('src'))" style="width:120px;height:90px" src="@item.ImageUrl" />
+                            }
+                        }
+                    </div>
+                    <input id="logo" type="hidden" name="logo" value="@obj.logo">
+                    <a id="openUploadForm" onclick="openUploadForm(theEntity.Id,'logo','0')" class="easyui-linkbutton" data-options="iconCls:'icon-add'">打开文件上传窗口</a>
             </tr>
             <tr>
                 <th>成本价</th>
@@ -298,11 +313,6 @@
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
 
-            var noSelect = $('#area_code').combobox('getValue') == $('#area_code').combobox('getText');
-            if (noSelect) {
-                dialogError('请选择所属区域');
-                return;
-            }
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
 

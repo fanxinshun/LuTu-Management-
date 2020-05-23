@@ -42,6 +42,7 @@ namespace Coldairarrow.Web
 
             var _ImagesBusiness = new ImagesBusiness();
             ViewData["ImagesDatas2"] = _ImagesBusiness.GetFilePath(id, "commodity_photo", theProduct.commodity_photo);
+            ViewData["ImagesDatas3"] = _ImagesBusiness.GetFilePath(id, "logo", theProduct.logo);
             return View();
         }
 

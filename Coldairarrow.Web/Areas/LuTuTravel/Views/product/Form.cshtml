@@ -444,8 +444,7 @@
         productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">餐饮：</div><div> <input value="' + (obj.food || '') + '" class="easyui-textbox" data-options="width:\'70%\',required:false,validType:\'length[0, 1000]\'" /></div></div>';
         productIntroductionHtml += '<div style="padding:5px 10px"><div style="float:left;text-align:right;width:10%">图片：</div>';
         productIntroductionHtml += '<div>' + getTheProductIntroductionImagesStr(obj.Id) + '</div>';
-        productIntroductionHtml += '<div style="text-align:right;width:99%"><a onclick="goNextProductIntroduction()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一天</a></div>';
-        productIntroductionHtml += '<div style="text-align:right;width:99%"><a onclick="deleteIntroduction(\'' + (obj.Id || '') + '\')" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">删除</a></div>';
+        productIntroductionHtml += '<div style="text-align:right;width:99%"><a onclick="goNextProductIntroduction()" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'">下一天</a><a onclick="deleteIntroduction(\'' + (obj.Id || '') + '\')" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:\'icon-remove\'">删除</a></div>';
         return productIntroductionHtml;
     }
 
@@ -544,11 +543,6 @@
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
 
-            var noSelect = $('#area_code').combobox('getValue') == $('#area_code').combobox('getText');
-            if (noSelect) {
-                dialogError('请选择所属区域');
-                return;
-            }
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
 

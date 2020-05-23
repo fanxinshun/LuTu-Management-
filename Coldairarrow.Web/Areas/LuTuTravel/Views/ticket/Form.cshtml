@@ -612,11 +612,6 @@
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
 
-            var noSelect = $('#area_code').combobox('getValue') == $('#area_code').combobox('getText');
-            if (noSelect) {
-                dialogError('请选择所属区域');
-                return;
-            }
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
 
