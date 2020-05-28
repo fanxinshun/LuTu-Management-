@@ -349,7 +349,7 @@ namespace Coldairarrow.Util
 
         #region 内部成员
 
-        private static string BuildBody(Dictionary<string, object> parameters, ContentType contentType)
+        public static string BuildBody(Dictionary<string, object> parameters, ContentType contentType)
         {
             StringBuilder bodyBuilder = new StringBuilder();
             switch (contentType)

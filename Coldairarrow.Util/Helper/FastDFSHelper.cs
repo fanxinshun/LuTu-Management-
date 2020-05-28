@@ -20,8 +20,8 @@ namespace Coldairarrow.Util.Helper
         /// </summary>
         static FastDFSHelper()
         {
-            string[] trackers = ConfigHelper.GetValue("FastDFS", "fastdfs_trackers").Split(new char[','], StringSplitOptions.RemoveEmptyEntries);
-            string[] storages = ConfigHelper.GetValue("FastDFS", "fastdfs_storages").Split(new char[','], StringSplitOptions.RemoveEmptyEntries);
+            string[] trackers = ConfigHelper.GetValue("FastDFS", "fastdfs_trackers")?.Split(new char[','], StringSplitOptions.RemoveEmptyEntries);
+            string[] storages = ConfigHelper.GetValue("FastDFS", "fastdfs_storages")?.Split(new char[','], StringSplitOptions.RemoveEmptyEntries);
             int port = int.Parse(ConfigHelper.GetValue("FastDFS", "fastdfs_port"));
 
             foreach (var onetracker in trackers)

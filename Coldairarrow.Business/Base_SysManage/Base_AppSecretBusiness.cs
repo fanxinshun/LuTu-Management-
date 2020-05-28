@@ -10,7 +10,21 @@ namespace Coldairarrow.Business.Base_SysManage
     public class Base_AppSecretBusiness : BaseBusiness<Base_AppSecret>
     {
         #region 外部接口
+        /// <summary>
+        /// 获取数据列表
+        /// </summary>
+        /// <param name="condition">查询类型</param>
+        /// <param name="keyword">关键字</param>
+        /// <returns></returns>
+        public List<Base_AppSecret> GetDataList(string[] appIds)
+        {
+            if (appIds == null || appIds.Length == 0) return null;
 
+            var q = GetIQueryable();
+            q = q.Where(x => appIds.Contains(x.AppId));
+
+            return q.ToList();
+        }
         /// <summary>
         /// 获取数据列表
         /// </summary>
