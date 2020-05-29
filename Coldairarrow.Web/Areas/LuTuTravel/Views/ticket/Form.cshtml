@@ -8,14 +8,6 @@
     var ImagesDatas2 = (List<ImagesData>)(ViewData["ImagesDatas2"]);
 
     var objStr = Html.Raw(obj.ToJson());
-    obj.content = obj.content.IsNullOrEmpty() ? @"【入园凭证】
-【退改说明】
-【温馨提示】" : obj.content;
-    obj.scenic_spot = obj.scenic_spot.IsNullOrEmpty() ? @"【景点简介】
-【景点特色】
-【景点包含】" : obj.scenic_spot;
-    obj.line_recommendation = obj.line_recommendation.IsNullOrEmpty() ? @"【公共交通】
-【自驾线路】" : obj.line_recommendation;
 
     var datalist = (List<product_date>)(ViewData["theProductData"]);
     var datalistStr = Html.Raw(datalist.ToJson());
@@ -287,7 +279,7 @@
             <tr>
                 <th>是否是推荐(0否 1是)</th>
                 <td>
-                    <input name="recommend_status" value="@obj.recommend_status" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:1">
+                    <input name="recommend_status" value="@(obj.recommend_status?? 0)" class="easyui-numberbox" data-options="width:'20%',required:true,min:0,max:1">
                 </td>
             </tr>
             <tr>

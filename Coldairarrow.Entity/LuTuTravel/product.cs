@@ -18,6 +18,11 @@ namespace Coldairarrow.Entity.LuTuTravel
         public int Id { get; set; }
 
         /// <summary>
+        /// 外部系统门票ID
+        /// </summary> 
+        public int? ref_Id { get; set; }
+
+        /// <summary>
         /// 数据有效性
         /// </summary>
         public String enable_flag { get; set; }
@@ -36,7 +41,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 线路名称,景点名称
         /// </summary>
         public String title { get; set; }
-        
+
         /// <summary>
         /// 地区编码
         /// </summary>
@@ -56,7 +61,9 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// <summary>
         /// 预定须知
         /// </summary>
-        public String content { get; set; }
+        public String content { get; set; } = @"【入园凭证】
+【退改说明】
+【温馨提示】";
 
         /// <summary>
         /// 行程特色
@@ -71,12 +78,15 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// <summary>
         /// 景点详情
         /// </summary>
-        public String scenic_spot { get; set; }
+        public String scenic_spot { get; set; } = @"【景点简介】
+【景点特色】
+【景点包含】";
 
         /// <summary>
         /// 线路推荐
         /// </summary>
-        public String line_recommendation { get; set; }
+        public String line_recommendation { get; set; } = @"【公共交通】
+【自驾线路】";
 
         /// <summary>
         /// 产品图片地址，多张图片用“,"隔开
@@ -343,7 +353,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 分终端配置
         /// </summary>
         public String validity_terminal { get; set; }
-        
+
 
         /// <summary>
         /// 产地

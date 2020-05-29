@@ -8,7 +8,7 @@ namespace Coldairarrow.Util
     /// <summary>
     /// 时间帮助类
     /// </summary>
-    public class TimerHelper
+    public static class TimerHelper
     {
         /// <summary>
         /// 设置一个时间间隔的循环操作

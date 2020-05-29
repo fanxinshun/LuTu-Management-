@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Coldairarrow.Business.Base_SysManage;
+using Coldairarrow.Business.LuTuTravel;
 using Coldairarrow.DataRepository;
 using Coldairarrow.Entity.Base_SysManage;
 using Coldairarrow.Util;
@@ -75,6 +76,7 @@ namespace Coldairarrow.Web
             });
 
             InitEF();
+            new TimerBusiness();//开启定时任务
         }
 
         private void InitEF()

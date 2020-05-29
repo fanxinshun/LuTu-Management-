@@ -15,7 +15,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 门票ID
         /// </summary>
         [Key, Column(Order = 1)]
-        public Int32 Id { get; set; }
+        public Int32? Id { get; set; }
 
         /// <summary>
         /// 景区ID
