@@ -94,7 +94,7 @@ namespace Coldairarrow.Web
             {
                 theData.product_marketing_id = Guid.NewGuid().ToSequentialGuid();
                 theData.create_by = Operator.UserId;
-                theData.create_time = DateTime.Now;
+                theData.create_time = DateTime.Now.ToCstTime();
                 _product_marketingBusiness.AddData(theData);
 
                 foreach (var item in listProductDate)
@@ -109,7 +109,7 @@ namespace Coldairarrow.Web
             else
             {
                 theData.update_by = Operator.UserId;
-                theData.update_time = DateTime.Now;
+                theData.update_time = DateTime.Now.ToCstTime();
                 _product_marketingBusiness.UpdateData(theData);
 
                 foreach (var item in listProductDate)

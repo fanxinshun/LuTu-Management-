@@ -80,7 +80,7 @@ namespace Coldairarrow.Web
                 parentTag.area_code = null;
                 parentTag.img_url = null;
                 parentTag.create_by = Operator.UserId;
-                parentTag.create_time = DateTime.Now;
+                parentTag.create_time = DateTime.Now.ToCstTime();
 
                 _product_tagBusiness.AddData(parentTag);
                 theData.parent_id = parentTag.Id;
@@ -90,13 +90,13 @@ namespace Coldairarrow.Web
             {
                 theData.Id = Guid.NewGuid().ToSequentialGuid();
                 theData.create_by = Operator.UserId;
-                theData.create_time = DateTime.Now;
+                theData.create_time = DateTime.Now.ToCstTime();
                 _product_tagBusiness.AddData(theData);
             }
             else
             {
                 theData.update_by = Operator.UserId;
-                theData.update_time = DateTime.Now;
+                theData.update_time = DateTime.Now.ToCstTime();
                 _product_tagBusiness.UpdateData(theData);
             }
 

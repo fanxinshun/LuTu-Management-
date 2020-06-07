@@ -28,8 +28,8 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <returns></returns>
         public MainData GetMainData(int days, Pagination pagination)
         {
-            var currentTime = DateTime.Now.ToString("yyyy-MM-dd");
-            var yesterdayTime = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+            var currentTime = DateTime.Now.ToCstTime().ToString("yyyy-MM-dd");
+            var yesterdayTime = DateTime.Now.ToCstTime().AddDays(-1).ToString("yyyy-MM-dd");
             var data = new MainData();
 
             var listPays = new payBusiness().GetIQueryable().Where(x => x.status == 1).ToList();//支付记录
@@ -60,8 +60,8 @@ namespace Coldairarrow.Business.LuTuTravel
             decimal value = 0;
             for (int i = days - 1; i >= 0; i--)
             {
-                value += listPays.Where(x => x.pay_time?.ToString("yyyy-MM-dd") == DateTime.Now.AddDays(-i).ToString("yyyy-MM-dd")).Sum(x => x.money);
-                data.xAxisData.Add(DateTime.Now.AddDays(-i).ToString("MM/dd"));
+                value += listPays.Where(x => x.pay_time?.ToString("yyyy-MM-dd") == DateTime.Now.ToCstTime().AddDays(-i).ToString("yyyy-MM-dd")).Sum(x => x.money);
+                data.xAxisData.Add(DateTime.Now.ToCstTime().AddDays(-i).ToString("MM/dd"));
                 data.yAxisData.Add(value);
             }
 
@@ -95,7 +95,7 @@ namespace Coldairarrow.Business.LuTuTravel
             var listMembers = new membersBusiness().GetIQueryable().ToList();//用户信息
             var listOrders = _orderBusiness.GetIQueryable().Where(x => x.status == 1).ToList().Where(x => listPays.Find(a => a.order_id == x.Id) != null).ToList();//订单 -支付完成的订单
 
-            var nowTime = DateTime.Now;
+            var nowTime = DateTime.Now.ToCstTime();
             for (int i = days - 1; i >= 0; i--)
             {
                 data.xAxisData.Add(nowTime.AddDays(-i).ToString("MM/dd"));
@@ -121,7 +121,7 @@ namespace Coldairarrow.Business.LuTuTravel
             var listOrders = _orderBusiness.GetIQueryable().Where(x => x.status == 1).ToList().Where(x => listPays.Find(a => a.order_id == x.Id) != null).ToList();//订单 -支付完成的订单
 
             decimal value = 0;
-            var nowTime = DateTime.Now;
+            var nowTime = DateTime.Now.ToCstTime();
             for (int i = days - 1; i >= 0; i--)
             {
                 data.xAxisData.Add(nowTime.AddDays(-i).ToString("MM/dd"));

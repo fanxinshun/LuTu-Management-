@@ -109,7 +109,7 @@ namespace Coldairarrow.Business.LuTuTravel
             var theData = GetTheData(id);
             theData.enable_flag = theData.enable_flag == "1" ? "0" : "1";
             theData.update_by = Operator.UserId;
-            theData.update_time = DateTime.Now;
+            theData.update_time = DateTime.Now.ToCstTime();
             UpdateData(theData);
         }
 

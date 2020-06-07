@@ -94,13 +94,13 @@ namespace Coldairarrow.Web
                 theData.enable_flag = "1";
                 theData.special_status = 1;
                 theData.create_by = Operator.UserId;
-                theData.create_time = DateTime.Now;
+                theData.create_time = DateTime.Now.ToCstTime();
                 _productBusiness.AddData(theData);
             }
             else
             {
                 theData.update_by = Operator.UserId;
-                theData.update_time = DateTime.Now;
+                theData.update_time = DateTime.Now.ToCstTime();
                 _productBusiness.UpdateData(theData);
             }
             var addProductDate = new List<product_date>();

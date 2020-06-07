@@ -55,7 +55,7 @@ namespace Coldairarrow.Web
             if(theData.id.IsNullOrEmpty())
             {
                 theData.id = Guid.NewGuid().ToSequentialGuid();
-                theData.create_time = DateTime.Now;
+                theData.create_time = DateTime.Now.ToCstTime();
 
                 _product_couponsBusiness.AddData(theData);
             }

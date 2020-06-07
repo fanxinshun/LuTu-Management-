@@ -40,7 +40,7 @@ namespace Coldairarrow.Util
         public static string GenRandom(int len)
         {
             string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            Random randrom = new Random((int)DateTime.Now.Ticks);
+            Random randrom = new Random((int)DateTime.Now.ToCstTime().Ticks);
             string str = "";
             for (int i = 0; i < len; i++)
             {

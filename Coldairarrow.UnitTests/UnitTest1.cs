@@ -1,4 +1,5 @@
 using Coldairarrow.Business.Common;
+using Coldairarrow.Business.LuTuTravel;
 using Coldairarrow.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -11,7 +12,7 @@ namespace Coldairarrow.UnitTests
         [TestMethod]
         public void TestMethod1()
         {
-            //new PostDataToSjdzp().GetTickets();
+            new TimerBusiness().GetTickets();
         }
 
     }

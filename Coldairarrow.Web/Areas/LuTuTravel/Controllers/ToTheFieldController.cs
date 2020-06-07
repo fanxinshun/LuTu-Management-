@@ -10,13 +10,13 @@ using System.Collections.Generic;
 namespace Coldairarrow.Web
 {
     [Area("LuTuTravel")]
-    public class commodityController : BaseMvcController
+    public class ToTheFieldController : BaseMvcController
     {
         ProductBusiness _productBusiness = null;
         product_dateBusiness _product_dateBusiness = null;
         DictionaryBusiness _dictionaryBusiness = null;
         TeamBusiness _teamBusiness = null;
-        public commodityController()
+        public ToTheFieldController()
         {
             _productBusiness = new ProductBusiness();
             _product_dateBusiness = new product_dateBusiness();
@@ -49,7 +49,7 @@ namespace Coldairarrow.Web
         #endregion
 
         #region 获取数据
-          
+         
 
         /// <summary>
         /// 获取数据列表
@@ -59,7 +59,7 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDataList(string product_type_id, string title, DateTime? create_time1, DateTime? create_time2, Pagination pagination, string enable_flag)
         {
-            var dataList = _productBusiness.GetDataList(2, product_type_id, title, string.Empty, create_time1, create_time2, pagination, enable_flag);
+            var dataList = _productBusiness.GetDataList(3, product_type_id, title, string.Empty, create_time1, create_time2, pagination, enable_flag);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
@@ -82,7 +82,7 @@ namespace Coldairarrow.Web
             if (theData.Id == 0)
             {
                 theData.enable_flag = "1";
-                theData.special_status = 2;
+                theData.special_status = 3;
                 theData.create_by = Operator.UserId;
                 theData.create_time = DateTime.Now.ToCstTime();
 

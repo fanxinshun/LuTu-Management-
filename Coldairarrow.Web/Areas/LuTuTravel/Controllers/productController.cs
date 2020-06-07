@@ -157,13 +157,13 @@ namespace Coldairarrow.Web
                 theData.enable_flag = "1";
                 theData.special_status = 0;
                 theData.create_by = Operator.UserId;
-                theData.create_time = DateTime.Now;
+                theData.create_time = DateTime.Now.ToCstTime();
                 _productBusiness.AddData(theData);
             }
             else
             {
                 theData.update_by = Operator.UserId;
-                theData.update_time = DateTime.Now;
+                theData.update_time = DateTime.Now.ToCstTime();
                 _productBusiness.UpdateData(theData);
             }
 
@@ -182,7 +182,7 @@ namespace Coldairarrow.Web
                         stay = item.stay,
                         food = item.food,
                         create_by = Operator.UserId,
-                        create_time = DateTime.Now
+                        create_time = DateTime.Now.ToCstTime()
                     });
                 }
                 else
@@ -196,7 +196,7 @@ namespace Coldairarrow.Web
                         stay = item.stay,
                         food = item.food,
                         update_by = Operator.UserId,
-                        update_time = DateTime.Now
+                        update_time = DateTime.Now.ToCstTime()
                     };
                     _product_IntroductionBusiness.UpdateAny(introduction, new List<string>() { "days", "title", "scheduling", "stay", "food", "update_by", "update_time" });
                 }
@@ -261,7 +261,7 @@ namespace Coldairarrow.Web
                 var listProductDate = _product_dateBusiness.GetDataList(theData.Id);
                 theData.Id = 0;
                 theData.create_by = Operator.UserId;
-                theData.create_time = DateTime.Now;
+                theData.create_time = DateTime.Now.ToCstTime();
                 _productBusiness.Insert(theData);
                 foreach (var item in listProductDate)
                 {

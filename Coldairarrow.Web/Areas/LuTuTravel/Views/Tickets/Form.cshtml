@@ -1,0 +1,272 @@
+@using Coldairarrow.Entity.LuTuTravel;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Tickets)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:25%;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>门票标题</th>
+                <td>
+                    <input name="title" value="@obj.title" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>门票类型</th>
+                <td>
+                    <input name="type" value="@obj.type" class="easyui-textbox" data-options="width:'60%',required:true">
+                    <span>1普通票，2套票，3线路</span>
+                </td>
+            </tr>
+            <tr>
+                <th>所属地区(省份--城市--县)</th>
+                <td>
+                    <input name="county_name" value="@obj.county_name" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>封面图片网址</th>
+                <td>
+                    <img style="width:120px;height:90px" src="@obj.image" />
+                </td>
+            </tr>
+            <tr>
+                <th>购买须知</th>
+                <td>
+                    <input name="notice" value="@obj.notice" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>产品简介</th>
+                <td>
+                    <input name="brief" value="@obj.brief" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>支付类型</th>
+                <td>
+                    <input name="pay_type" value="@obj.pay_type" class="easyui-textbox" data-options="width:'60%',required:true">
+                    <span>1：在线支付；2：景区到付</span>
+                </td>
+            </tr>
+            <tr>
+                <th>门票原价/当天的市场价/门市价/票面原价</th>
+                <td>
+                    <input name="original_price" value="@obj.original_price" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>当天的指导价/建议价</th>
+                <td>
+                    <input name="market_price" value="@obj.market_price" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>SKU默认分销价</th>
+                <td>
+                    <input name="sku_user_price" value="@obj.sku_user_price" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>SKU默认返现</th>
+                <td>
+                    <input name="sku_back_cash" value="@obj.sku_back_cash" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>SKU默认市场价</th>
+                <td>
+                    <input name="sku_market_price" value="@obj.sku_market_price" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>SKU默认指导/建议价</th>
+                <td>
+                    <input name="sku_suggest_price" value="@obj.sku_suggest_price" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>下单时是否必须提供身份证号码字段 </th>
+                <td>
+                    <input name="must_id_number" value="@obj.must_id_number" class="easyui-textbox" data-options="width:'60%',required:true">
+                    <span>1是，0否</span>
+                </td>
+            </tr>
+            <tr>
+                <th>实际价格(成人价)</th>
+                <td>
+                    <input name="nett_price" value="@obj.nett_price" class="easyui-textbox" data-options="width:'60%',required:true">
+                    <span>当天的分销价；分销商以此与管理员结算</span>
+                </td>
+            </tr>
+            <tr>
+                <th>实际价格(儿童价)</th>
+                <td>
+                    <input name="nett_price2" value="@obj.nett_price2" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>当天的返现：订单完成消费（验证/核销）</th>
+                <td>
+                    <input name="back_cash" value="@obj.back_cash" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>退票类型</th>
+                <td>
+                    <input name="refund_type" value="@obj.refund_type" class="easyui-textbox" data-options="width:'60%',required:true">
+                    <span>1可退票，2 不可退票，3 审核退票 </span>
+                </td>
+            </tr>
+            <tr>
+                <th>退票手续费类型</th>
+                <td>
+                    <input name="refund_chanrge_type" value="@obj.refund_chanrge_type" class="easyui-textbox" data-options="width:'60%',required:true">
+                    <span>1: 按票数计算；2：按订单计算，每退一张票需扣手续费 1/票数；</span>
+                </td>
+            </tr>
+            <tr>
+                <th>退票手续费</th>
+                <td>
+                    <input name="refund_chanrge" value="@obj.refund_chanrge" class="easyui-textbox" data-options="width:'60%',required:true">
+                    <span>数值，例 5.00 单位/元；结果等于百分比+固定值</span>
+                </td>
+            </tr>
+            <tr>
+                <th>退票手续费百分比值：数值 按票价的百分比计算</th>
+                <td>
+                    <input name="self_refund_scale" value="@obj.self_refund_scale" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>退票手续费固定值，单位/元</th>
+                <td>
+                    <input name="self_refund_fixed" value="@obj.self_refund_fixed" class="easyui-textbox" data-options="width:'60%',required:true">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="aa" class="easyui-accordion" data-options="selected:-1">
+        <div title="其它信息">
+            <table class="table_base">
+                <colgroup>
+                    <col style="width:25%;" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>介绍信息:html内容无法展示</th>
+                        <td>
+                            <input name="description" value="@obj.description" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>门票数量/总库存</th>
+                        <td>
+                            <input name="amount" value="@obj.amount" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>门票排序</th>
+                        <td>
+                            <input name="sort_order" value="@obj.sort_order" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>订单有效期类型;1有效日期，2固定日期</th>
+                        <td>
+                            <input name="validity_type" value="@obj.validity_type" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>validity_type=1时下单成功开始有效期，以天计算</th>
+                        <td>
+                            <input name="validity_day" value="@obj.validity_day" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>validity_type=2时固定开始时间</th>
+                        <td>
+                            <input name="start_time" value="@obj.start_time" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>validity_type=2时固定结束时间</th>
+                        <td>
+                            <input name="expire_time" value="@obj.expire_time" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>短信发送类型</th>
+                        <td>
+                            <input name="send_type" value="@obj.send_type" class="easyui-textbox" data-options="width:'60%',required:true">
+                            <span>1二维码，2文字码</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>短信内容</th>
+                        <td>
+                            <input name="sms_content" value="@obj.sms_content" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>彩信内容</th>
+                        <td>
+                            <input name="mms_content" value="@obj.mms_content" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>打印内容</th>
+                        <td>
+                            <input name="print_content" value="@obj.print_content" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>是否是从第三方导入</th>
+                        <td>
+                            <input name="is_import" value="@obj.is_import" class="easyui-textbox" data-options="width:'60%',required:true">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+@section foottoolbar{
+    @*<a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>*@
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'LuTuTravel/Tickets/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogMsg('保存成功!');
+                    parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>

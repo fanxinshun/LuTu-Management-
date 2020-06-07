@@ -15,14 +15,15 @@ namespace Coldairarrow.Business.LuTuTravel
         TicketsBusiness _TicketsBusiness = new TicketsBusiness();
 
         private TimeSpan intervalTime = new TimeSpan(24, 0, 0);//执行间隔
-        private static DateTime currientTime = DateTime.Now;//当前时间
+        private static DateTime currientTime = DateTime.Now.ToCstTime();//当前时间
 
-        private static DateTime time24 = DateTime.Parse(currientTime.ToShortDateString() + " 23:59:59");//当天24点
-        private static TimeSpan delyTimeSpan = time24 - currientTime.AddHours(1);//当天24点-当前时间+1小时，即每天1点开始同步
+        private static DateTime delyTime = DateTime.Parse(currientTime.AddDays(1).ToShortDateString() + " 04:00:00");//延迟到什么时间执行
+        private static TimeSpan delyTimeSpan = delyTime.Subtract(currientTime).Duration();//延迟多久(TimeSpan)
 
         public TimerBusiness()
         {
-            TimerHelper.SetInterval(GetTickets, intervalTime, delyTimeSpan);//执行定时任务
+            _TicketsBusiness.WriteSysLog($"定时任务启动：currientTime:{currientTime}，delyTime:{delyTime}，intervalTime:{intervalTime}，delyTimeSpan:{delyTimeSpan}");
+            TimerHelper.SetInterval(GetTickets, intervalTime, delyTimeSpan);//开启定时任务
         }
 
         /// <summary>
@@ -30,23 +31,31 @@ namespace Coldairarrow.Business.LuTuTravel
         /// </summary>
         public void GetTickets()
         {
-            _TicketsBusiness.WriteSysLog("同步门票数据---开始同步");
-            _TicketsBusiness.DeleteAll();
-            Dictionary<string, object> paramters = base.paramters.Copy(0, base.paramters.Count).ToDictionary(k => k.Key, v => v.Value);
-            paramters["method"] = "item_list";
-
-            while (true)
+            try
             {
-                string resultData = HttpHelper.PostData(postUrl, base.GetParamsAndSig(paramters));
-                ResponseModel model = resultData.ToObject<ResponseModel>();
-                List<Tickets> listTickets = model.list.ToJson().ToList<Tickets>();
-                if (listTickets?.Count == 0) break;
+                _TicketsBusiness.WriteSysLog("同步门票数据---开始同步");
 
-                _TicketsBusiness.Insert(listTickets);//插入数据
-                //_TicketsBusiness.SynchronousData(listTickets);//更新product表门票数据
-                paramters["page"] = int.Parse(paramters["page"].ToString()) + 1;
+                Dictionary<string, object> paramters = base.paramters.Copy(0, base.paramters.Count).ToDictionary(k => k.Key, v => v.Value);
+                paramters["method"] = "item_list";
+                //_TicketsBusiness.DeleteAll();//全删？
+                while (true)
+                {
+                    string resultData = HttpHelper.PostData(postUrl, base.GetParamsAndSig(paramters));
+                    _TicketsBusiness.WriteSysLog($"【{paramters["page"]}】{resultData}");//记录每次同步的数据日志
+
+                    ResponseModel model = resultData.ToObject<ResponseModel>();
+                    List<Tickets> listTickets = model.list.ToJson().ToList<Tickets>();
+                    if (listTickets?.Count == 0) break;
+
+                    _TicketsBusiness.SynchronousData(listTickets);//更新product表门票数据
+                    paramters["page"] = int.Parse(paramters["page"].ToString()) + 1;
+                }
+                _TicketsBusiness.WriteSysLog("同步门票数据---同步完成");
             }
-            _TicketsBusiness.WriteSysLog("同步门票数据---同步完成");
+            catch (Exception ex)
+            {
+                _TicketsBusiness.WriteSysLog($"同步门票数据---发生异常！{ex}");
+            }
         }
     }
 }

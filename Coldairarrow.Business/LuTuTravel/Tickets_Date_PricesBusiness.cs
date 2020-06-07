@@ -1,5 +1,4 @@
 using Coldairarrow.Business.Common;
-using Coldairarrow.Entity.Base_SysManage;
 using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
 using System;
@@ -9,52 +8,40 @@ using System.Linq.Dynamic.Core;
 
 namespace Coldairarrow.Business.LuTuTravel
 {
-    public class TicketsBusiness : BaseBusiness<Tickets>
+    public class Tickets_Date_PricesBusiness : BaseBusiness<Tickets_Date_Prices>
     {
-        ProductBusiness _ProductBusiness = new ProductBusiness();
-
-        Tickets_Date_PricesBusiness _Tickets_Date_PricesBusiness = new Tickets_Date_PricesBusiness();
-
-
-        public override EnumType.LogType LogType { get => EnumType.LogType.同步接口数据; }
 
         /// <summary>
         /// 更新门票数据
         /// </summary>
-        public void SynchronousData(List<Tickets> tickets)
+        public void SynchronousData(int ticketsId, List<Tickets_Date_Prices> ticketsDate)
         {
-            var insertTickets = new List<Tickets>();
-            var updateTickets = new List<Tickets>();
-            var allTicketsIds = tickets.Select(x => x.Id).ToList();
+            var insertTicketsDate = new List<Tickets_Date_Prices>();
+            var updateTicketsDate = new List<Tickets_Date_Prices>();
+            var allTicketsDateIds = ticketsDate.Select(x => x.date).ToList();
 
-            var exsitsTickets = GetIQueryable().Where(x => allTicketsIds.Contains(x.Id)).ToList();
-            tickets.ForEach(item =>
+            var exsitsTickets = GetIQueryable().Where(x => x.Tickets_Id == ticketsId && allTicketsDateIds.Contains(x.date)).ToList();
+            ticketsDate.ForEach(item =>
             {
-                item.description = string.Empty;//清空
                 var updateTicket = exsitsTickets.Find(x => x.Id == item.Id);
                 if (updateTicket != null)
                 {
                     updateTicket = item;
-                    updateTicket.county_name = $"{item.prov_name}--{item.prov_name}--{item.prov_name}";
-                    updateTicket.update_by = "System";
+                    updateTicket.update_by = Operator.UserId;
                     updateTicket.update_time = DateTime.Now.ToCstTime();
-                    updateTickets.Add(updateTicket);
+                    updateTicketsDate.Add(updateTicket);
                 }
                 else
                 {
-                    item.create_by = "System";
+                    item.create_by = Operator.UserId;
                     item.create_time = DateTime.Now.ToCstTime();
-                    insertTickets.Add(item);
-                }
-                if (item.date_prices?.Count > 0)
-                {
-                    _Tickets_Date_PricesBusiness.SynchronousData(item.Id, item.date_prices);
+                    insertTicketsDate.Add(item);
                 }
             });
-            if (updateTickets.Count > 0)
-                Update(updateTickets);
-            if (insertTickets.Count > 0)
-                Insert(insertTickets);
+            if (exsitsTickets.Count > 0)
+                Update(updateTicketsDate);
+            if (insertTicketsDate.Count > 0)
+                Insert(insertTicketsDate);
         }
 
         #region 外部接口
@@ -65,7 +52,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<Tickets> GetDataList(string condition, string keyword, Pagination pagination)
+        public List<Tickets_Date_Prices> GetDataList(string condition, string keyword, Pagination pagination)
         {
             var q = GetIQueryable();
 
@@ -81,7 +68,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
-        public Tickets GetTheData(int id)
+        public Tickets_Date_Prices GetTheData(string id)
         {
             return GetEntity(id);
         }
@@ -90,7 +77,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 添加数据
         /// </summary>
         /// <param name="newData">数据</param>
-        public void AddData(Tickets newData)
+        public void AddData(Tickets_Date_Prices newData)
         {
             Insert(newData);
         }
@@ -98,7 +85,7 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <summary>
         /// 更新数据
         /// </summary>
-        public void UpdateData(Tickets theData)
+        public void UpdateData(Tickets_Date_Prices theData)
         {
             Update(theData);
         }

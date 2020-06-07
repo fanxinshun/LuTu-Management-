@@ -83,7 +83,7 @@ namespace Coldairarrow.Business.LuTuTravel
             if (theData.invite_code.IsNullOrEmpty() || theData.invite_code.Length == 6)//一级团长 生成8位邀请码
             {
                 member.header_status = 1;
-                member.header_time = DateTime.Now;
+                member.header_time = DateTime.Now.ToCstTime();
                 member.header_level = 1;
                 member.invite_code = RandomHelper.GenRandom(8);
                 if (!theData.invite_code.IsNullOrEmpty())
@@ -94,7 +94,7 @@ namespace Coldairarrow.Business.LuTuTravel
             if (theData.invite_code.Length == 8) //二级团长 不生成邀请码
             {
                 member.header_status = 1;
-                member.header_time = DateTime.Now;
+                member.header_time = DateTime.Now.ToCstTime();
                 member.header_level = 2;
                 member.share_invite_code = theData.invite_code;
             }

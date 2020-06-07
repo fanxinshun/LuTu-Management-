@@ -1,19 +1,15 @@
-using Coldairarrow.Business.Common;
 using Coldairarrow.Business.LuTuTravel;
 using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
-using Dynamitey.DynamicObjects;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq.Dynamic.Core;
 
 namespace Coldairarrow.Web
 {
     [Area("LuTuTravel")]
-    public class product_typeController : BaseMvcController
+    public class TicketsController : BaseMvcController
     {
-        product_typeBusiness _product_typeBusiness = new product_typeBusiness();
+        TicketsBusiness _ticketsBusiness = new TicketsBusiness();
 
         #region 视图功能
 
@@ -22,9 +18,9 @@ namespace Coldairarrow.Web
             return View();
         }
 
-        public ActionResult Form(string id)
+        public ActionResult Form(int id)
         {
-            var theData = id.IsNullOrEmpty() ? new product_type() : _product_typeBusiness.GetTheData(id);
+            var theData = id.IsNullOrEmpty() ? new Tickets() : _ticketsBusiness.GetTheData(id);
 
             return View(theData);
         }
@@ -39,9 +35,9 @@ namespace Coldairarrow.Web
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public ActionResult GetDataList(string type_name, Pagination pagination)
+        public ActionResult GetDataList(string condition, string keyword, Pagination pagination)
         {
-            var dataList = _product_typeBusiness.GetDataList(type_name, pagination);
+            var dataList = _ticketsBusiness.GetDataList(condition, keyword, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
@@ -54,21 +50,15 @@ namespace Coldairarrow.Web
         /// 保存
         /// </summary>
         /// <param name="theData">保存的数据</param>
-        public ActionResult SaveData(product_type theData)
+        public ActionResult SaveData(Tickets theData)
         {
-            if (theData.id.IsNullOrEmpty())
+            if(theData.Id.IsNullOrEmpty())
             {
-                theData.id = Guid.NewGuid().ToSequentialGuid();
-                theData.create_by = Operator.UserId;
-                theData.create_time = DateTime.Now.ToCstTime();
-                theData.enable_flag = 1;
-                _product_typeBusiness.AddData(theData);
+                _ticketsBusiness.AddData(theData);
             }
             else
             {
-                theData.update_by = Operator.UserId;
-                theData.update_time = DateTime.Now.ToCstTime();
-                _product_typeBusiness.UpdateData(theData);
+                _ticketsBusiness.UpdateData(theData);
             }
 
             return Success();
@@ -80,8 +70,7 @@ namespace Coldairarrow.Web
         /// <param name="theData">删除的数据</param>
         public ActionResult DeleteData(string ids)
         {
-            List<string> listId = ids.ToList<string>();
-            _product_typeBusiness.DeleteData(listId);
+            _ticketsBusiness.DeleteData(ids.ToList<string>());
 
             return Success("删除成功！");
         }
