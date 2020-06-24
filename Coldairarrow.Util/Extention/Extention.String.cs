@@ -263,6 +263,15 @@ namespace Coldairarrow.Util
         {
             return Convert.ToDateTime(str);
         }
+        /// <summary>
+        /// 转换为ToDecimal格式
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static Decimal ToDecimal(this string str)
+        {
+            return Convert.ToDecimal(str);
+        }
 
         /// <summary>
         /// 将Json字符串反序列化为对象

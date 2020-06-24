@@ -68,11 +68,10 @@ namespace Coldairarrow.Web
         /// 删除数据
         /// </summary>
         /// <param name="theData">删除的数据</param>
-        public ActionResult DeleteData(string ids)
+        public ActionResult ChangeStatus(int id)
         {
-            _ticketsBusiness.DeleteData(ids.ToList<string>());
-
-            return Success("删除成功！");
+            _ticketsBusiness.ChangeStatus(id);
+            return Success();
         }
 
         #endregion

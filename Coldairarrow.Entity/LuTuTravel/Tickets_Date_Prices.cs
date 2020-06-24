@@ -24,7 +24,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// <summary>
         /// 本日时间
         /// </summary>
-        public DateTime? date { get; set; }
+        public DateTime date { get; set; }
 
         /// <summary>
         /// 本日设置的价格

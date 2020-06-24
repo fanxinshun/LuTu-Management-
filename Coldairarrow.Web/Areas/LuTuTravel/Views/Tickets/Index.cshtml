@@ -4,28 +4,21 @@
 
 @section toolbar{
     @*<a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>*@
+    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">上架/下架</a>
     <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">查看</a>
-    @*<a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>*@
 }
 
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
             <label class="search_label">查询类别</label>
-            <select name="condition" class="easyui-combobox" data-options="width:100">
+            <select name="condition" class="easyui-combobox" data-options="width:200">
                 <option value="">请选择</option>
-                
+
                 <option value="title">门票标题</option>
-                <option value="sms_content">短信内容</option>
-                <option value="mms_content">彩信内容</option>
-                <option value="print_content">打印内容</option>
-                <option value="image">封面图片网址</option>
-                <option value="notice">购买须知（重要信息）</option>
+                <option value="notice">购买须知</option>
                 <option value="description">介绍信息</option>
                 <option value="brief">产品简介</option>
-                <option value="nett_price2">实际价格(儿童价)</option>
-                <option value="county_name">所属地区(省份--城市--县)</option>
-                <option value="refund_chanrge_type">退票手续费类型：1: 按票数计算；2：按订单计算，每退一张票需扣手续费 1/票数；</option>
             </select>
             <input name="keyword" class="easyui-textbox" style="width:150px" />
         </div>
@@ -67,17 +60,35 @@
 
                 { title: '门票Id', field: 'Id', width: 200 },
                 { title: '门票标题', field: 'title', width: 200 },
-                { title: '门票类型', field: 'type', width: 200 },
+                {
+                    title: '类型', field: 'type', width: 200, formatter: function (value, row, index) {
+                        if (value == "1") return '普通票';
+                        else if (value == "2") return '套票';
+                        else if (value == "3") return '线路';
+                    }
+                },
+                {
+                    title: '状态', field: 'status', width: 200, formatter: function (value, row, index) {
+                        if (value == "0") return '已下线';
+                        else if (value == "1") return '已上线';
+                    }
+                },
                 { title: '门票原价', field: 'original_price', width: 200 },
                 { title: '市场价', field: 'market_price', width: 200 },
-                { title: '退票类型', field: 'refund_type', width: 200 },
+                {
+                    title: '退票类型', field: 'refund_type', width: 200, formatter: function (value, row, index) {
+                        if (value == "1") return '允许退票';
+                        else if (value == "2") return '不可退票';
+                        else if (value == "3") return '管理员审核';
+                    }
+                },
                 { title: '购买须知', field: 'notice', width: 200 },
                 { title: '介绍信息', field: 'description', width: 200 },
                 { title: '产品简介', field: 'brief', width: 200 },
-                { title: 'SKU默认分销价', field: 'sku_user_price', width: 200 },
-                { title: 'SKU默认返现', field: 'sku_back_cash', width: 200 },
-                { title: 'SKU默认市场价', field: 'sku_market_price', width: 200 },
-                { title: 'SKU默认指导/建议价', field: 'sku_suggest_price', width: 200 },
+                { title: '默认分销价', field: 'sku_user_price', width: 200 },
+                { title: '默认返现', field: 'sku_back_cash', width: 200 },
+                { title: '默认市场价', field: 'sku_market_price', width: 200 },
+                { title: '默认指导/建议价', field: 'sku_suggest_price', width: 200 },
                 { title: '实际价格(儿童价)', field: 'nett_price2', width: 200 },
                 //{ title: '景区ID', field: 'supplier_id', width: 200 },
                 //{ title: '下单时是否必须提供身份证号码字段 1是，0否', field: 'must_id_number', width: 200 },
@@ -99,8 +110,13 @@
                 //{ title: '封面图片网址', field: 'image', width: 200 },
                 //{ title: '是否是从第三方导入', field: 'is_import', width: 200 },
                 //{ title: '实际价格(成人价) //当天的分销价；分销商以此与管理员结算', field: 'nett_price', width: 200 },
-                //{ title: '当天的返现：订单完成消费（验证/核销）', field: 'back_cash', width: 200 },
-                //{ title: '支付类型：1：在线支付；2：景区到付', field: 'pay_type', width: 200 },
+                { title: '当天的返现：订单完成消费（验证/核销）', field: 'back_cash', width: 200 },
+                {
+                    title: '支付类型', field: 'pay_type', width: 200, formatter: function (value, row, index) {
+                        if (value == "1") return '在线支付';
+                        else if (value == "2") return '景区到付';
+                    }
+                },
             ]],
             onBeforeLoad: function (param) {
 
@@ -145,21 +161,19 @@
 
         //删除数据
         $('#delete').click(function () {
-            var checked = $("#dataTable").datagrid("getChecked");
-            if (!checked || !checked.length) {
+            var selected = $("#dataTable").datagrid("getChecked");
+            if (!selected || !selected.length) {
                 dialogError('请选择要删除的记录!');
                 return;
             }
-            var ids = $.map(checked, function (item) {
-                return item['Id'];
-            });
+            var id = selected[0].Id;
 
-            dialogComfirm('确认删除吗？', function () {
-                $.postJSON(rootUrl + 'LuTuTravel/Tickets/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+            dialogComfirm('是否更改门票上线状态？', function () {
+                $.postJSON(rootUrl + 'LuTuTravel/Tickets/ChangeStatus', { id: id }, function (resJson) {
                     if (resJson.Success) {
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');
-                        dialogMsg('删除成功!');
+                        dialogMsg('操作成功!');
                     }
                     else {
                         dialogError(resJson.Msg);

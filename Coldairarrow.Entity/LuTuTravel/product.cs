@@ -245,7 +245,7 @@ namespace Coldairarrow.Entity.LuTuTravel
         public int? pay_time { get; set; }
 
         /// <summary>
-        /// 类别(0:产品，1:门票，2:扶贫商品，3：去田里)
+        /// 类别(0:产品，1:门票，2:扶贫商品，3：去田间)
         /// </summary>
         public int? special_status { get; set; }
 

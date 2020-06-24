@@ -1,10 +1,12 @@
 using Coldairarrow.Business.Common;
 using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Reflection;
 
 namespace Coldairarrow.Business.LuTuTravel
 {
@@ -14,30 +16,44 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <summary>
         /// 更新门票数据
         /// </summary>
-        public void SynchronousData(int ticketsId, List<Tickets_Date_Prices> ticketsDate)
+        public void SynchronousData(int ticketsId, JObject ticketsDate)
         {
             var insertTicketsDate = new List<Tickets_Date_Prices>();
             var updateTicketsDate = new List<Tickets_Date_Prices>();
-            var allTicketsDateIds = ticketsDate.Select(x => x.date).ToList();
+            var allTicketsDateIds = ticketsDate.Children().Select(x => x.Path.ToDateTime()).ToList();
 
             var exsitsTickets = GetIQueryable().Where(x => x.Tickets_Id == ticketsId && allTicketsDateIds.Contains(x.date)).ToList();
-            ticketsDate.ForEach(item =>
+            foreach (JProperty item in ticketsDate.Children())
             {
-                var updateTicket = exsitsTickets.Find(x => x.Id == item.Id);
+                if (DateTime.Now.AddDays(1).ToCstTime() > item.Name.ToDateTime())//只更新当天及以后的价格日历
+                {
+                    continue;
+                }
+                var updateTicket = exsitsTickets.Find(x => x.date == item.Path.ToDateTime());
                 if (updateTicket != null)
                 {
-                    updateTicket = item;
+                    updateTicket.price = item.Value["price"].ToString().ToDecimal();
+                    updateTicket.stock = item.Value["stock"].ToString().ToInt();
+                    updateTicket.suggest_price = item.Value["suggest_price"].ToString().ToDecimal();
+                    updateTicket.market_price = item.Value["market_price"].ToString().ToDecimal();
                     updateTicket.update_by = Operator.UserId;
                     updateTicket.update_time = DateTime.Now.ToCstTime();
                     updateTicketsDate.Add(updateTicket);
                 }
                 else
                 {
-                    item.create_by = Operator.UserId;
-                    item.create_time = DateTime.Now.ToCstTime();
-                    insertTicketsDate.Add(item);
+                    Tickets_Date_Prices obj = new Tickets_Date_Prices();
+                    obj.Tickets_Id = ticketsId;
+                    obj.date = item.Name.ToDateTime();
+                    obj.price = item.Value["price"].ToString().ToDecimal();
+                    obj.stock = item.Value["stock"].ToString().ToInt();
+                    obj.suggest_price = item.Value["suggest_price"].ToString().ToDecimal();
+                    obj.market_price = item.Value["market_price"].ToString().ToDecimal();
+                    obj.create_by = Operator.UserId;
+                    obj.create_time = DateTime.Now.ToCstTime();
+                    insertTicketsDate.Add(obj);
                 }
-            });
+            }
             if (exsitsTickets.Count > 0)
                 Update(updateTicketsDate);
             if (insertTicketsDate.Count > 0)

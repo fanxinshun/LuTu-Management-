@@ -1,7 +1,4 @@
-using Coldairarrow.Util.Model;
-using Dynamitey.DynamicObjects;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -33,6 +30,11 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// 门票类型;1普通票，2套票，3线路
         /// </summary>
         public Int32? type { get; set; }
+
+        /// <summary>
+        /// 产品状态；1：正常； 0：下架
+        /// </summary>
+        public Int32? status { get; set; }
 
         /// <summary>
         /// 短信发送类型;1二维码，2文字码
@@ -209,7 +211,8 @@ namespace Coldairarrow.Entity.LuTuTravel
         /// <summary>
         /// 日历价格
         /// </summary>
-        public List<Tickets_Date_Prices> date_prices { get; set; }
+        [NotMapped]
+        public object date_prices { get; set; }
 
 
         /// <summary>

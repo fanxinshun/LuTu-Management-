@@ -37,10 +37,11 @@ namespace Coldairarrow.Business.LuTuTravel
 
                 Dictionary<string, object> paramters = base.paramters.Copy(0, base.paramters.Count).ToDictionary(k => k.Key, v => v.Value);
                 paramters["method"] = "item_list";
+                paramters["type"] = 1;
                 //_TicketsBusiness.DeleteAll();//全删？
                 while (true)
                 {
-                    string resultData = HttpHelper.PostData(postUrl, base.GetParamsAndSig(paramters));
+                    string resultData = HttpHelper.PostData(base.postUrl, base.GetParamsAndSig(paramters));
                     _TicketsBusiness.WriteSysLog($"【{paramters["page"]}】{resultData}");//记录每次同步的数据日志
 
                     ResponseModel model = resultData.ToObject<ResponseModel>();

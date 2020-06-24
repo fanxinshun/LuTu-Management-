@@ -13,19 +13,16 @@ namespace Coldairarrow.Business.Common
 {
     public class PostDataToSjdzp
     {
-        public readonly string postUrl = string.Empty;
-        public readonly string authcode = string.Empty;
+        public readonly string postUrl = ConfigHelper.GetValue("AOMIAPI", "url");
+        public readonly string authcode = ConfigHelper.GetValue("AOMIAPI", "authcode");
+        public readonly string pid = ConfigHelper.GetValue("AOMIAPI", "pid");
         public Dictionary<string, object> paramters = new Dictionary<string, object>();
 
         Base_AppSecretBusiness _Base_AppSecretBusiness = new Base_AppSecretBusiness();
 
         public PostDataToSjdzp()
         {
-            List<Base_AppSecret> sjdzpParamters = _Base_AppSecretBusiness.GetDataList(new string[] { "sjdzp_Url", "sjdzp_pid", "sjdzp_authcode" });
-            postUrl = sjdzpParamters.Find(x => x.AppId == "sjdzp_Url").AppSecret;
-            authcode = sjdzpParamters.Find(x => x.AppId == "sjdzp_authcode").AppSecret;
-            paramters.Add("_pid", sjdzpParamters.Find(x => x.AppId == "sjdzp_pid").AppSecret);
-
+            paramters.Add("_pid", pid);
             paramters.Add("format", "json");
             paramters.Add("method", string.Empty);
             paramters.Add("page", 1);
