@@ -33,7 +33,7 @@ namespace Coldairarrow.Business.LuTuTravel
             var exsitsTickets = GetIQueryable().Where(x => allTicketsIds.Contains(x.Id)).ToList();
             foreach (var item in tickets)
             {
-                if (item.status == 0)//下线的不更新
+                if (item.status == 0)//奥米下线的不更新
                 {
                     continue;
                 }
@@ -41,6 +41,10 @@ namespace Coldairarrow.Business.LuTuTravel
                 var updateTicket = exsitsTickets.Find(x => x.Id == item.Id);
                 if (updateTicket != null)
                 {
+                    if (updateTicket.status == 0)//鹿途下线的也不更新
+                    {
+                        continue;
+                    }
                     updateTicket.supplier_id = item.supplier_id;
                     updateTicket.title = item.title;
                     updateTicket.type = item.type;

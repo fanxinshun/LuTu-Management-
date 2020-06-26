@@ -20,22 +20,22 @@ namespace Coldairarrow.Business.LuTuTravel
         {
             var insertTicketsDate = new List<Tickets_Date_Prices>();
             var updateTicketsDate = new List<Tickets_Date_Prices>();
-            var allTicketsDateIds = ticketsDate.Children().Select(x => x.Path.ToDateTime()).ToList();
+            var allTicketsDateIds = ticketsDate.Children().Select(x => x.Path?.ToDateTime()).ToList();
 
             var exsitsTickets = GetIQueryable().Where(x => x.Tickets_Id == ticketsId && allTicketsDateIds.Contains(x.date)).ToList();
             foreach (JProperty item in ticketsDate.Children())
             {
-                if (DateTime.Now.AddDays(1).ToCstTime() > item.Name.ToDateTime())//只更新当天及以后的价格日历
+                if (DateTime.Now.ToCstTime().AddDays(1).ToCstTime() > item.Name.ToDateTime())//只更新当天及以后的价格日历
                 {
                     continue;
                 }
                 var updateTicket = exsitsTickets.Find(x => x.date == item.Path.ToDateTime());
                 if (updateTicket != null)
                 {
-                    updateTicket.price = item.Value["price"].ToString().ToDecimal();
-                    updateTicket.stock = item.Value["stock"].ToString().ToInt();
-                    updateTicket.suggest_price = item.Value["suggest_price"].ToString().ToDecimal();
-                    updateTicket.market_price = item.Value["market_price"].ToString().ToDecimal();
+                    updateTicket.price = item.Value["price"]?.ToString().ToDecimal();
+                    updateTicket.stock = item.Value["stock"]?.ToString().ToInt();
+                    updateTicket.suggest_price = item.Value["suggest_price"]?.ToString().ToDecimal();
+                    updateTicket.market_price = item.Value["market_price"]?.ToString().ToDecimal();
                     updateTicket.update_by = Operator.UserId;
                     updateTicket.update_time = DateTime.Now.ToCstTime();
                     updateTicketsDate.Add(updateTicket);
@@ -45,10 +45,10 @@ namespace Coldairarrow.Business.LuTuTravel
                     Tickets_Date_Prices obj = new Tickets_Date_Prices();
                     obj.Tickets_Id = ticketsId;
                     obj.date = item.Name.ToDateTime();
-                    obj.price = item.Value["price"].ToString().ToDecimal();
-                    obj.stock = item.Value["stock"].ToString().ToInt();
-                    obj.suggest_price = item.Value["suggest_price"].ToString().ToDecimal();
-                    obj.market_price = item.Value["market_price"].ToString().ToDecimal();
+                    obj.price = item.Value["price"]?.ToString().ToDecimal();
+                    obj.stock = item.Value["stock"]?.ToString().ToInt();
+                    obj.suggest_price = item.Value["suggest_price"]?.ToString().ToDecimal();
+                    obj.market_price = item.Value["market_price"]?.ToString().ToDecimal();
                     obj.create_by = Operator.UserId;
                     obj.create_time = DateTime.Now.ToCstTime();
                     insertTicketsDate.Add(obj);
