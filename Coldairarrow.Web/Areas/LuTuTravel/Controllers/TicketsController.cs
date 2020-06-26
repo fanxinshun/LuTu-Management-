@@ -3,6 +3,8 @@ using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Coldairarrow.Web
 {
@@ -52,7 +54,7 @@ namespace Coldairarrow.Web
         /// <param name="theData">保存的数据</param>
         public ActionResult SaveData(Tickets theData)
         {
-            if(theData.Id.IsNullOrEmpty())
+            if (theData.Id.IsNullOrEmpty())
             {
                 _ticketsBusiness.AddData(theData);
             }
@@ -68,9 +70,14 @@ namespace Coldairarrow.Web
         /// 删除数据
         /// </summary>
         /// <param name="theData">删除的数据</param>
-        public ActionResult ChangeStatus(int id)
+        public ActionResult ChangeStatus(List<int> ids)
         {
-            _ticketsBusiness.ChangeStatus(id);
+            var list = ids.Distinct().ToList();
+            if (list.Contains(1) && list.Contains(0))
+            {
+                return Error("所选记录上线状态不一致！");
+            }
+            _ticketsBusiness.ChangeStatus(ids);
             return Success();
         }
 

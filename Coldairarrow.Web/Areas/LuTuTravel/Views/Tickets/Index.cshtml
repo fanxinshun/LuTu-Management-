@@ -161,15 +161,17 @@
 
         //删除数据
         $('#delete').click(function () {
-            var selected = $("#dataTable").datagrid("getChecked");
-            if (!selected || !selected.length) {
+            var checked = $("#dataTable").datagrid("getChecked");
+            if (!checked || !checked.length) {
                 dialogError('请选择要删除的记录!');
                 return;
             }
-            var id = selected[0].Id;
+            var ids = $.map(checked, function (item) {
+                return item['Id'];
+            });
 
             dialogComfirm('是否更改门票上线状态？', function () {
-                $.postJSON(rootUrl + 'LuTuTravel/Tickets/ChangeStatus', { id: id }, function (resJson) {
+                $.postJSON(rootUrl + 'LuTuTravel/Tickets/ChangeStatus', { id: ids }, function (resJson) {
                     if (resJson.Success) {
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');

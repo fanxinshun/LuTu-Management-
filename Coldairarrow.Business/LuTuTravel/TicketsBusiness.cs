@@ -2,6 +2,7 @@ using Coldairarrow.Business.Common;
 using Coldairarrow.Entity.Base_SysManage;
 using Coldairarrow.Entity.LuTuTravel;
 using Coldairarrow.Util;
+using Nest;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -33,15 +34,11 @@ namespace Coldairarrow.Business.LuTuTravel
             var exsitsTickets = GetIQueryable().Where(x => allTicketsIds.Contains(x.Id)).ToList();
             foreach (var item in tickets)
             {
-                if (item.status == 0)//奥米下线的不更新
-                {
-                    continue;
-                }
                 item.description = string.Empty;//清空
                 var updateTicket = exsitsTickets.Find(x => x.Id == item.Id);
                 if (updateTicket != null)
                 {
-                    if (updateTicket.status == 0)//鹿途下线的也不更新
+                    if (updateTicket.status == 0)//鹿途下线的不更新
                     {
                         continue;
                     }
@@ -154,14 +151,16 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 更改上线状态
         /// </summary>
         /// <param name="theData">删除的数据</param>
-        public void ChangeStatus(int id)
+        public void ChangeStatus(List<int> ids)
         {
-            var entity = GetEntity(id);
-            if (entity != null)
+            var entitys = GetIQueryable().Where(x => ids.Contains(x.Id)).ToList();
+            foreach (var item in entitys)
             {
-                entity.status = entity.status == 1 ? 0 : 1;
-                Update(entity);
+                item.status = item.status == 0 ? 1 : 0;
+                item.update_by = Common.Operator.UserId;
+                item.update_time = DateTime.Now.ToCstTime();
             }
+            Update(entitys);
         }
         /// <summary>
         /// 删除数据
