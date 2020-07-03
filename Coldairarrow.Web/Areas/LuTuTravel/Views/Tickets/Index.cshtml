@@ -11,16 +11,33 @@
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
-            <label class="search_label">查询类别</label>
-            <select name="condition" class="easyui-combobox" data-options="width:200">
+            <label class="search_label">门票标题</label>
+            <input name='title' class='easyui-textbox'>
+        </div>
+        <div class="search_item">
+            <label class="search_label">购买须知</label>
+            <input name='notice' class='easyui-textbox'>
+        </div>
+        <div class="search_item">
+            <label class="search_label">产品简介</label>
+            <input name='brief' class='easyui-textbox'>
+        </div>
+        <div class="search_item">
+            <label class="search_label">退票类型</label>
+            <select name="refund_type" class="easyui-combobox" data-options="width:150">
                 <option value="">请选择</option>
-
-                <option value="title">门票标题</option>
-                <option value="notice">购买须知</option>
-                <option value="description">介绍信息</option>
-                <option value="brief">产品简介</option>
+                <option value="1">允许退票</option>
+                <option value="2">不可退票</option>
+                <option value="3">管理员审核</option>
             </select>
-            <input name="keyword" class="easyui-textbox" style="width:150px" />
+        </div>
+        <div class="search_item">
+            <label class="search_label">上线状态</label>
+            <select name="status" class="easyui-combobox" data-options="width:150">
+                <option value="">请选择</option>
+                <option value="1">已上线</option>
+                <option value="0">已下线</option>
+            </select>
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
@@ -47,8 +64,8 @@
             singleSelect: false,
             selectOnCheck: false,
             checkOnSelect: false,
-            //sortName: 'Id',
-            //sortOrder: 'asc',
+            sortName: 'Id',
+            sortOrder: 'desc',
             //rownumbers: true,
             pagination: true,
             pageSize: 30,
@@ -167,18 +184,18 @@
                 return;
             }
             var ids = $.map(checked, function (item) {
-                return item['Id'];
+                return parseInt(item['Id']);
             });
 
             dialogComfirm('是否更改门票上线状态？', function () {
-                $.postJSON(rootUrl + 'LuTuTravel/Tickets/ChangeStatus', { id: ids }, function (resJson) {
-                    if (resJson.Success) {
+                $.postJSON(rootUrl + 'LuTuTravel/Tickets/ChangeStatus', { ids: ids }, function (resJson) {
+                    if (resJson.success) {
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');
                         dialogMsg('操作成功!');
                     }
                     else {
-                        dialogError(resJson.Msg);
+                        dialogError(resJson.msg);
                     }
                 });
             });

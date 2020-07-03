@@ -106,16 +106,30 @@ namespace Coldairarrow.Business.LuTuTravel
         /// <summary>
         /// 获取数据列表
         /// </summary>
-        /// <param name="condition">查询类型</param>
-        /// <param name="keyword">关键字</param>
+        /// <param name="title">门票标题</param>
+        /// <param name="notice">购买须知</param
+        /// <param name="brief">产品简介</param>
+        /// <param name="refund_type">退票类型</param>
+        /// <param name="status">上线状态</param>
         /// <returns></returns>
-        public List<Tickets> GetDataList(string condition, string keyword, Pagination pagination)
+        public List<Tickets> GetDataList(string title, string notice, string brief, int? refund_type, int? status, Pagination pagination)
         {
             var q = GetIQueryable();
 
-            //模糊查询
-            if (!condition.IsNullOrEmpty() && !keyword.IsNullOrEmpty())
-                q = q.Where($@"{condition}.Contains(@0)", keyword);
+            if (!title.IsNullOrEmpty())
+                q = q.Where(x => x.title.Contains(title));
+
+            if (!notice.IsNullOrEmpty())
+                q = q.Where(x => x.notice.Contains(notice));
+
+            if (!brief.IsNullOrEmpty())
+                q = q.Where(x => x.brief.Contains(brief));
+
+            if (!refund_type.IsNullOrEmpty())
+                q = q.Where(x => x.refund_type == refund_type);
+
+            if (!status.IsNullOrEmpty())
+                q = q.Where(x => x.status == status);
 
             return q.GetPagination(pagination).ToList();
         }
@@ -151,9 +165,15 @@ namespace Coldairarrow.Business.LuTuTravel
         /// 更改上线状态
         /// </summary>
         /// <param name="theData">删除的数据</param>
-        public void ChangeStatus(List<int> ids)
+        public AjaxResult ChangeStatus(List<int> ids)
         {
             var entitys = GetIQueryable().Where(x => ids.Contains(x.Id)).ToList();
+            var list = entitys.Select(x => x.status);
+            if (list.Contains(1) && list.Contains(0))
+            {
+                return Error("所选记录上线状态不一致！");
+            }
+
             foreach (var item in entitys)
             {
                 item.status = item.status == 0 ? 1 : 0;
@@ -161,6 +181,7 @@ namespace Coldairarrow.Business.LuTuTravel
                 item.update_time = DateTime.Now.ToCstTime();
             }
             Update(entitys);
+            return Success();
         }
         /// <summary>
         /// 删除数据

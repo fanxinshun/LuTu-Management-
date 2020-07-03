@@ -34,12 +34,15 @@ namespace Coldairarrow.Web
         /// <summary>
         /// 获取数据列表
         /// </summary>
-        /// <param name="condition">查询类型</param>
-        /// <param name="keyword">关键字</param>
+        /// <param name="title">门票标题</param>
+        /// <param name="notice">购买须知</param
+        /// <param name="brief">产品简介</param>
+        /// <param name="refund_type">退票类型</param>
+        /// <param name="status">上线状态</param>
         /// <returns></returns>
-        public ActionResult GetDataList(string condition, string keyword, Pagination pagination)
+        public ActionResult GetDataList(string title, string notice, string brief, int? refund_type, int? status, Pagination pagination)
         {
-            var dataList = _ticketsBusiness.GetDataList(condition, keyword, pagination);
+            var dataList = _ticketsBusiness.GetDataList(title, notice, brief, refund_type, status, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
@@ -70,15 +73,9 @@ namespace Coldairarrow.Web
         /// 删除数据
         /// </summary>
         /// <param name="theData">删除的数据</param>
-        public ActionResult ChangeStatus(List<int> ids)
+        public AjaxResult ChangeStatus(List<int> ids)
         {
-            var list = ids.Distinct().ToList();
-            if (list.Contains(1) && list.Contains(0))
-            {
-                return Error("所选记录上线状态不一致！");
-            }
-            _ticketsBusiness.ChangeStatus(ids);
-            return Success();
+            return _ticketsBusiness.ChangeStatus(ids);
         }
 
         #endregion
