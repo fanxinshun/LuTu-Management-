@@ -34,7 +34,6 @@ namespace Coldairarrow.Business.LuTuTravel
             var exsitsTickets = GetIQueryable().Where(x => allTicketsIds.Contains(x.Id)).ToList();
             foreach (var item in tickets)
             {
-                item.description = string.Empty;//清空
                 var updateTicket = exsitsTickets.Find(x => x.Id == item.Id);
                 if (updateTicket != null)
                 {
@@ -42,53 +41,20 @@ namespace Coldairarrow.Business.LuTuTravel
                     {
                         continue;
                     }
-                    updateTicket.supplier_id = item.supplier_id;
-                    updateTicket.title = item.title;
-                    updateTicket.type = item.type;
-                    updateTicket.status = item.status;
-                    updateTicket.send_type = item.send_type;
-                    updateTicket.pay_type = item.pay_type;
-                    updateTicket.amount = item.amount;
-                    updateTicket.sort_order = item.sort_order;
-                    updateTicket.refund_type = item.refund_type;
-                    updateTicket.validity_type = item.validity_type;
-                    updateTicket.validity_day = item.validity_day;
-                    updateTicket.start_time = item.start_time;
-                    updateTicket.expire_time = item.expire_time;
-                    updateTicket.sms_content = item.sms_content;
-                    updateTicket.mms_content = item.mms_content;
-                    updateTicket.print_content = item.print_content;
-                    updateTicket.image = item.image;
-                    updateTicket.notice = item.notice;
-                    updateTicket.description = item.description;
-                    updateTicket.brief = item.brief;
-                    updateTicket.is_import = item.is_import;
-                    updateTicket.nett_price = item.nett_price;
-                    updateTicket.back_cash = item.back_cash;
-                    updateTicket.original_price = item.original_price;
-                    updateTicket.market_price = item.market_price;
-                    updateTicket.sku_user_price = item.sku_user_price;
-                    updateTicket.sku_market_price = item.sku_market_price;
-                    updateTicket.sku_suggest_price = item.sku_suggest_price;
-                    updateTicket.nett_price2 = item.nett_price2;
-                    updateTicket.must_id_number = item.must_id_number;
-                    updateTicket.prov_name = item.prov_name;
-                    updateTicket.city_name = item.city_name;
-                    //updateTicket.county_name = item.county_name;
-                    updateTicket.refund_chanrge_type = item.refund_chanrge_type;
-                    updateTicket.refund_chanrge = item.refund_chanrge;
-                    updateTicket.self_refund_scale = item.self_refund_scale;
-                    updateTicket.self_refund_fixed = item.self_refund_fixed;
-                    updateTicket.county_name = $"{item.prov_name}--{item.prov_name}--{item.prov_name}";
+                    CopyEntity(item, updateTicket);
                     updateTicket.update_by = "System";
                     updateTicket.update_time = DateTime.Now.ToCstTime();
                     updateTickets.Add(updateTicket);
                 }
                 else
                 {
-                    item.create_by = "System";
-                    item.create_time = DateTime.Now.ToCstTime();
-                    insertTickets.Add(item);
+                    Tickets entity = new Tickets();
+                    entity.Id = item.Id;
+
+                    CopyEntity(item, entity);
+                    entity.create_by = "System";
+                    entity.create_time = DateTime.Now.ToCstTime();
+                    insertTickets.Add(entity);
                 }
                 if (item.date_prices.GetType() == typeof(JObject))
                 {
@@ -99,6 +65,53 @@ namespace Coldairarrow.Business.LuTuTravel
                 Update(updateTickets);
             if (insertTickets.Count > 0)
                 Insert(insertTickets);
+        }
+
+        /// <summary>
+        /// 更新对象
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="ticket"></param>
+        private static void CopyEntity(Tickets item, Tickets ticket)
+        {
+            ticket.supplier_id = item.supplier_id;
+            ticket.title = item.title;
+            ticket.type = item.type;
+            ticket.status = item.status;
+            ticket.send_type = item.send_type;
+            ticket.pay_type = item.pay_type;
+            ticket.amount = item.amount;
+            ticket.sort_order = item.sort_order;
+            ticket.refund_type = item.refund_type;
+            ticket.validity_type = item.validity_type;
+            ticket.validity_day = item.validity_day;
+            ticket.start_time = item.start_time;
+            ticket.expire_time = item.expire_time;
+            ticket.sms_content = item.sms_content;
+            ticket.mms_content = item.mms_content;
+            ticket.print_content = item.print_content;
+            ticket.image = item.image;
+            ticket.notice = item.notice;
+            ticket.description = string.Empty;//不接收该字段
+            ticket.brief = item.brief;
+            ticket.is_import = item.is_import;
+            ticket.nett_price = item.nett_price;
+            ticket.back_cash = item.back_cash;
+            ticket.original_price = item.original_price;
+            ticket.market_price = item.market_price;
+            ticket.sku_user_price = item.sku_user_price;
+            ticket.sku_market_price = item.sku_market_price;
+            ticket.sku_suggest_price = item.sku_suggest_price;
+            ticket.nett_price2 = item.nett_price2;
+            ticket.must_id_number = item.must_id_number;
+            ticket.prov_name = item.prov_name;
+            ticket.city_name = item.city_name;
+            //updateTicket.county_name = item.county_name;
+            ticket.refund_chanrge_type = item.refund_chanrge_type;
+            ticket.refund_chanrge = item.refund_chanrge;
+            ticket.self_refund_scale = item.self_refund_scale;
+            ticket.self_refund_fixed = item.self_refund_fixed;
+            ticket.county_name = $"{item.prov_name}--{item.prov_name}--{item.prov_name}";
         }
 
         #region 外部接口
