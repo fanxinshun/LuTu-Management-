@@ -264,15 +264,6 @@ namespace Coldairarrow.Util
             return Convert.ToDateTime(str);
         }
         /// <summary>
-        /// 转换为日期格式--Linux时区
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static DateTime ToCstTime(this string str)
-        {
-            return Convert.ToDateTime(str).ToCstTime();
-        }
-        /// <summary>
         /// 转换为ToDecimal格式
         /// </summary>
         /// <param name="str"></param>
